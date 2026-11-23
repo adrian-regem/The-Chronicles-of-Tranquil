@@ -894,3 +894,65 @@ html { scroll-behavior:smooth; }
 .book-cover-placeholder img{display:block;width:100%;height:100%;object-fit:cover}
 .book-mini-cover{overflow:hidden}
 .book-mini-cover img{display:block;width:100%;height:100%;object-fit:cover}
+
+
+/* ===== Каталог книг: неизменные миниатюры и карточка с приоритетом текста ===== */
+.book-cover-placeholder{aspect-ratio:2/3;overflow:hidden}
+.book-cover-placeholder img{width:100%;height:100%;object-fit:contain!important;object-position:center}
+.book-selector.is-expanded .book-choice,
+.book-selector.is-expanded .book-choice.is-active{
+  min-height:0;flex-direction:row;align-items:center;padding:9px;
+  transform:none;box-shadow:none;
+}
+.book-selector.is-expanded .book-choice .book-cover-placeholder,
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  width:64px;min-width:64px;aspect-ratio:2/3;flex:0 0 64px;
+}
+.book-selector.is-expanded .book-choice.is-active{border-color:var(--teal-bright);background:rgba(62,126,126,.15)}
+.book-details{grid-column:2;min-width:0}
+.book-detail-heading{display:flex;align-items:flex-start;gap:18px;margin-bottom:20px}
+.book-detail-cover{display:block;width:76px;height:114px;flex:0 0 76px;object-fit:contain;object-position:top center;border:1px solid var(--line-strong);background:rgba(0,0,0,.16)}
+.book-detail-title{min-width:0}
+.book-detail-title .eyebrow{margin:0 0 5px}
+.book-detail-title h3{margin:0 0 12px}
+.book-metadata{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0}
+.book-metadata div{display:flex;flex-wrap:wrap;gap:5px}
+.book-metadata dt{color:var(--muted);font-size:11px}
+.book-metadata dd{margin:0;color:var(--text);font-size:12px}
+.book-synopsis{max-width:none;margin:0 0 14px;white-space:normal;line-height:1.75}
+.book-excerpt{margin:20px 0;padding:14px 18px;border-left:2px solid var(--teal);background:rgba(62,126,126,.07);color:var(--muted);font-size:13px;line-height:1.8}
+.book-store-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.book-store-group{min-width:0}
+.book-store-group h4{margin:0 0 10px;color:var(--muted);font:500 13px/1.2 "PT Sans",Arial,sans-serif}
+.book-store-list{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.book-store-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:42px;min-height:38px;padding:5px 8px;border:1px solid var(--line);background:rgba(62,126,126,.06);color:var(--text);transition:border-color .2s ease,background .2s ease}
+.book-store-link:hover{border-color:var(--teal-bright);background:rgba(62,126,126,.16)}
+.book-store-mark{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:24px;color:#e6eeee;font:700 14px/1 "PT Sans",Arial,sans-serif;letter-spacing:-.04em}
+.book-store-ozon{font-size:10px;letter-spacing:-.08em;color:#69a9ff}
+.book-store-wildberries{font-size:12px;color:#d79aff}
+.book-store-yкниги,.book-store-якниги{font-size:17px;color:#ffdc4c}
+.book-store-литрес{font-size:18px;color:#ff795f}
+.book-store-name{font-size:10px;color:var(--muted)}
+.book-detail-status{margin:18px 0 0;color:var(--teal-bright);font-size:12px}
+@media(max-width:680px){
+ .book-selector.is-expanded{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .book-selector.is-expanded .book-choice,
+ .book-selector.is-expanded .book-choice.is-active{
+  grid-row:1!important;grid-column:auto!important;min-height:0;flex-direction:column;align-items:stretch;padding:6px;gap:6px
+ }
+ .book-selector.is-expanded .book-choice .book-cover-placeholder,
+ .book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  width:100%;min-width:0;flex:initial;aspect-ratio:2/3
+ }
+ .book-selector.is-expanded .book-details{grid-column:1/-1;grid-row:2!important;padding:16px 14px}
+ .book-detail-heading{gap:12px;margin-bottom:16px}
+ .book-detail-cover{width:58px;height:87px;flex-basis:58px}
+ .book-detail-title h3{font-size:27px;margin-bottom:8px}
+ .book-metadata{gap:5px 12px}
+ .book-metadata dt,.book-metadata dd{font-size:10px}
+ .book-synopsis{font-size:13px;line-height:1.7}
+ .book-excerpt{font-size:12px;padding:11px 12px}
+ .book-store-groups{grid-template-columns:1fr;gap:14px;margin-top:18px;padding-top:14px}
+ .book-store-link{min-width:40px;min-height:36px}
+ .book-store-name{font-size:9px}
+}
