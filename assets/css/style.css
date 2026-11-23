@@ -105,3 +105,42 @@ blockquote { margin: 30px auto 18px; color: #e9dfce; font-size: clamp(28px, 4.5v
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+/* Внутренние страницы */
+.page-shell { min-height: 100vh; }
+.page-header { position: relative; background: rgba(17,16,14,.98); }
+.page-main { min-height: 65vh; }
+.page-heading { padding: 90px 8vw 70px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(105,76,40,.2), transparent 65%), #171510; border-bottom: 1px solid var(--line); }
+.page-heading h1 { margin: 15px 0 18px; font-size: clamp(48px, 7vw, 82px); line-height: 1; color: var(--gold-light); }
+.page-lead { max-width: 720px; margin: 0 auto; color: var(--muted); font-size: 14px; line-height: 2; }
+.page-content { width: min(1120px, 84vw); margin: 0 auto; padding: 70px 0 110px; }
+.content-section { margin: 0 0 65px; }
+.content-section h2 { font-size: clamp(34px, 4vw, 48px); }
+.content-section > p, .placeholder-copy { color: var(--muted); line-height: 2; }
+.placeholder-grid, .link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.placeholder-card, .placeholder-panel { position: relative; padding: 30px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(197,166,107,.06), transparent 70%); }
+.placeholder-card h3, .link-card h2 { margin: 12px 0; color: var(--gold-light); font: 500 32px/1.1 var(--serif); }
+.placeholder-card p, .placeholder-panel p { color: var(--muted); font-size: 13px; line-height: 1.9; }
+.placeholder-small { font-size: 11px !important; }
+.status-note { display: inline-block; margin-top: 8px; padding: 5px 10px; border: 1px solid var(--line); color: var(--gold); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+.link-card { display: block; transition: border-color .2s ease, transform .2s ease; }
+.link-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+.link-card h2 { font-size: 30px; }
+.link-card .tile-arrow { position: absolute; right: 24px; bottom: 22px; }
+.article-list { border-top: 1px solid var(--line); }
+.article-list a { position: relative; display: block; padding: 25px 55px 25px 10px; border-bottom: 1px solid var(--line); transition: padding .2s ease, background .2s ease; }
+.article-list a:hover { padding-left: 20px; background: rgba(197,166,107,.04); }
+.article-list h2 { margin: 8px 0 0; font-size: clamp(28px, 4vw, 40px); color: var(--text); }
+.article-list .tile-arrow { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); }
+.placeholder-panel { text-align: center; padding: 55px 30px; }
+.placeholder-panel h2 { color: var(--gold-light); }
+.map-placeholder { min-height: 360px; display: grid; align-content: center; justify-items: center; background: radial-gradient(ellipse at center, rgba(197,166,107,.12), transparent 65%), #171510; }
+.placeholder-symbol { color: var(--gold); font-size: 32px; }
+.page-content .text-link { margin-top: 18px; }
+@media (max-width: 680px) {
+  .page-header { position: relative; }
+  .page-heading { padding: 65px 7vw 50px; }
+  .page-content { width: 86vw; padding: 48px 0 75px; }
+  .placeholder-grid, .link-grid { grid-template-columns: 1fr; }
+  .placeholder-card, .placeholder-panel { padding: 23px; }
+  .content-section { margin-bottom: 48px; }
+}
