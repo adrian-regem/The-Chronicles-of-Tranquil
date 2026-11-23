@@ -886,3 +886,10 @@ html { scroll-behavior:smooth; }
 .period-map-image{width:100%;height:auto;max-width:none;object-fit:fill}
 .map-viewport .period-map-image{visibility:hidden}
 .map-viewport .map-image-track .period-map-image{visibility:visible}
+
+
+/* Mobile-only map gesture instructions */
+.map-mobile-instructions{display:none}
+@media(max-width:680px){
+ .map-mobile-instructions{display:block;width:min(1050px,88vw);margin:-8px auto 16px;padding:0 8px;color:var(--teal-bright);font:11px/1.5 "PT Sans",Arial,sans-serif;text-align:center}
+}
