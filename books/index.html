@@ -31,33 +31,38 @@
     <p class="page-lead">Истории, происходящие в одной вселенной. Здесь будут представлены книги, сведения о них и порядок чтения.</p>
   </section>
   <div class="page-content">
-
-    <section class="content-section books-feature">
-      <img class="books-photo" src="/assets/images/books/books-photo.jpg" alt="Физические издания книг «Хроники Транквила»">
-      <p class="books-photo-caption">Печатные издания «Хроник Транквила»</p>
-    </section>
     <section class="content-section">
       <h2>О цикле</h2>
-      <p class="placeholder-copy">Здесь появится описание литературного цикла и объяснение хронологии чтения.</p>
-    </section>
-    <section class="content-section">
-      <h2>Порядок чтения</h2>
-      <p class="placeholder-copy">Здесь будет указана рекомендуемая последовательность чтения основной серии и самостоятельных произведений.</p>
-    </section>
-    <section class="content-section">
-      <h2>Хроники Транквила</h2>
-      <div class="book-selector" id="book-selector" aria-label="Книги цикла «Хроники Транквила»">
-        <button class="book-choice" type="button" data-book="enslavement" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅰ</span></span><span class="book-choice-title">Порабощение</span></button>
-        <button class="book-choice" type="button" data-book="artifact" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅱ</span></span><span class="book-choice-title">Артефакт</span></button>
-        <button class="book-choice" type="button" data-book="third" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅲ</span></span><span class="book-choice-title">Третья книга</span></button>
-        <section class="book-details" id="book-details" hidden aria-live="polite"></section>
-      </div>
-    </section>
-    <section class="content-section">
-      <h2>Отдельные произведения</h2>
-      <article class="placeholder-card"><span class="eyebrow">Повесть</span><h3>Золотые крылья</h3><p>Здесь появятся описание, синопсис и характеристики произведения.</p><span class="status-note">Информация готовится</span><p class="placeholder-small">Ссылки на печатную и электронную версии будут добавлены отдельно.</p></article>
+      <p class="placeholder-copy">Здесь появится описание литературного цикла и его мира.</p>
     </section>
 
+    <section class="content-section" id="chronicles-section">
+      <h2>Хроники Транквила</h2>
+      <div class="book-selector" data-book-selector="chronicles" aria-label="Книги цикла «Хроники Транквила»">
+        <button class="book-choice" type="button" data-book="enslavement" aria-label="Открыть книгу «Порабощение»" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅰ</span></span></button>
+        <button class="book-choice" type="button" data-book="artifact" aria-label="Открыть книгу «Артефакт»" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅱ</span></span></button>
+        <button class="book-choice" type="button" data-book="third" aria-label="Открыть третью книгу цикла" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅲ</span></span></button>
+        <section class="book-details" hidden aria-live="polite"></section>
+      </div>
+    </section>
+
+    <section class="content-section" id="spinoffs-section">
+      <h2>Спин-оффы</h2>
+      <div class="book-selector" data-book-selector="spinoffs" aria-label="Отдельные произведения вселенной">
+        <button class="book-choice" type="button" data-book="golden-wings" aria-label="Открыть спин-офф «Золотые крылья»" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>✦</span></span></button>
+        <section class="book-details" hidden aria-live="polite"></section>
+      </div>
+    </section>
+
+    <section class="content-section" id="guides-section">
+      <h2>Справочники</h2>
+      <div class="book-selector" data-book-selector="guides" aria-label="Справочники по книгам цикла">
+        <button class="book-choice" type="button" data-book="guide-enslavement" aria-label="Открыть путеводитель по Порабощению" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅰ</span></span></button>
+        <button class="book-choice" type="button" data-book="guide-artifact" aria-label="Открыть путеводитель по Артефакту" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅱ</span></span></button>
+        <button class="book-choice" type="button" data-book="guide-unknown" aria-label="Открыть неизвестный пока справочник" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>?</span></span></button>
+        <section class="book-details" hidden aria-live="polite"></section>
+      </div>
+    </section>
   </div>
   <div class="page-content section-return-wrap books-return-wrap"><a class="section-return" href="/">← На главную</a></div>
 </main>
