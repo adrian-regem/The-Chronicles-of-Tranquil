@@ -41,7 +41,7 @@ const mapImage=document.querySelector("#period-map-image"),mapViewport=document.
 const mapZoom=document.querySelector("#map-zoom"),mapZoomValue=document.querySelector("#map-zoom-value");
 const mapZoomReset=document.querySelector("#map-zoom-reset"),mapComingSoon=document.querySelector("#map-coming-soon");
 const mapZoomControls=document.querySelector(".map-zoom-controls"),mapPanHint=document.querySelector(".map-pan-hint");
-let mapScale=1,mapX=0,mapY=0,mapDrag=null,touchPan=null,touchScrollY=null;
+let mapScale=1,mapX=0,mapY=0,mapDrag=null,touchPan=null;
 let mapTrack=null,mapCopies=[],mapBaseWidth=0,mapBaseHeight=0;
 const mapMod=(value,mod)=>((value%mod)+mod)%mod;
 function setupMapTrack(){
@@ -100,7 +100,7 @@ document.querySelectorAll("[data-map-period]").forEach(button=>button.addEventLi
   if(mapTrack)mapTrack.hidden=false;
   const src=period==="artifact"?"/assets/images/maps/Транквил%20(1).png":"/assets/images/maps/Транквил.png";
   mapCopies.forEach(img=>{img.src=src;img.hidden=false;});
-  mapImage.alt="Карта мира — период «"+title+"»";
+  mapImage.alt="Карта мира — период \""+title+"\"";
   if(mapImage.complete&&mapImage.naturalWidth)setupMapTrack();
  }
  mapScale=1;mapY=0;resetMap();
@@ -126,36 +126,56 @@ mapViewport?.addEventListener("pointermove",e=>{
 function stopMapDrag(e){if(!mapDrag||(e&&mapDrag.id!==e.pointerId))return;mapDrag=null;mapViewport?.classList.remove("is-dragging");}
 mapViewport?.addEventListener("pointerup",stopMapDrag);mapViewport?.addEventListener("pointercancel",stopMapDrag);
 mapViewport?.addEventListener("touchstart",e=>{
- if(mapImage?.hidden)return;
+ if(e.target.closest(".map-zoom-controls")||mapImage?.hidden)return;
  if(e.touches.length===2){
-  e.preventDefault();touchScrollY=null;
-  const mid={x:(e.touches[0].clientX+e.touches[1].clientX)/2,y:(e.touches[0].clientY+e.touches[1].clientY)/2};
-  touchPan={x:mid.x,y:mid.y};
- }else if(e.touches.length===1){touchPan=null;touchScrollY=e.touches[0].clientY;}
+  e.preventDefault();
+  const a=e.touches[0],b=e.touches[1];
+  touchPan={mode:"pinch",x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2,distance:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)};
+ }else if(e.touches.length===1){
+  touchPan={mode:"pan",x:e.touches[0].clientX,y:e.touches[0].clientY};
+ }
 },{passive:false});
 mapViewport?.addEventListener("touchmove",e=>{
- if(e.touches.length===2&&touchPan){
+ if(e.target.closest(".map-zoom-controls"))return;
+ if(e.touches.length===2&&touchPan?.mode==="pinch"){
   e.preventDefault();
-  const mid={x:(e.touches[0].clientX+e.touches[1].clientX)/2,y:(e.touches[0].clientY+e.touches[1].clientY)/2};
-  moveMap(mid.x-touchPan.x,mid.y-touchPan.y);touchPan=mid;
- }else if(e.touches.length===1&&touchScrollY!==null){
-  e.preventDefault();const nextY=e.touches[0].clientY;window.scrollBy(0,touchScrollY-nextY);touchScrollY=nextY;
+  const a=e.touches[0],b=e.touches[1];
+  const mid={x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};
+  const distance=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+  const rect=mapViewport.getBoundingClientRect();
+  const oldScale=mapScale;
+  const nextScale=Math.max(1,Math.min(4,oldScale*(distance/(touchPan.distance||distance))));
+  const localX=mid.x-rect.left,localY=mid.y-rect.top;
+  const mapPointX=mapX+localX/oldScale,mapPointY=mapY+localY/oldScale;
+  mapScale=nextScale;
+  mapX=mapPointX-localX/mapScale;
+  mapY=mapPointY-localY/mapScale;
+  mapX=-mapBaseWidth+mapMod(mapX+mapBaseWidth,mapBaseWidth);
+  clampMapY();renderMap();
+  touchPan={mode:"pinch",x:mid.x,y:mid.y,distance};
+ }else if(e.touches.length===1&&touchPan?.mode==="pan"){
+  e.preventDefault();
+  const next={x:e.touches[0].clientX,y:e.touches[0].clientY};
+  moveMap(next.x-touchPan.x,next.y-touchPan.y);
+  touchPan={mode:"pan",...next};
  }
 },{passive:false});
 mapViewport?.addEventListener("touchend",e=>{
- if(e.touches.length<2)touchPan=null;
- if(e.touches.length===0)touchScrollY=null;else if(e.touches.length===1)touchScrollY=e.touches[0].clientY;
+ if(e.target.closest(".map-zoom-controls"))return;
+ if(e.touches.length===1){
+  touchPan={mode:"pan",x:e.touches[0].clientX,y:e.touches[0].clientY};
+ }else if(e.touches.length===0)touchPan=null;
 },{passive:true});
-mapViewport?.addEventListener("touchcancel",()=>{touchPan=null;touchScrollY=null;},{passive:true});
+mapViewport?.addEventListener("touchcancel",()=>{touchPan=null;},{passive:true});
 
 // Expandable catalogs: each section has its own single-open selection.
 const bookData={
  enslavement:{title:"Порабощение",cover:"Ⅰ",eyebrow:"Книга первая",synopsis:"Синопсис первой книги появится здесь. Это место предназначено для краткого знакомства с завязкой истории, её героями и главным конфликтом — без раскрытия ключевых поворотов.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],next:"artifact"},
  artifact:{title:"Артефакт",cover:"Ⅱ",eyebrow:"Книга вторая",synopsis:"Синопсис второй книги появится здесь. В этом блоке будет краткое описание сюжета и его связи с первой частью цикла.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],previous:"enslavement",next:"third"},
  third:{title:"Третья книга",cover:"Ⅲ",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",status:"Название пока не объявлено",links:["Информация о публикации появится позже"],previous:"artifact"},
- "golden-wings":{title:"Золотые крылья",eyebrow:"Спин-офф к: Артефакт",synopsis:"Здесь появятся описание, синопсис и сведения о повести «Золотые крылья».",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
+ "golden-wings":{title:"Золотые крылья",eyebrow:"Спин-офф к: Артефакт",synopsis:"Здесь появятся описание, синопсис и сведения о повести \"Золотые крылья\".",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
  "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Хроники Транквила: Порабощение",cover:"Ⅰ"}},
- "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести «Золотые крылья».",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Хроники Транквила: Артефакт",cover:"Ⅱ"},{id:"golden-wings",title:"Золотые крылья",cover:"✦"}]},
+ "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести \"Золотые крылья\".",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Хроники Транквила: Артефакт",cover:"Ⅱ"},{id:"golden-wings",title:"Золотые крылья",cover:"✦"}]},
  "guide-unknown":{title:"Неизвестный справочник",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",status:"Информация появится позже",links:["Подробности будут опубликованы позднее"],forBook:{id:"third",title:"Хроники Транквила: ???",cover:"Ⅲ"}}
 };
 function makeBookLink(id,label,cover,klass){
