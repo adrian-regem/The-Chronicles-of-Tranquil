@@ -869,3 +869,20 @@ html { scroll-behavior:smooth; }
  .book-cycle-nav{grid-template-columns:1fr}
  .book-cycle-link{font-size:10px}
 }
+
+
+/* Current page title in the fixed header */
+.header-section-title{font-size:13px!important;font-weight:600;letter-spacing:.08em}
+@media(max-width:680px){.header-section-title{font-size:10px!important}}
+
+/* Seamless horizontal map loop with bounded vertical movement */
+.map-viewport{overflow:hidden;position:relative}
+.map-image-track{
+ position:absolute;top:0;left:0;display:flex;align-items:flex-start;
+ transform-origin:top left;will-change:transform;pointer-events:none;
+}
+.map-image-track img{display:block;flex:0 0 auto;max-width:none;height:auto;object-fit:fill}
+.map-image-track[hidden]{display:none!important}
+.period-map-image{width:100%;height:auto;max-width:none;object-fit:fill}
+.map-viewport .period-map-image{visibility:hidden}
+.map-viewport .map-image-track .period-map-image{visibility:visible}
