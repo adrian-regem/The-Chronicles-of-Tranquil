@@ -480,6 +480,7 @@ body:not(.page-shell) .hero .text-link:hover { transform:translateX(3px); }
 
 /* Homepage banner copy: left-aligned editorial heading and lead */
 body:not(.page-shell) .hero-content { text-align:left; align-items:flex-start; }
+body:not(.page-shell) .site-header{position:fixed!important}
 body:not(.page-shell) .hero .eyebrow { font-size:clamp(14px,1.6vw,19px); font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
 body:not(.page-shell) .hero .hero-author { max-width:650px; color:#e0e7e9; font-size:clamp(14px,1.35vw,17px); line-height:1.65; }
 .article-return-wrap { display:flex; flex-wrap:wrap; gap:14px; }
@@ -822,7 +823,8 @@ html { scroll-behavior:smooth; }
   color:#dce8e8;text-align:center;font:500 clamp(22px,3vw,36px)/1.35 "Yanone Kaffeesatz",sans-serif;
 }
 .map-coming-soon[hidden]{display:none}
-.map-viewport{touch-action:pan-y}
+.map-viewport{touch-action:none}
+.period-map-image[hidden]{display:none!important}
 @media(max-width:680px){
   .map-zoom-controls{left:7px;right:auto}
   .map-disclaimer{font-size:11px;line-height:1.55;margin-bottom:16px}
