@@ -146,7 +146,7 @@ mapViewport?.addEventListener("touchmove",e=>{
   const oldScale=mapScale;
   const nextScale=Math.max(1,Math.min(4,oldScale*(distance/(touchPan.distance||distance))));
   const localX=mid.x-rect.left,localY=mid.y-rect.top;
-  const mapPointX=mapX+localX/oldScale,mapPointY=mapY+localY/oldScale;
+  const mapPointX=localX/oldScale-mapX,mapPointY=localY/oldScale-mapY;
   mapScale=nextScale;
   mapX=mapPointX-localX/mapScale;
   mapY=mapPointY-localY/mapScale;
@@ -173,9 +173,9 @@ const bookData={
  enslavement:{title:"Порабощение",cover:"Обложка Порабощение.png",eyebrow:"Книга первая",synopsis:"Синопсис первой книги появится здесь. Это место предназначено для краткого знакомства с завязкой истории, её героями и главным конфликтом — без раскрытия ключевых поворотов.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],next:"artifact"},
  artifact:{title:"Артефакт",cover:"Обложка Артефакт.png",eyebrow:"Книга вторая",synopsis:"Синопсис второй книги появится здесь. В этом блоке будет краткое описание сюжета и его связи с первой частью цикла.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],previous:"enslavement",next:"third"},
  third:{title:"Третья книга",cover:"Обложка Неизвестно.png",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",status:"Название пока не объявлено",links:["Информация о публикации появится позже"],previous:"artifact"},
- "golden-wings":{title:"Золотые крылья",cover:"Обложка Золотые крылья.png",eyebrow:"Спин-офф к: Артефакт",synopsis:"Здесь появятся описание, синопсис и сведения о повести \"Золотые крылья\".",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
- "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Хроники Транквила: Порабощение",cover:"Обложка Порабощение.png"}},
- "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести \"Золотые крылья\".",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Хроники Транквила: Артефакт",cover:"Обложка Артефакт.png"},{id:"golden-wings",title:"Золотые крылья",cover:"Обложка Золотые крылья.png"}]},
+ "golden-wings":{title:"Золотые крылья",cover:"Обложка Золотые крылья.png",eyebrow:"Повесть",relationLabel:"Связана с:",forBook:{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},synopsis:"Здесь появятся описание, синопсис и сведения о повести \"Золотые крылья\".",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
+ "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Порабощение",cover:"Обложка Порабощение.png"}},
+ "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести \"Золотые крылья\".",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},{id:"golden-wings",title:"Золотые крылья",cover:"Обложка Золотые крылья.png"}]},
  "guide-unknown":{title:"Неизвестный справочник",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",status:"Информация появится позже",links:["Подробности будут опубликованы позднее"],forBook:{id:"third",title:"Хроники Транквила: ???",cover:"Обложка Неизвестно.png"}}
 };
 function makeBookLink(id,label,cover,klass){
@@ -205,7 +205,7 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   selector.classList.add("is-expanded");details.style.gridRow=String(idx+1);
   let extra="",forExtra="";
   const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);
-  if(relatedBooks.length)forExtra='<div class="book-for-row"><span class="book-for-label">Для книг:</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>';
+  if(relatedBooks.length)forExtra='<div class="book-for-row"><span class="book-for-label">'+(data.relationLabel||"Для книг:")+'</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>';
   if(data.previous||data.next){
    extra+='<div class="book-cycle-nav">';
    if(data.previous){const p=bookData[data.previous];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Предыдущая книга цикла</span>'+makeBookLink(data.previous,p.title,p.cover||"Ⅰ","book-cycle-link")+'</div>';}
