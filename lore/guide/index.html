@@ -36,19 +36,21 @@
         <label class="guide-search-label" for="guide-search">Поиск по персонажам и терминам</label>
         <div class="guide-search-wrap"><span aria-hidden="true">⌕</span><input id="guide-search" type="search" placeholder="Введите имя, термин или название..." autocomplete="off"></div>
         <div class="guide-filters">
-          <label for="guide-spoilers">Показывать материалы до:</label>
-          <select id="guide-spoilers">
-            <option value="0">Без спойлеров</option>
-            <option value="1">«Порабощение»</option>
-            <option value="2">«Артефакт»</option>
-          </select>
-          <label for="guide-type">Категория:</label>
-          <select id="guide-type">
-            <option value="all">Все записи</option>
-            <option value="character">Персонажи</option>
-            <option value="term">Термины и понятия</option>
-            <option value="place">Места и организации</option>
-          </select>
+          <div class="guide-filter-group"><label for="guide-spoilers">Показывать материалы до:</label>
+            <select id="guide-spoilers">
+              <option value="0">Без спойлеров</option>
+              <option value="1">«Порабощение»</option>
+              <option value="2">«Артефакт»</option>
+            </select>
+          </div>
+          <div class="guide-filter-group"><label for="guide-type">Категория:</label>
+            <select id="guide-type">
+              <option value="all">Все записи</option>
+              <option value="character">Персонажи</option>
+              <option value="term">Термины и понятия</option>
+              <option value="place">Места и организации</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="guide-results" id="guide-results" aria-live="polite">
