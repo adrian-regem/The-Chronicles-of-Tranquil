@@ -52,13 +52,21 @@ function setupMapTrack(){
   mapCopies=[mapImage];
   for(let i=0;i<2;i++){const copy=mapImage.cloneNode();copy.removeAttribute("id");copy.alt="";copy.setAttribute("aria-hidden","true");copy.draggable=false;mapTrack.append(copy);mapCopies.push(copy);}
  }
+ const previousWidth=mapBaseWidth,previousHeight=mapBaseHeight;
+ const previousXProgress=previousWidth?mapMod(mapX+previousWidth,previousWidth)/previousWidth:0;
+ const previousYProgress=previousHeight?mapY/previousHeight:0;
  mapBaseWidth=mapViewport.clientWidth;
  mapBaseHeight=mapBaseWidth*mapImage.naturalHeight/mapImage.naturalWidth;
  mapViewport.style.height=mapBaseHeight+"px";
  mapTrack.style.width=(mapBaseWidth*3)+"px";
  mapTrack.style.height=mapBaseHeight+"px";
  mapCopies.forEach(img=>{img.style.width=mapBaseWidth+"px";img.style.height=mapBaseHeight+"px";});
- mapX=-mapBaseWidth;
+ if(previousWidth&&previousHeight){
+  mapX=-mapBaseWidth+previousXProgress*mapBaseWidth;
+  mapY=previousYProgress*mapBaseHeight;
+ }else{
+  mapX=-mapBaseWidth;mapY=0;
+ }
  clampMapY();renderMap();
 }
 function clampMapY(){
@@ -103,7 +111,6 @@ document.querySelectorAll("[data-map-period]").forEach(button=>button.addEventLi
   mapImage.alt="Карта мира — период \""+title+"\"";
   if(mapImage.complete&&mapImage.naturalWidth)setupMapTrack();
  }
- mapScale=1;mapY=0;resetMap();
 }));
 mapImage?.addEventListener("error",()=>{const err=document.querySelector("#map-image-error");if(err)err.hidden=false;});
 mapImage?.addEventListener("load",()=>{const err=document.querySelector("#map-image-error");if(err)err.hidden=true;setupMapTrack();});
@@ -181,7 +188,7 @@ const bookData={
     {brand:"Литрес",mark:"Л",url:"https://www.litres.ru/book/nikita-dmitrichev/hroniki-trankvila-poraboschenie-63015983/"},
     {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/9i1GIsn"}
    ]},
-   {format:"Бумажная версия",items:[
+   {format:"Печатная версия",items:[
     {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/khroniki_trankvila_poraboshenie/"},
     {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/vFsYIt8"},
     {brand:"Wildberries",mark:"WB",url:"https://www.wildberries.ru/catalog/36147651/detail.aspx?targetUrl=SN"}
