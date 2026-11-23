@@ -281,3 +281,12 @@ a:focus-visible,button:focus-visible { outline: 2px solid var(--teal-bright); ou
  .hero { min-height:560px;height:78svh;background-position:center; }
  .hero .text-link { bottom:12%; }
 }
+
+/* Yanone Kaffeesatz is distributed under the SIL Open Font License 1.1 */
+:root { --serif: "Yanone Kaffeesatz", "Arial Narrow", sans-serif; }
+h1,h2,h3,h4,blockquote,.brand-name,.footer-brand,.page-heading h1,.placeholder-card h3,.link-card h2,.article-list h2 {
+  font-family:"Yanone Kaffeesatz","Arial Narrow",sans-serif;
+  font-weight:500;
+  letter-spacing:.025em;
+}
+.hero h1 { font-family:"Yanone Kaffeesatz","Arial Narrow",sans-serif; }
