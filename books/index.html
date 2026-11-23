@@ -46,10 +46,11 @@
     </section>
     <section class="content-section">
       <h2>Хроники Транквила</h2>
-      <div class="placeholder-grid">
-        <article class="placeholder-card"><span class="eyebrow">Книга первая</span><h3>Порабощение</h3><p>Здесь появятся описание, синопсис и характеристики книги.</p><span class="status-note">Информация готовится</span><p class="placeholder-small">Ссылки на печатную и электронную версии будут добавлены отдельно.</p></article>
-        <article class="placeholder-card"><span class="eyebrow">Книга вторая</span><h3>Артефакт</h3><p>Здесь появятся описание, синопсис и характеристики книги.</p><span class="status-note">Информация готовится</span><p class="placeholder-small">Ссылки на печатную и электронную версии будут добавлены отдельно.</p></article>
-        <article class="placeholder-card"><span class="eyebrow">Книга третья</span><h3>Название пока не объявлено</h3><p>Продолжение основной серии.</p><span class="status-note">Скоро</span></article>
+      <div class="book-selector" id="book-selector" aria-label="Книги цикла «Хроники Транквила»">
+        <button class="book-choice" type="button" data-book="enslavement" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅰ</span></span><span class="book-choice-title">Порабощение</span></button>
+        <button class="book-choice" type="button" data-book="artifact" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅱ</span></span><span class="book-choice-title">Артефакт</span></button>
+        <button class="book-choice" type="button" data-book="third" aria-expanded="false"><span class="book-cover-placeholder" aria-hidden="true"><span>Ⅲ</span></span><span class="book-choice-title">Третья книга</span></button>
+        <section class="book-details" id="book-details" hidden aria-live="polite"></section>
       </div>
     </section>
     <section class="content-section">
