@@ -33,8 +33,12 @@ document.querySelectorAll("[data-map-period]").forEach((button) => {
     const display = document.querySelector("#map-display");
     if (display) {
       display.dataset.currentMap = period;
-      const title = period === "artifact" ? "Артефакт" : "Порабощение";
-      display.innerHTML = '<div class="map-placeholder"><span class="placeholder-symbol">✧</span><h2>Карта периода «' + title + '»</h2><p>Переключатель выбран. Для отображения карты нужно добавить изображение этого исторического периода.</p></div>';
+      const artifact = period === "artifact";
+      const title = artifact ? "Артефакт" : "Порабощение";
+      const src = artifact
+        ? "/assets/images/maps/%D0%A2%D1%80%D0%B0%D0%BD%D0%BA%D0%B2%D0%B8%D0%BB%20(1).png"
+        : "/assets/images/maps/%D0%A2%D1%80%D0%B0%D0%BD%D0%BA%D0%B2%D0%B8%D0%BB.png";
+      display.innerHTML = '<figure class="map-image-frame"><img class="period-map-image" src="' + src + '" alt="Карта Транквила периода «' + title + '»"><figcaption>Транквиль — период «' + title + '»</figcaption></figure>';
     }
   });
 });
