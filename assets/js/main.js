@@ -269,7 +269,7 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   });
   if(active){selector.classList.remove("is-expanded");details.hidden=true;return;}
   const data=bookData[button.dataset.book],all=[...selector.querySelectorAll(".book-choice")],idx=all.indexOf(button);
-  let nextRow=2;all.forEach(item=>{item.style.gridRow=item===button?"1":String(nextRow++);});
+  all.forEach(item=>{item.style.gridRow="1";});
   button.classList.add("is-active");button.setAttribute("aria-expanded","true");
   selector.classList.add("is-expanded");details.hidden=false;details.style.gridRow="1";
   const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);
@@ -278,7 +278,7 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   if(data.previous||data.next){
    extra+='<div class="book-cycle-nav">';
    if(data.previous){const p=bookData[data.previous];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Предыдущая книга цикла</span>'+makeBookLink(data.previous,p.title,p.cover||"Ⅰ","book-cycle-link")+'</div>';}
-   if(data.next){const n=bookData[data.next];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Следующая книга цикла</span>'+makeBookLink(data.next,n.title,n.cover||"Ⅱ","book-cycle-link")+'</div>';}
+   if(data.next){const n=bookData[data.next];extra+='<div class="book-cycle-item book-cycle-item-next"><span class="book-cycle-label">Следующая книга цикла</span>'+makeBookLink(data.next,n.title,n.cover||"Ⅱ","book-cycle-link")+'</div>';}
    extra+='</div>';
   }
   const cover=data.cover?'<img class="book-detail-cover" src="/assets/images/books/'+encodeURIComponent(data.cover)+'" alt="">':"";
