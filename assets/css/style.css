@@ -1011,3 +1011,8 @@ html { scroll-behavior:smooth; }
  .book-store-link{min-width:40px;min-height:36px}
  .book-store-name{font-size:9px}
 }
+
+
+/* Explicit hidden-state handling for expandable book panels */
+.book-details[hidden]{display:none!important}
+.book-details:not([hidden]){display:block}
