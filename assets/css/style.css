@@ -1156,3 +1156,19 @@ html { scroll-behavior:smooth; }
   .book-selector.is-expanded .book-details{grid-column:1/-1!important;grid-row:2!important}
   .book-cycle-item-next{grid-column:1}
 }
+
+
+/* Mobile: keep the current page label centered on the viewport, not offset from the right edge. */
+@media(max-width:680px){
+  .header-section-title{
+    left:50%!important;
+    right:auto!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+    width:max-content;
+    max-width:calc(100vw - 120px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:center;
+  }
+}
