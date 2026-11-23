@@ -183,7 +183,8 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   button.classList.add("is-active");button.setAttribute("aria-expanded","true");
   selector.classList.add("is-expanded");details.style.gridRow=String(idx+1);
   let extra="",forExtra="";
-  const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);\n  if(relatedBooks.length)forExtra='<div class="book-for-row"><span class="book-for-label">Для книг:</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>';
+  const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);
+  if(relatedBooks.length)forExtra='<div class="book-for-row"><span class="book-for-label">Для книг:</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>';
   if(data.previous||data.next){
    extra+='<div class="book-cycle-nav">';
    if(data.previous){const p=bookData[data.previous];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Предыдущая книга цикла</span>'+makeBookLink(data.previous,p.title,p.cover||"Ⅰ","book-cycle-link")+'</div>';}
