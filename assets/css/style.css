@@ -720,3 +720,28 @@ body.lore-page .page-heading .page-lead { color:#e0e5e7; text-shadow:0 2px 12px 
 
 .guide-filter-group { display:flex; flex-direction:column; gap:9px; min-width:0; }
 html { scroll-behavior:smooth; }
+
+
+/* ===== Map images and visible period controls ===== */
+.map-viewer { width:100%; }
+.map-switcher { display:flex; justify-content:center; gap:12px; margin:0 0 22px; }
+.map-period-button { min-width:150px; padding:12px 22px; border-radius:2px; }
+.map-display { width:100%; border:1px solid var(--line-strong); background:#0b0f11; }
+.map-image-frame { margin:0; padding:14px; }
+.period-map-image { display:block; width:100%; height:auto; max-height:78vh; object-fit:contain; margin:0 auto; }
+.map-image-frame figcaption { padding:12px 4px 2px; color:var(--muted); text-align:center; font-size:12px; letter-spacing:.08em; }
+@media(max-width:600px) {
+  .map-switcher { display:grid; grid-template-columns:1fr 1fr; }
+  .map-period-button { min-width:0; padding:11px 8px; }
+  .map-image-frame { padding:6px; }
+}
+
+/* Keep dictionary controls visibly grouped while the entries are being prepared. */
+.guide-dictionary { display:block; width:100%; }
+.guide-toolbar { display:block; }
+.guide-search-wrap { width:100%; }
+.guide-filters { display:grid; }
+.guide-filter-group { display:flex; flex-direction:column; gap:9px; }
+.guide-empty { display:block; padding:55px 28px; text-align:center; }
+.guide-empty h2 { color:var(--text); }
+.guide-empty p { max-width:680px; margin:0 auto; color:var(--muted); line-height:1.8; }
