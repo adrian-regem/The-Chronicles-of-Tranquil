@@ -18,4 +18,4 @@ if (menuToggle && mainNav) {
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
-// Реальные цитаты добавим после того, как выберем их из книг.
+// Генератор начнёт показывать случайные цитаты после добавления утверждённой подборки.
