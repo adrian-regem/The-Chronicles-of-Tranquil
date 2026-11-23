@@ -258,7 +258,18 @@ function openMainBook(id){
 }
 function renderStoreGroups(stores){
  if(!stores?.length)return "";
- return '<div class="book-store-groups">'+stores.map(group=>'<section class="book-store-group"><h4>'+group.format+'</h4><div class="book-store-list">'+group.items.map(store=>'<a class="book-store-link" href="'+store.url+'" target="_blank" rel="noopener noreferrer" aria-label="'+group.format+': '+store.brand+'" title="'+store.brand+' — '+group.format+'"><span class="book-store-mark book-store-'+store.brand.toLowerCase().replace(/[^a-zа-яё]/g,"")+'">'+store.mark+'</span><span class="book-store-name">'+store.brand+'</span></a>').join("")+'</div></section>').join("")+'</div>';
+ const storeLogos={
+  "Ridero":"Лого Ridero.png",
+  "Я Книги":"Лого Яндекс Книги.png",
+  "Литрес":"Лого Литрес.png",
+  "Ozon":"Лого Ozon.png",
+  "Wildberries":"Лого WB.png"
+ };
+ return '<div class="book-store-groups">'+stores.map(group=>'<section class="book-store-group"><h4>'+group.format+'</h4><div class="book-store-list">'+group.items.map(store=>{
+  const logo=storeLogos[store.brand];
+  const mark=logo?'<img class="book-store-logo" src="/assets/images/icons/'+encodeURIComponent(logo)+'" alt="">':'<span class="book-store-mark">'+(store.mark||"")+'</span>';
+  return '<a class="book-store-link" href="'+store.url+'" target="_blank" rel="noopener noreferrer" aria-label="'+group.format+': '+store.brand+'" title="'+store.brand+': '+group.format+'">'+mark+'<span class="book-store-name">'+store.brand+'</span></a>';
+ }).join("")+'</div></section>').join("")+'</div>';
 }
 document.querySelectorAll("[data-book-selector]").forEach(selector=>{
  const details=selector.querySelector(".book-details");

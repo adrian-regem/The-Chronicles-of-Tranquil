@@ -1172,3 +1172,51 @@ html { scroll-behavior:smooth; }
     text-align:center;
   }
 }
+
+
+/* ===== Обложки каталога: точное соотношение исходных изображений ===== */
+/* Все файлы обложек имеют размер 400 × 565 px (соотношение 80:113). */
+.book-selector .book-cover-placeholder,
+.book-selector.is-expanded .book-choice .book-cover-placeholder,
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  aspect-ratio:80/113!important;
+}
+.book-selector .book-cover-placeholder img,
+.book-selector.is-expanded .book-choice .book-cover-placeholder img,
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder img{
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:80/113!important;
+  object-fit:fill!important;
+  object-position:center!important;
+}
+
+/* На компьютерах карточки обложек на 20% уже ячеек сетки. */
+@media(min-width:681px){
+  .book-selector .book-choice,
+  .book-selector.is-expanded .book-choice,
+  .book-selector.is-expanded .book-choice.is-active{
+    width:80%!important;
+    justify-self:center!important;
+  }
+}
+
+/* На телефонах карточки занимают всю ширину своей колонки. */
+@media(max-width:680px){
+  .book-selector .book-choice,
+  .book-selector.is-expanded .book-choice,
+  .book-selector.is-expanded .book-choice.is-active{
+    width:100%!important;
+  }
+}
+
+/* Логотипы магазинов вместо буквенных заглушек. */
+.book-store-logo{
+  display:block;
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  object-fit:contain;
+  object-position:center;
+}
+.book-store-link{gap:7px}
