@@ -1016,3 +1016,63 @@ html { scroll-behavior:smooth; }
 /* Explicit hidden-state handling for expandable book panels */
 .book-details[hidden]{display:none!important}
 .book-details:not([hidden]){display:block}
+
+
+/* Desktop book selection: move the selected full cover to the upper-left,
+   shrinking it smoothly while keeping the complete portrait visible. */
+@media(min-width:681px){
+ .book-selector.is-expanded .book-choice.is-active{
+  display:flex;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:flex-start;
+  justify-self:start;
+  align-self:start;
+  width:76px;
+  min-width:76px;
+  min-height:0!important;
+  padding:6px!important;
+  overflow:visible;
+  transform:none!important;
+  transition:width .45s cubic-bezier(.2,.75,.25,1),padding .45s ease,background .3s ease,border-color .3s ease;
+ }
+ .book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  display:block;
+  width:60px!important;
+  min-width:60px!important;
+  height:auto!important;
+  aspect-ratio:2/3!important;
+  flex:0 0 auto!important;
+  overflow:hidden;
+  transition:width .45s cubic-bezier(.2,.75,.25,1),min-width .45s cubic-bezier(.2,.75,.25,1);
+ }
+ .book-selector.is-expanded .book-choice.is-active .book-cover-placeholder img{
+  display:block;
+  width:100%;
+  height:auto!important;
+  aspect-ratio:2/3;
+  object-fit:contain!important;
+ }
+ .book-selector.is-expanded .book-details .book-detail-cover{display:none}
+}
+
+/* On mobile, preserve the cover's native 2:3 ratio in every state. */
+@media(max-width:680px){
+ .book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  display:block;
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  aspect-ratio:2/3!important;
+  flex:initial!important;
+  overflow:visible;
+ }
+ .book-selector.is-expanded .book-choice.is-active .book-cover-placeholder img{
+  display:block;
+  width:100%;
+  height:auto!important;
+  aspect-ratio:2/3;
+  object-fit:contain!important;
+  object-position:center top;
+ }
+}
