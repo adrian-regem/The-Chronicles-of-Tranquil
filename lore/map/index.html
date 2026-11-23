@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Yanone+Kaffeesatz:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body class="page-shell top-level-page">
+<body class="page-shell top-level-page lore-page">
 <header class="site-header page-header">
   <a class="brand" href="/" aria-label="Транквильский вестник — на главную"><img class="brand-crest" src="/assets/images/countries/%D0%93%D0%B5%D1%80%D0%B1%20%D0%9A%D0%B0%D1%80%D1%82%D1%80%D0%B0%D0%B4%D0%B0%20%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80.png" alt=""><span class="brand-name">Транквильский <span>вестник</span></span></a>
   <button class="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button>
@@ -32,8 +32,14 @@
   </section>
   <div class="page-content">
 
-    <section class="content-section">
-      <div class="placeholder-panel map-placeholder"><span class="placeholder-symbol">✧</span><h2>Карта появится здесь</h2><p>Место для карты Транквила. Позднее здесь можно будет увеличивать изображение и изучать отдельные области.</p></div>
+    <section class="content-section map-viewer">
+      <div class="map-switcher" role="group" aria-label="Выбор исторического периода карты">
+        <button class="map-period-button active" type="button" data-map-period="enslavement" aria-pressed="true">Порабощение</button>
+        <button class="map-period-button" type="button" data-map-period="artifact" aria-pressed="false">Артефакт</button>
+      </div>
+      <div class="map-display" id="map-display" data-current-map="enslavement">
+        <div class="map-placeholder"><span class="placeholder-symbol">✧</span><h2>Карта периода «Порабощение»</h2><p>Переключатель периодов готов. Для отображения карты нужно добавить соответствующее изображение.</p></div>
+      </div>
     </section>
 
   </div>
