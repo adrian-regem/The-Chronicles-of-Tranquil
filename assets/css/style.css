@@ -409,3 +409,71 @@ body:not(.page-shell) .hero-bottom { bottom:14px; left:5vw; right:5vw; color:rgb
   .top-level-page .page-heading { min-height:210px; padding:35px 7vw; background-position:center; }
   body:not(.page-shell) .hero { min-height:210px;height:56vw;max-height:290px; }
 }
+
+/* ===== Финальная настройка баннеров и заголовков ===== */
+.top-level-page .page-heading {
+  background-image:
+    linear-gradient(90deg,rgba(8,12,14,.42),rgba(8,12,14,.18) 50%,rgba(8,12,14,.42)),
+    url('/assets/images/backgrounds/%D0%A8%D0%B0%D0%BF%D0%BA%D0%B0.png') !important;
+  background-position:center center !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+}
+.top-level-page .page-heading h1 { text-transform:uppercase; }
+.top-level-page .page-heading { border-block:1px solid rgba(190,204,209,.28); }
+body:not(.page-shell) .hero {
+  background-image:
+    linear-gradient(90deg,rgba(8,12,14,.12),rgba(8,12,14,.04)),
+    url('/assets/images/backgrounds/%D0%A8%D0%B0%D0%BF%D0%BA%D0%B0.png') !important;
+  background-position:center center !important;
+  background-size:cover !important;
+}
+body:not(.page-shell) .hero-content {
+  display:flex !important;
+  position:absolute !important;
+  inset:auto 7vw 28px 7vw !important;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:5px;
+  max-width:760px !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  padding:18px 22px;
+  background:rgba(8,12,14,.68);
+  border-left:2px solid var(--teal-bright);
+  backdrop-filter:blur(5px);
+}
+body:not(.page-shell) .hero .eyebrow {
+  display:block !important;
+  margin:0;
+  color:#e3eeee;
+  font-size:clamp(12px,1.35vw,17px);
+  letter-spacing:.08em;
+  line-height:1.45;
+}
+body:not(.page-shell) .hero .hero-author {
+  display:block;
+  margin:0;
+  color:#b8c8cb;
+  font-size:13px;
+}
+body:not(.page-shell) .hero h1,
+body:not(.page-shell) .hero-copy,
+body:not(.page-shell) .hero .ornament { display:none !important; }
+body:not(.page-shell) .hero .text-link {
+  position:static;
+  transform:none;
+  margin-top:8px;
+  padding:0;
+  border:0;
+  background:transparent;
+  backdrop-filter:none;
+}
+body:not(.page-shell) .hero .text-link:hover { transform:translateX(3px); }
+.section-return { color:var(--teal-bright); }
+.site-footer p { max-width:760px; margin:8px auto; line-height:1.6; }
+@media(max-width:680px) {
+ body:not(.page-shell) .hero-content { inset:auto 5vw 18px 5vw !important; padding:12px 14px; }
+ body:not(.page-shell) .hero .eyebrow { font-size:12px; }
+ body:not(.page-shell) .hero .hero-author { font-size:11px; }
+}
