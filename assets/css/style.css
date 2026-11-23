@@ -893,3 +893,7 @@ html { scroll-behavior:smooth; }
 @media(max-width:680px){
  .map-mobile-instructions{display:block;width:min(1050px,88vw);margin:-8px auto 16px;padding:0 8px;color:var(--teal-bright);font:11px/1.5 "PT Sans",Arial,sans-serif;text-align:center}
 }
+
+/* Let native touch interaction on the zoom slider work independently of map gestures */
+.map-viewport{touch-action:auto}
+.map-zoom-controls input[type=range]{touch-action:none}
