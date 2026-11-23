@@ -477,3 +477,9 @@ body:not(.page-shell) .hero .text-link:hover { transform:translateX(3px); }
  body:not(.page-shell) .hero .eyebrow { font-size:12px; }
  body:not(.page-shell) .hero .hero-author { font-size:11px; }
 }
+
+/* Homepage banner copy: left-aligned editorial heading and lead */
+body:not(.page-shell) .hero-content { text-align:left; align-items:flex-start; }
+body:not(.page-shell) .hero .eyebrow { font-size:clamp(14px,1.6vw,19px); font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+body:not(.page-shell) .hero .hero-author { max-width:650px; color:#e0e7e9; font-size:clamp(14px,1.35vw,17px); line-height:1.65; }
+.article-return-wrap { display:flex; flex-wrap:wrap; gap:14px; }
