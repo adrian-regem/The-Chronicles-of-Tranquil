@@ -271,7 +271,7 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   const data=bookData[button.dataset.book],all=[...selector.querySelectorAll(".book-choice")],idx=all.indexOf(button);
   all.forEach((item,i)=>item.style.gridRow=String(i+1));
   button.classList.add("is-active");button.setAttribute("aria-expanded","true");
-  selector.classList.add("is-expanded");details.style.gridRow=String(idx+1);
+  selector.classList.add("is-expanded");details.hidden=false;details.style.gridRow=String(idx+1);
   const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);
   const forExtra=relatedBooks.length?'<div class="book-for-row"><span class="book-for-label">'+(data.relationLabel||"Для книг:")+'</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>':"";
   let extra="";
