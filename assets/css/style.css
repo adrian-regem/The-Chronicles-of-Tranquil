@@ -1076,3 +1076,83 @@ html { scroll-behavior:smooth; }
   object-position:center top;
  }
 }
+
+
+/* ===== Каталог книг: единая раскладка на компьютерах и телефонах ===== */
+.book-selector{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:18px;
+  align-items:start;
+  transition:none;
+}
+.book-selector .book-choice,
+.book-selector.is-expanded .book-choice,
+.book-selector.is-expanded .book-choice.is-active{
+  display:block!important;
+  grid-column:auto!important;
+  grid-row:1!important;
+  justify-self:stretch!important;
+  align-self:start!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0;
+  overflow:hidden!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:none!important;
+  transition:none!important;
+}
+.book-selector .book-choice:hover,
+.book-selector.is-expanded .book-choice:hover{transform:none!important}
+.book-selector .book-cover-placeholder,
+.book-selector.is-expanded .book-choice .book-cover-placeholder,
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  aspect-ratio:2/3!important;
+  margin:0!important;
+  flex:none!important;
+  overflow:hidden!important;
+  border:0!important;
+  transition:none!important;
+}
+.book-selector .book-cover-placeholder img,
+.book-selector.is-expanded .book-choice .book-cover-placeholder img,
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder img{
+  display:block;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:2/3;
+  object-fit:contain!important;
+  object-position:center;
+}
+.book-selector.is-expanded .book-choice.is-active{
+  outline:2px solid var(--teal-bright);
+  outline-offset:3px;
+}
+.book-selector.is-expanded .book-details{
+  grid-column:1/-1!important;
+  grid-row:2!important;
+  min-width:0;
+  animation:book-panel-in .95s cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes book-panel-in{
+  from{opacity:0;transform:translateY(26px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.book-cycle-item-next{grid-column:2}
+@media(max-width:680px){
+  .book-selector{gap:8px}
+  .book-selector.is-expanded{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}
+  .book-selector .book-choice,
+  .book-selector.is-expanded .book-choice,
+  .book-selector.is-expanded .book-choice.is-active{padding:0!important}
+  .book-selector.is-expanded .book-details{grid-column:1/-1!important;grid-row:2!important}
+  .book-cycle-item-next{grid-column:1}
+}
