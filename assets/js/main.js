@@ -148,8 +148,8 @@ mapViewport?.addEventListener("touchmove",e=>{
   const localX=mid.x-rect.left,localY=mid.y-rect.top;
   const mapPointX=localX/oldScale-mapX,mapPointY=localY/oldScale-mapY;
   mapScale=nextScale;
-  mapX=mapPointX-localX/mapScale;
-  mapY=mapPointY-localY/mapScale;
+  mapX=localX/mapScale-mapPointX;
+  mapY=localY/mapScale-mapPointY;
   mapX=-mapBaseWidth+mapMod(mapX+mapBaseWidth,mapBaseWidth);
   clampMapY();renderMap();
   touchPan={mode:"pinch",x:mid.x,y:mid.y,distance};
@@ -176,7 +176,7 @@ const bookData={
  "golden-wings":{title:"Золотые крылья",cover:"Обложка Золотые крылья.png",eyebrow:"Повесть",relationLabel:"Связана с:",forBook:{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},synopsis:"Здесь появятся описание, синопсис и сведения о повести \"Золотые крылья\".",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
  "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Порабощение",cover:"Обложка Порабощение.png"}},
  "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести \"Золотые крылья\".",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},{id:"golden-wings",title:"Золотые крылья",cover:"Обложка Золотые крылья.png"}]},
- "guide-unknown":{title:"Неизвестный справочник",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",status:"Информация появится позже",links:["Подробности будут опубликованы позднее"],forBook:{id:"third",title:"Хроники Транквила: ???",cover:"Обложка Неизвестно.png"}}
+ "guide-unknown":{title:"Неизвестный справочник",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",status:"Информация появится позже",links:["Подробности будут опубликованы позднее"],forBook:{id:"third",title:"???",cover:"Обложка Неизвестно.png"}}
 };
 function makeBookLink(id,label,cover,klass){
  const image=cover?'<img src="/assets/images/books/'+encodeURIComponent(cover)+'" alt="">':"";
