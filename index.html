@@ -14,22 +14,12 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#home" aria-label="Транквильский вестник — на главную">
-      <span class="brand-mark">Т</span>
-      <span class="brand-name">Транквильский <span>вестник</span></span>
-    </a>
-    <button class="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">
-      <span></span><span></span>
-    </button>
+    <a class="brand" href="/" aria-label="Транквильский вестник — на главную"><span class="brand-mark">Т</span><span class="brand-name">Транквильский <span>вестник</span></span></a>
+    <button class="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button>
     <nav class="main-nav" aria-label="Основная навигация">
-      <a class="active" href="#home">Главная</a>
-      <a href="#books">Книги</a>
-      <a href="#reference">Справочник</a>
-      <a href="#news">Новости</a>
-      <a href="#author">Об авторе</a>
+      <a class="active" href="/">Главная</a><a href="/books/">Книги</a><a href="/lore/">Справочник</a><a href="/news/">Новости</a><a href="/author/">Автор</a>
     </nav>
   </header>
-
   <main>
     <section class="hero" id="home">
       <div class="hero-shade"></div>
@@ -38,69 +28,27 @@
         <h1>Хроники<br><em>Транквиля</em></h1>
         <span class="ornament" aria-hidden="true">✦</span>
         <p class="hero-copy">Мир, в котором у каждой истории есть своя цена,<br class="desktop-only"> у каждого выбора — последствия, а у каждой легенды — начало.</p>
-        <a class="text-link" href="#books">Открыть книги <span aria-hidden="true">→</span></a>
+        <a class="text-link" href="/books/">Открыть книги <span aria-hidden="true">→</span></a>
       </div>
       <div class="hero-bottom"><span>Исследуйте мир Транквиля</span><span class="scroll-mark">↓</span></div>
     </section>
-
-    <section class="intro section-wrap">
+    <section class="intro section-wrap" id="setting">
       <p class="eyebrow">Добро пожаловать</p>
       <h2>История не заканчивается<br><em>последней страницей</em></h2>
       <p class="section-lead">«Транквильский вестник» — путеводитель по миру, который живёт за пределами книг. Здесь собраны истории, земли, судьбы и открытия, дополняющие основное повествование.</p>
+      <a class="text-link" href="/lore/">Исследовать справочник <span aria-hidden="true">→</span></a>
     </section>
-
-    <section class="feature-section" id="books">
-      <div class="feature-image feature-books" role="img" aria-label="Место для иллюстрации книжной серии"></div>
-      <div class="feature-copy">
-        <p class="eyebrow">Литературная серия</p>
-        <h2>Книги <em>Транквиля</em></h2>
-        <p>Начните путешествие с первой книги основной серии и следуйте за историей в задуманном автором порядке.</p>
-        <a class="text-link" href="#books">Перейти к книгам <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-
-    <section class="quote-section">
+    <section class="quote-section" id="quotes">
       <div class="quote-inner">
         <p class="eyebrow">Голоса Транквиля</p>
         <blockquote id="quote-text">«Здесь появится цитата из одной из книг»</blockquote>
         <p class="quote-source" id="quote-source">Хроники Транквиля</p>
         <button class="outline-button" id="new-quote" type="button">Другая цитата <span aria-hidden="true">↻</span></button>
-        <p class="quote-note">Подборка подлинных цитат из книг будет добавлена отдельно.</p>
+        <p class="quote-note">Генератор будет использовать только подлинные цитаты из произведений.</p>
       </div>
-    </section>
-
-    <section class="reference-section section-wrap" id="reference">
-      <p class="eyebrow">За пределами страниц</p>
-      <h2>Исследуйте <em>мир</em></h2>
-      <div class="tile-grid">
-        <a class="info-tile" href="#reference"><span class="tile-number">01</span><h3>Карта мира</h3><p>Земли, границы и дальние уголки Транквиля.</p><span class="tile-arrow">↗</span></a>
-        <a class="info-tile" href="#reference"><span class="tile-number">02</span><h3>Государства</h3><p>История, культура и устройство стран.</p><span class="tile-arrow">↗</span></a>
-        <a class="info-tile" href="#reference"><span class="tile-number">03</span><h3>Персонажи</h3><p>Те, чьи решения меняют ход истории.</p><span class="tile-arrow">↗</span></a>
-        <a class="info-tile" href="#reference"><span class="tile-number">04</span><h3>Путеводители</h3><p>Дополнительные материалы для читателей.</p><span class="tile-arrow">↗</span></a>
-      </div>
-    </section>
-
-    <section class="news-section" id="news">
-      <div class="section-wrap">
-        <p class="eyebrow">Из жизни вселенной</p>
-        <h2>Последние <em>вести</em></h2>
-        <p class="section-lead">Здесь будут появляться новости о книгах, работе над продолжением и событиях, связанных с миром Транквиля.</p>
-        <div class="empty-news">Первые новости скоро появятся здесь.</div>
-      </div>
-    </section>
-
-    <section class="author-section section-wrap" id="author">
-      <p class="eyebrow">Создатель вселенной</p>
-      <h2>Об <em>авторе</em></h2>
-      <p class="section-lead">Небольшое знакомство с автором и способы связаться с ним появятся в этом разделе.</p>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <a class="footer-brand" href="#home">Транквильский вестник</a>
-    <p>Литературная вселенная «Хроники Транквиля»</p>
-    <span>© <span id="year"></span> Все права защищены</span>
-  </footer>
+  <footer class="site-footer"><a class="footer-brand" href="/">Транквильский вестник</a><p>Литературная вселенная «Хроники Транквиля»</p><span>© <span id="year"></span> Все права защищены</span></footer>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
