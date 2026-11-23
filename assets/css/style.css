@@ -290,3 +290,122 @@ h1,h2,h3,h4,blockquote,.brand-name,.footer-brand,.page-heading h1,.placeholder-c
   letter-spacing:.025em;
 }
 .hero h1 { font-family:"Yanone Kaffeesatz","Arial Narrow",sans-serif; }
+
+/* ===== Исправление логотипа и шапки сайта ===== */
+.brand {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+  max-width:min(360px,42vw);
+  flex:0 1 auto;
+}
+.brand-crest {
+  display:block;
+  width:clamp(34px,3.2vw,46px) !important;
+  height:clamp(34px,3.2vw,46px) !important;
+  max-width:46px !important;
+  max-height:46px !important;
+  min-width:0;
+  object-fit:contain;
+  object-position:center;
+  flex:0 0 auto;
+  filter:brightness(0) invert(1) drop-shadow(0 0 5px rgba(255,255,255,.16)) !important;
+}
+.brand-name {
+  display:block;
+  min-width:0;
+  font-family:"Yanone Kaffeesatz","Arial Narrow",sans-serif;
+  font-size:clamp(19px,2vw,25px);
+  line-height:1;
+  white-space:nowrap;
+  color:#f2f4f5;
+}
+.brand-name span {
+  display:block;
+  margin-top:4px;
+  color:#a9b3b8;
+  font-family:"PT Sans",Arial,sans-serif;
+  font-size:11px;
+  letter-spacing:.22em;
+}
+.site-header {
+  position:relative;
+  inset:auto;
+  min-height:82px;
+  width:100%;
+  padding:12px clamp(16px,5vw,72px);
+  gap:clamp(12px,2vw,28px);
+  background:rgba(13,16,18,.97);
+  border-bottom:1px solid rgba(190,204,209,.28);
+  backdrop-filter:blur(12px);
+}
+.site-header.page-header { position:relative; }
+.main-nav { flex:0 1 auto; flex-wrap:wrap; justify-content:flex-end; }
+.main-nav a { white-space:nowrap; }
+.top-level-page .page-heading {
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:clamp(220px,27vw,330px);
+  padding:48px 8vw;
+  overflow:hidden;
+  border-top:1px solid rgba(190,204,209,.24);
+  border-bottom:1px solid rgba(190,204,209,.24);
+  background-color:#111619;
+  background-image:
+    linear-gradient(90deg,rgba(8,12,14,.38),rgba(8,12,14,.18) 50%,rgba(8,12,14,.38)),
+    url('/assets/images/backgrounds/%D0%A8%D0%B0%D0%BF%D0%BA%D0%B0.png');
+  background-position:center;
+  background-size:cover;
+}
+.top-level-page .page-heading h1,
+.top-level-page .page-heading .eyebrow,
+.top-level-page .page-heading .page-lead {
+  position:relative;
+  z-index:1;
+  color:#f0f2f3;
+  text-shadow:0 2px 14px rgba(0,0,0,.85);
+}
+.top-level-page .page-heading .eyebrow { color:#a8d0ce; }
+.top-level-page .page-heading .page-lead { color:#e0e5e7; }
+body:not(.page-shell) .site-header { position:absolute; top:0; left:0; right:0; background:rgba(9,12,14,.78); }
+body:not(.page-shell) .hero {
+  min-height:clamp(260px,33vw,390px);
+  height:clamp(260px,33vw,390px);
+  padding:0;
+  display:block;
+  background-image:url('/assets/images/backgrounds/%D0%A8%D0%B0%D0%BF%D0%BA%D0%B0.png');
+  background-position:center;
+  background-size:cover;
+  border-block:1px solid rgba(190,204,209,.24);
+}
+body:not(.page-shell) .hero-shade { background:linear-gradient(90deg,rgba(8,12,14,.1),transparent 55%,rgba(8,12,14,.12)); }
+body:not(.page-shell) .hero-content { display:none; }
+body:not(.page-shell) .hero-bottom { bottom:14px; left:5vw; right:5vw; color:rgba(235,240,242,.75); }
+@media(max-width:900px) {
+  .site-header { padding-inline:4vw; }
+  .brand { max-width:36vw; }
+  .brand-crest { width:38px !important;height:38px !important; }
+  .brand-name { font-size:20px; }
+  .main-nav { gap:12px; }
+  .main-nav a { font-size:10px; }
+}
+@media(max-width:680px) {
+  .site-header,.site-header.page-header {
+    min-height:68px;
+    padding:9px 5vw;
+    gap:8px;
+  }
+  .brand { max-width:calc(100% - 54px); gap:9px; }
+  .brand-crest { width:34px !important;height:34px !important; }
+  .brand-name { font-size:18px; }
+  .brand-name span { font-size:9px; }
+  .menu-toggle { flex:0 0 auto; }
+  .main-nav { top:67px; }
+  .top-level-page .page-heading { min-height:210px; padding:35px 7vw; background-position:center; }
+  body:not(.page-shell) .hero { min-height:210px;height:56vw;max-height:290px; }
+}
