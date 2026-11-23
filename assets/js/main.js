@@ -170,13 +170,78 @@ mapViewport?.addEventListener("touchcancel",()=>{touchPan=null;},{passive:true})
 
 // Expandable catalogs: each section has its own single-open selection.
 const bookData={
- enslavement:{title:"Порабощение",cover:"Обложка Порабощение.png",eyebrow:"Книга первая",synopsis:"Синопсис первой книги появится здесь. Это место предназначено для краткого знакомства с завязкой истории, её героями и главным конфликтом — без раскрытия ключевых поворотов.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],next:"artifact"},
- artifact:{title:"Артефакт",cover:"Обложка Артефакт.png",eyebrow:"Книга вторая",synopsis:"Синопсис второй книги появится здесь. В этом блоке будет краткое описание сюжета и его связи с первой частью цикла.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],previous:"enslavement",next:"third"},
- third:{title:"Третья книга",cover:"Обложка Неизвестно.png",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",status:"Название пока не объявлено",links:["Информация о публикации появится позже"],previous:"artifact"},
- "golden-wings":{title:"Золотые крылья",cover:"Обложка Золотые крылья.png",eyebrow:"Спин-офф",relationLabel:"Связана с:",forBook:{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},synopsis:"Здесь появятся описание, синопсис и сведения о повести \"Золотые крылья\".",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
- "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Порабощение",cover:"Обложка Порабощение.png"}},
- "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла, а также повести \"Золотые крылья\".",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBooks:[{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},{id:"golden-wings",title:"Золотые крылья",cover:"Обложка Золотые крылья.png"}]},
- "guide-unknown":{title:"Неизвестный справочник",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",status:"Информация появится позже",links:["Подробности будут опубликованы позднее"],forBook:{id:"third",title:"???",cover:"Обложка Неизвестно.png"}}
+ enslavement:{
+  title:"Порабощение",cover:"Обложка Порабощение.png",eyebrow:"Книга первая",
+  synopsis:"Первая часть цикла «Хроники Транквила» рассказывает о поиске свободы. Её ищут и находят в разных ипостасях: кто-то желает сбежать от своего долга, кто-то — наоборот, исполнить его. Одни пытаются избежать наказания, а другие же хотят остаться героями. Иные стремятся к спокойной жизни.\n\nПерсонажи сталкиваются с различными испытаниями, раскрывая тайны и расправляясь с трудностями на своём пути. Сюжет затрагивает темы дружбы, предательства и власти, а также исследует сложные моральные дилеммы.",
+  metadata:[["Объём","612 бумажных страниц"],["Дата выпуска","22 октября 2020 г."]],
+  stores:[
+   {format:"Электронная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/khroniki_trankvila_poraboshenie/"},
+    {brand:"Я Книги",mark:"Я",url:"https://books.yandex.ru/books/fbYn3qVZ?username=b0748768650&utm_place=content_book_menu_item"},
+    {brand:"Литрес",mark:"Л",url:"https://www.litres.ru/book/nikita-dmitrichev/hroniki-trankvila-poraboschenie-63015983/"},
+    {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/9i1GIsn"}
+   ]},
+   {format:"Бумажная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/khroniki_trankvila_poraboshenie/"},
+    {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/vFsYIt8"},
+    {brand:"Wildberries",mark:"WB",url:"https://www.wildberries.ru/catalog/36147651/detail.aspx?targetUrl=SN"}
+   ]}
+  ],
+  next:"artifact"
+ },
+ artifact:{
+  title:"Артефакт",cover:"Обложка Артефакт.png",eyebrow:"Книга вторая",
+  synopsis:"Долгожданное продолжение первой книги, поднимающее проблему несправедливости мира, когда только обладатели ведьмовской крови могут управлять магией и быть на ступень выше простых людей.\n\nЧерез глубокие и живые истории персонажей автор заставляет задуматься о роли обычного человека в глобальных для всей планеты потрясениях. Что лучше: поддаться течению или стоять у руля?",
+  metadata:[["Объём","540 страниц"],["Дата выпуска","9 февраля 2024 г."]],
+  stores:[
+   {format:"Электронная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/khroniki_trankvila_artefakt/"},
+    {brand:"Литрес",mark:"Л",url:"https://www.litres.ru/book/nikita-dmitrichev/hroniki-trankvila-artefakt-70354606/"},
+    {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/TUzqnEQ"},
+    {brand:"Я Книги",mark:"Я",url:"https://bookmate.ru/books/uVpnXmKp"}
+   ]},
+   {format:"Печатная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/khroniki_trankvila_artefakt/"},
+    {brand:"Wildberries",mark:"WB",url:"https://www.wildberries.ru/catalog/209742637/detail.aspx?targetUrl=SN"}
+   ]}
+  ],
+  previous:"enslavement",next:"third"
+ },
+ third:{title:"Третья книга",cover:"Обложка Неизвестно.png",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",metadata:[],stores:[],status:"Название пока не объявлено",previous:"artifact"},
+ "golden-wings":{
+  title:"Золотые крылья",cover:"Обложка Золотые крылья.png",eyebrow:"Спин-офф",
+  excerpt:"— Выходит, она была единственной выжившей?\n— Нет, многие сторонники королевы сбежали ещё до чистки. Но благодаря именно этой ведьме сохранились многие считавшиеся утерянными знания. То, что ведьмы сейчас в принципе существуют, именно её заслуга.\n— Это был большой подвиг. Как её звали?\n— Сорция Век. По крайней мере, именно это имя ей приписывают в легендах. Всё произошло пятьсот лет назад, не осталось никого, кто бы мог всё подтвердить.",
+  metadata:[["Объём","144 страницы"],["Дата выпуска","21 июня 2024 г."]],
+  stores:[
+   {format:"Электронная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/zolotye_krylya_1/"},
+    {brand:"Литрес",mark:"Л",url:"https://www.litres.ru/book/nikita-dmitrichev/zolotye-krylya-70821091/?lfrom=1166021823&ref_key=81e481cffebfbbeb4a6a51e08cd05f25b2e05c5d9ba0eaf59f4eea1da571c736&ref_offer=1"},
+    {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/9i1GBfD"},
+    {brand:"Я Книги",mark:"Я",url:"https://bookmate.ru/books/z6DAfe2w"}
+   ]},
+   {format:"Печатная версия",items:[
+    {brand:"Ridero",mark:"R",url:"https://ridero.ru/books/zolotye_krylya_1/"},
+    {brand:"Ozon",mark:"OZON",url:"https://ozon.ru/t/rhl7NiG"},
+    {brand:"Wildberries",mark:"WB",url:"https://www.wildberries.ru/catalog/239852599/detail.aspx?targetUrl=SN"}
+   ]}
+  ],
+  relationLabel:"Связана с:",forBook:{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"}
+ },
+ "guide-enslavement":{
+  title:"Путеводитель по Порабощению",cover:"Обложка Путеводитель по Порабощению.png",eyebrow:"Справочник",
+  synopsis:"«Хроники Транквила: Порабощение» стала первой книгой цикла. Вмещая в себя более 600 страниц и 60 персонажей, она может стать настоящим испытанием на внимательность.\n\nДля комфортного читательского опыта автор публикует удобный вариант своего справочника, которым и сам пользовался при работе над рукописью. Он содержит имена, портреты и титулы героев, карту мира, а также прочие важные мелочи.",
+  metadata:[],
+  stores:[{format:"Бесплатная электронная версия",items:[{brand:"Ridero",mark:"R",url:"https://ridero.ru/books/putevoditel_po_porabosheniyu/"}]}],
+  forBook:{id:"enslavement",title:"Порабощение",cover:"Обложка Порабощение.png"}
+ },
+ "guide-artifact":{
+  title:"Путеводитель по Артефакту",cover:"Обложка Путеводитель по Артефакту.png",eyebrow:"Справочник",
+  synopsis:"«Хроники Транквила: Артефакт» и «Золотые крылья» продолжили основной сюжет цикла, рассказав свою историю. Насчитывая в общей сумме более 600 страниц и 120 персонажей, они могут стать настоящим испытанием на внимательность.\n\nДля комфортного читательского опыта автор публикует удобный вариант своего справочника, которым и сам пользовался при работе над рукописью. Он содержит имена, портреты и титулы героев, карту мира, а также прочие важные мелочи.",
+  metadata:[],
+  stores:[{format:"Бесплатная электронная версия",items:[{brand:"Ridero",mark:"R",url:"https://ridero.ru/books/putevoditel_po_artefaktu/"}]}],
+  forBooks:[{id:"artifact",title:"Артефакт",cover:"Обложка Артефакт.png"},{id:"golden-wings",title:"Золотые крылья",cover:"Обложка Золотые крылья.png"}]
+ },
+ "guide-unknown":{title:"Неизвестный справочник",cover:"Обложка Неизвестно.png",eyebrow:"Справочник",synopsis:"Название и содержание третьего справочника будут объявлены позднее.",metadata:[],stores:[],status:"Информация появится позже",forBook:{id:"third",title:"???",cover:"Обложка Неизвестно.png"}}
 };
 function makeBookLink(id,label,cover,klass){
  const image=cover?'<img src="/assets/images/books/'+encodeURIComponent(cover)+'" alt="">':"";
@@ -191,6 +256,10 @@ function openMainBook(id){
  target.click();
  mainSelector.scrollIntoView({behavior:"smooth",block:"center"});
 }
+function renderStoreGroups(stores){
+ if(!stores?.length)return "";
+ return '<div class="book-store-groups">'+stores.map(group=>'<section class="book-store-group"><h4>'+group.format+'</h4><div class="book-store-list">'+group.items.map(store=>'<a class="book-store-link" href="'+store.url+'" target="_blank" rel="noopener noreferrer" aria-label="'+group.format+': '+store.brand+'" title="'+store.brand+' — '+group.format+'"><span class="book-store-mark book-store-'+store.brand.toLowerCase().replace(/[^a-zа-яё]/g,"")+'">'+store.mark+'</span><span class="book-store-name">'+store.brand+'</span></a>').join("")+'</div></section>').join("")+'</div>';
+}
 document.querySelectorAll("[data-book-selector]").forEach(selector=>{
  const details=selector.querySelector(".book-details");
  selector.querySelectorAll(".book-choice").forEach(button=>button.addEventListener("click",()=>{
@@ -203,17 +272,21 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   all.forEach((item,i)=>item.style.gridRow=String(i+1));
   button.classList.add("is-active");button.setAttribute("aria-expanded","true");
   selector.classList.add("is-expanded");details.style.gridRow=String(idx+1);
-  let extra="",forExtra="";
   const relatedBooks=data.forBooks||(data.forBook?[data.forBook]:[]);
-  if(relatedBooks.length)forExtra='<div class="book-for-row"><span class="book-for-label">'+(data.relationLabel||"Для книг:")+'</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>';
+  const forExtra=relatedBooks.length?'<div class="book-for-row"><span class="book-for-label">'+(data.relationLabel||"Для книг:")+'</span>'+relatedBooks.map(book=>makeBookLink(book.id,book.title,book.cover,"book-for-link")).join("")+'</div>':"";
+  let extra="";
   if(data.previous||data.next){
    extra+='<div class="book-cycle-nav">';
    if(data.previous){const p=bookData[data.previous];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Предыдущая книга цикла</span>'+makeBookLink(data.previous,p.title,p.cover||"Ⅰ","book-cycle-link")+'</div>';}
    if(data.next){const n=bookData[data.next];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Следующая книга цикла</span>'+makeBookLink(data.next,n.title,n.cover||"Ⅱ","book-cycle-link")+'</div>';}
    extra+='</div>';
   }
-  details.innerHTML='<p class="eyebrow">'+data.eyebrow+'</p><h3>'+data.title+'</h3>'+forExtra+'<p class="book-synopsis">'+data.synopsis+'</p><p class="book-detail-status">'+data.status+'</p><div class="book-detail-links">'+data.links.map(x=>'<span>'+x+'</span>').join("")+'</div>'+extra;
-  details.hidden=false;
+  const cover=data.cover?'<img class="book-detail-cover" src="/assets/images/books/'+encodeURIComponent(data.cover)+'" alt="">':"";
+  const metadata=data.metadata?.length?'<dl class="book-metadata">'+data.metadata.map(item=>'<div><dt>'+item[0]+'</dt><dd>'+item[1]+'</dd></div>').join("")+'</dl>':"";
+  const synopsis=data.synopsis?'<p class="book-synopsis">'+data.synopsis.replace(/\n\n/g,"</p><p class=\"book-synopsis\">")+'</p>':"";
+  const excerpt=data.excerpt?'<blockquote class="book-excerpt">'+data.excerpt.replace(/\n/g,"<br>")+'</blockquote>':"";
+  const status=data.status?'<p class="book-detail-status">'+data.status+'</p>':"";
+  details.innerHTML='<div class="book-detail-heading">'+cover+'<div class="book-detail-title"><p class="eyebrow">'+data.eyebrow+'</p><h3>'+data.title+'</h3>'+metadata+'</div></div>'+forExtra+synopsis+excerpt+status+renderStoreGroups(data.stores)+extra;
  }));
 });
 document.addEventListener("click",e=>{
