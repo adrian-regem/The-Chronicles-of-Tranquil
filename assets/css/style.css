@@ -717,3 +717,6 @@ body.lore-page .page-heading .page-lead { color:#e0e5e7; text-shadow:0 2px 12px 
   color:#e4f2f1;
 }
 .map-display .map-placeholder { min-height:360px; }
+
+.guide-filter-group { display:flex; flex-direction:column; gap:9px; min-width:0; }
+html { scroll-behavior:smooth; }
