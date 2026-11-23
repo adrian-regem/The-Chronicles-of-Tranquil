@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    image { filter: brightness(0); }
+    @media (prefers-color-scheme: dark) {
+      image { filter: brightness(0) invert(1); }
+    }
+  </style>
+  <image href="../logo/Герб%20Картрада%20вектор.png" width="512" height="512" preserveAspectRatio="xMidYMid meet"/>
+</svg>
