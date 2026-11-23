@@ -41,7 +41,7 @@ const mapImage=document.querySelector("#period-map-image"),mapViewport=document.
 const mapZoom=document.querySelector("#map-zoom"),mapZoomValue=document.querySelector("#map-zoom-value");
 const mapZoomReset=document.querySelector("#map-zoom-reset"),mapComingSoon=document.querySelector("#map-coming-soon");
 const mapZoomControls=document.querySelector(".map-zoom-controls"),mapPanHint=document.querySelector(".map-pan-hint");
-let mapScale=1,mapX=0,mapY=0,mapDrag=null,touchPan=null;
+let mapScale=1,mapX=0,mapY=0,mapDrag=null,touchPan=null,touchScrollY=null;
 function renderMap(){
  if(!mapImage)return;
  mapImage.style.transform=`translate(${mapX}px,${mapY}px) scale(${mapScale})`;
@@ -81,27 +81,35 @@ mapViewport?.addEventListener("pointermove",e=>{
 function stopMapDrag(e){if(!mapDrag||(e&&mapDrag.id!==e.pointerId))return;mapDrag=null;mapViewport?.classList.remove("is-dragging");}
 mapViewport?.addEventListener("pointerup",stopMapDrag);mapViewport?.addEventListener("pointercancel",stopMapDrag);
 mapViewport?.addEventListener("touchstart",e=>{
- if(e.touches.length===2&&!mapImage?.hidden){
-  e.preventDefault();
+ if(mapImage?.hidden)return;
+ if(e.touches.length===2){
+  e.preventDefault();touchScrollY=null;
   const mid={x:(e.touches[0].clientX+e.touches[1].clientX)/2,y:(e.touches[0].clientY+e.touches[1].clientY)/2};
   touchPan={x:mid.x,y:mid.y,ox:mapX,oy:mapY};
- }
+ }else if(e.touches.length===1){touchPan=null;touchScrollY=e.touches[0].clientY;}
 },{passive:false});
 mapViewport?.addEventListener("touchmove",e=>{
  if(e.touches.length===2&&touchPan){
   e.preventDefault();
   const mid={x:(e.touches[0].clientX+e.touches[1].clientX)/2,y:(e.touches[0].clientY+e.touches[1].clientY)/2};
   mapX=touchPan.ox+mid.x-touchPan.x;mapY=touchPan.oy+mid.y-touchPan.y;renderMap();
+ }else if(e.touches.length===1&&touchScrollY!==null){
+  e.preventDefault();
+  const nextY=e.touches[0].clientY;window.scrollBy(0,touchScrollY-nextY);touchScrollY=nextY;
  }
 },{passive:false});
-mapViewport?.addEventListener("touchend",e=>{if(e.touches.length<2)touchPan=null;},{passive:true});
-mapViewport?.addEventListener("touchcancel",()=>{touchPan=null;},{passive:true});
+mapViewport?.addEventListener("touchend",e=>{
+ if(e.touches.length<2)touchPan=null;
+ if(e.touches.length===0)touchScrollY=null;
+ else if(e.touches.length===1)touchScrollY=e.touches[0].clientY;
+},{passive:true});
+mapViewport?.addEventListener("touchcancel",()=>{touchPan=null;touchScrollY=null;},{passive:true});
 
 // Expandable catalogs: each section has its own single-open selection.
 const bookData={
- enslavement:{title:"Порабощение",eyebrow:"Книга первая",synopsis:"Синопсис первой книги появится здесь. Это место предназначено для краткого знакомства с завязкой истории, её героями и главным конфликтом — без раскрытия ключевых поворотов.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],next:"artifact"},
- artifact:{title:"Артефакт",eyebrow:"Книга вторая",synopsis:"Синопсис второй книги появится здесь. В этом блоке будет краткое описание сюжета и его связи с первой частью цикла.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],previous:"enslavement",next:"third"},
- third:{title:"Третья книга",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",status:"Название пока не объявлено",links:["Информация о публикации появится позже"],previous:"artifact"},
+ enslavement:{title:"Порабощение",cover:"Ⅰ",eyebrow:"Книга первая",synopsis:"Синопсис первой книги появится здесь. Это место предназначено для краткого знакомства с завязкой истории, её героями и главным конфликтом — без раскрытия ключевых поворотов.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],next:"artifact"},
+ artifact:{title:"Артефакт",cover:"Ⅱ",eyebrow:"Книга вторая",synopsis:"Синопсис второй книги появится здесь. В этом блоке будет краткое описание сюжета и его связи с первой частью цикла.",status:"Описание и ссылки готовятся",links:["Печатное издание — скоро","Электронная версия — скоро"],previous:"enslavement",next:"third"},
+ third:{title:"Третья книга",cover:"Ⅲ",eyebrow:"Книга третья",synopsis:"Название, аннотация и подробности третьей книги будут опубликованы позднее.",status:"Название пока не объявлено",links:["Информация о публикации появится позже"],previous:"artifact"},
  "golden-wings":{title:"Золотые крылья",eyebrow:"Спин-офф к: Артефакт",synopsis:"Здесь появятся описание, синопсис и сведения о повести «Золотые крылья».",status:"Информация готовится",links:["Печатное издание — скоро","Электронная версия — скоро"]},
  "guide-enslavement":{title:"Путеводитель по Порабощению",eyebrow:"Справочник",synopsis:"Справочник поможет ориентироваться в событиях, персонажах, местах и понятиях первой книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"enslavement",title:"Хроники Транквила: Порабощение",cover:"Ⅰ"}},
  "guide-artifact":{title:"Путеводитель по Артефакту",eyebrow:"Справочник",synopsis:"Справочник соберёт сведения о персонажах, местах и важных понятиях второй книги цикла.",status:"Справочник готовится",links:["Открыть справочник — скоро"],forBook:{id:"artifact",title:"Хроники Транквила: Артефакт",cover:"Ⅱ"}},
@@ -131,15 +139,15 @@ document.querySelectorAll("[data-book-selector]").forEach(selector=>{
   all.forEach((item,i)=>item.style.gridRow=String(i+1));
   button.classList.add("is-active");button.setAttribute("aria-expanded","true");
   selector.classList.add("is-expanded");details.style.gridRow=String(idx+1);
-  let extra="";
-  if(data.forBook)extra+='<div class="book-for-row"><span class="book-for-label">Для книг:</span>'+makeBookLink(data.forBook.id,data.forBook.title,data.forBook.cover,"book-for-link")+'</div>';
+  let extra="",forExtra="";
+  if(data.forBook)forExtra='<div class="book-for-row"><span class="book-for-label">Для книг:</span>'+makeBookLink(data.forBook.id,data.forBook.title,data.forBook.cover,"book-for-link")+'</div>';
   if(data.previous||data.next){
    extra+='<div class="book-cycle-nav">';
    if(data.previous){const p=bookData[data.previous];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Предыдущая книга цикла</span>'+makeBookLink(data.previous,p.title,p.cover||"Ⅰ","book-cycle-link")+'</div>';}
    if(data.next){const n=bookData[data.next];extra+='<div class="book-cycle-item"><span class="book-cycle-label">Следующая книга цикла</span>'+makeBookLink(data.next,n.title,n.cover||"Ⅱ","book-cycle-link")+'</div>';}
    extra+='</div>';
   }
-  details.innerHTML='<p class="eyebrow">'+data.eyebrow+'</p><h3>'+data.title+'</h3><p class="book-synopsis">'+data.synopsis+'</p><p class="book-detail-status">'+data.status+'</p><div class="book-detail-links">'+data.links.map(x=>'<span>'+x+'</span>').join("")+'</div>'+extra;
+  details.innerHTML='<p class="eyebrow">'+data.eyebrow+'</p><h3>'+data.title+'</h3>'+forExtra+'<p class="book-synopsis">'+data.synopsis+'</p><p class="book-detail-status">'+data.status+'</p><div class="book-detail-links">'+data.links.map(x=>'<span>'+x+'</span>').join("")+'</div>'+extra;
   details.hidden=false;
  }));
 });
