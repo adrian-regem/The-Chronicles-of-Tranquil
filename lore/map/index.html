@@ -30,22 +30,25 @@
     <h1>Карта Транквила</h1>
     <p class="page-lead">Выберите исторический период, чтобы посмотреть соответствующую версию карты мира.</p>
   </section>
-  <div class="page-content">
-
-    <section class="content-section map-viewer">
-      <div class="map-switcher" role="group" aria-label="Выбор исторического периода карты">
-        <button class="map-period-button active" type="button" data-map-period="enslavement" aria-pressed="true">Порабощение</button>
-        <button class="map-period-button" type="button" data-map-period="artifact" aria-pressed="false">Артефакт</button>
+  <section class="map-fullscreen-section" aria-label="Интерактивная карта Транквила">
+    <div class="map-switcher" role="group" aria-label="Выбор исторического периода карты">
+      <button class="map-period-button active" type="button" data-map-period="enslavement" aria-pressed="true">Порабощение</button>
+      <button class="map-period-button" type="button" data-map-period="artifact" aria-pressed="false">Артефакт</button>
+    </div>
+    <div class="map-viewport" id="map-viewport">
+      <img id="period-map-image" class="period-map-image" src="/assets/images/maps/Транквил.png" alt="Карта Транквила периода «Порабощение»" draggable="false">
+      <div class="map-zoom-controls" aria-label="Управление масштабом карты">
+        <label for="map-zoom">Масштаб</label>
+        <input id="map-zoom" type="range" min="1" max="4" step="0.1" value="1" orient="vertical" aria-label="Увеличение карты">
+        <output id="map-zoom-value" for="map-zoom">100%</output>
+        <button id="map-zoom-reset" type="button">Сбросить</button>
       </div>
-      <div class="map-display" id="map-display" data-current-map="enslavement">
-        <figure class="map-image-frame">
-          <img class="period-map-image" src="/assets/images/maps/%D0%A2%D1%80%D0%B0%D0%BD%D0%BA%D0%B2%D0%B8%D0%BB.png" alt="Карта Транквила периода «Порабощение»">
-          <figcaption>Транквиль — период «Порабощение»</figcaption>
-        </figure>
-      </div>
-    </section>
+      <p class="map-pan-hint">Перетаскивайте карту, чтобы перемещаться по увеличенному изображению</p>
+      <p class="map-image-error" id="map-image-error" hidden>Не удалось загрузить изображение карты. Проверьте путь к файлу в репозитории.</p>
+    </div>
+    <p class="map-caption" id="map-caption">Транквиль — период «Порабощение»</p>
+  </section>
 
-  </div>
 <div class="page-content section-return-wrap"><a class="section-return" href="/">← На главную</a></div>
 </main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-heading"><img src="/assets/images/countries/%D0%93%D0%B5%D1%80%D0%B1%20%D0%9A%D0%B0%D1%80%D1%82%D1%80%D0%B0%D0%B4%D0%B0%20%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80.png" alt="" class="footer-crest"><h2>Транквильский вестник</h2></div><div class="footer-copy"><p>Дмитричев Никита.</p><p>© 2026. Все материалы вселенной «Хроники Транквила» защищены авторским правом.</p></div></div></footer>
