@@ -787,3 +787,83 @@ html { scroll-behavior:smooth; }
 .book-selector.is-expanded .book-choice.is-active .book-choice-title{font-size:26px}
 @keyframes book-panel-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
 @media(max-width:680px){.book-selector{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.book-choice{padding:8px;gap:8px}.book-choice-title{font-size:18px}.book-selector.is-expanded{grid-template-columns:minmax(105px,.8fr) minmax(0,1.5fr);gap:8px}.book-selector.is-expanded .book-choice{padding:7px;gap:7px;flex-direction:column;align-items:stretch}.book-selector.is-expanded .book-choice .book-cover-placeholder{width:100%;min-width:0;aspect-ratio:2/3}.book-selector.is-expanded .book-choice-title{font-size:15px}.book-details{padding:16px 13px}.book-details h3{font-size:30px}.book-synopsis{font-size:12px;line-height:1.7}.book-detail-links{flex-direction:column}.book-detail-links span{font-size:10px}}
+
+
+/* ===== Закреплённая шапка и текущий раздел ===== */
+.site-header,.site-header.page-header{
+  position:fixed!important;top:0!important;left:0;right:0;z-index:1000;
+  min-height:82px;background:rgba(12,16,18,.96);backdrop-filter:blur(14px);
+  box-shadow:0 5px 22px rgba(0,0,0,.16);
+}
+.page-shell .page-main{padding-top:82px}
+.header-section-title{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  color:#dce8e8;font:600 14px/1 "PT Sans",Arial,sans-serif;
+  letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;
+  opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s ease;
+  pointer-events:none;
+}
+.site-header.is-scrolled .header-section-title{opacity:1;visibility:visible}
+@media(max-width:680px){
+  .site-header,.site-header.page-header{min-height:68px}
+  .page-shell .page-main{padding-top:68px}
+  .header-section-title{left:auto;right:62px;transform:translateY(-50%);font-size:10px;letter-spacing:.12em}
+}
+
+/* ===== Карта: дисклеймер, третья эпоха и удобное управление ===== */
+.map-disclaimer{
+  width:min(1050px,88vw);margin:0 auto 20px;padding:0 8px;
+  color:var(--muted);font:13px/1.7 "PT Sans",Arial,sans-serif;text-align:center;
+}
+.map-zoom-controls{left:18px;right:auto}
+.map-coming-soon{
+  position:absolute;inset:0;z-index:3;display:grid;place-items:center;
+  padding:30px;background:radial-gradient(ellipse at center,rgba(62,126,126,.15),transparent 65%),#0d1316;
+  color:#dce8e8;text-align:center;font:500 clamp(22px,3vw,36px)/1.35 "Yanone Kaffeesatz",sans-serif;
+}
+.map-coming-soon[hidden]{display:none}
+.map-viewport{touch-action:pan-y}
+@media(max-width:680px){
+  .map-zoom-controls{left:7px;right:auto}
+  .map-disclaimer{font-size:11px;line-height:1.55;margin-bottom:16px}
+  .map-zoom-controls input[type=range]{height:120px}
+}
+
+/* ===== Три независимых каталога книг ===== */
+.book-selector{grid-template-columns:repeat(3,minmax(0,1fr))}
+.book-choice{padding:12px}
+.book-choice-title{display:none}
+.book-selector[data-book-selector="spinoffs"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.book-selector[data-book-selector="spinoffs"] .book-choice{max-width:100%}
+.book-selector.is-expanded .book-choice{min-height:100px}
+.book-selector.is-expanded .book-choice .book-cover-placeholder{width:68px;min-width:68px;aspect-ratio:2/3}
+.book-selector.is-expanded .book-choice.is-active .book-cover-placeholder{width:100%;min-width:0;aspect-ratio:3/4}
+.book-detail-links a,.book-detail-links span{
+  display:inline-flex;align-items:center;padding:9px 12px;border:1px solid var(--line);
+  color:var(--muted);font-size:12px
+}
+.book-for-row{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:20px}
+.book-for-label{width:100%;color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.book-for-link,.book-cycle-link{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);
+  background:rgba(62,126,126,.06);color:var(--text);font:12px "PT Sans",Arial,sans-serif;
+  cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease
+}
+.book-for-link:hover,.book-cycle-link:hover{border-color:var(--teal-bright);box-shadow:var(--glow-teal)}
+.book-mini-cover{display:grid;place-items:center;width:24px;height:34px;border:1px solid var(--line-strong);background:linear-gradient(145deg,#303b40,#101517);font:16px "Yanone Kaffeesatz",sans-serif}
+.book-cycle-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:30px;padding-top:20px;border-top:1px solid var(--line)}
+.book-cycle-item{min-width:0}
+.book-cycle-label{display:block;margin-bottom:8px;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.book-cycle-link{max-width:100%;text-align:left}
+.book-cycle-link .book-mini-cover{width:34px;height:48px;flex:0 0 auto}
+.book-cycle-link span:last-child{min-width:0}
+@media(max-width:680px){
+ .book-selector{gap:8px}
+ .book-choice{padding:7px}
+ .book-selector.is-expanded{grid-template-columns:minmax(90px,.75fr) minmax(0,1.6fr);gap:8px}
+ .book-selector.is-expanded .book-choice{padding:6px;gap:6px;flex-direction:column;align-items:stretch}
+ .book-selector.is-expanded .book-choice .book-cover-placeholder{width:100%;min-width:0;aspect-ratio:2/3}
+ .book-details{padding:15px 12px}
+ .book-cycle-nav{grid-template-columns:1fr}
+ .book-cycle-link{font-size:10px}
+}
