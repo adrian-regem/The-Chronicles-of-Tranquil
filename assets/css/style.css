@@ -887,13 +887,10 @@ html { scroll-behavior:smooth; }
 .map-viewport .period-map-image{visibility:hidden}
 .map-viewport .map-image-track .period-map-image{visibility:visible}
 
-
-/* Mobile-only map gesture instructions */
-.map-mobile-instructions{display:none}
-@media(max-width:680px){
- .map-mobile-instructions{display:block;width:min(1050px,88vw);margin:-8px auto 16px;padding:0 8px;color:var(--teal-bright);font:11px/1.5 "PT Sans",Arial,sans-serif;text-align:center}
-}
-
 /* Let native touch interaction on the zoom slider work independently of map gestures */
 .map-viewport{touch-action:auto}
 .map-zoom-controls input[type=range]{touch-action:none}
+
+.book-cover-placeholder img{display:block;width:100%;height:100%;object-fit:cover}
+.book-mini-cover{overflow:hidden}
+.book-mini-cover img{display:block;width:100%;height:100%;object-fit:cover}
