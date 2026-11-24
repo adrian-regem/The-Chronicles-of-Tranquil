@@ -398,7 +398,7 @@ if(guideRoot){
   const name=state.name||"Без названия";
   const tags=Array.isArray(state.tags)?state.tags.filter(tag=>categoryIcon.has(tag)):[];
   const desc=state.description==null?"":String(state.description);
-  const portrait=state.portrait?"/assets/images/guide/"+portraitFolder(tags)+"/"+encodeURIComponent(state.portrait):"";
+  const portrait=state.portrait?"/assets/images/characters/"+encodeURIComponent(state.portrait):"";
   const tagMarkup=tags.map(tag=>'<span class="guide-entry-tag">'+guideIcon(categoryIcon.get(tag))+'<span>'+escapeGuide(tag)+'</span></span>').join("");
   const tabs=group.snapshots.map(item=>{
    const locked=item.record.version>guideProgress;
