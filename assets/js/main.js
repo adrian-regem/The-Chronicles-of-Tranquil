@@ -312,42 +312,183 @@ document.addEventListener("click",e=>{
  if(!link)return;
  e.preventDefault();openMainBook(link.dataset.openBook);
 });
-// Dictionary filters work with entries carrying data-guide-entry, data-type and data-spoiler.
-const guideSearch = document.querySelector("#guide-search");
-const guideSpoilers = document.querySelector("#guide-spoilers");
-const guideType = document.querySelector("#guide-type");
-const guideResults = document.querySelector("#guide-results");
-
-function filterGuideEntries() {
-  if (!guideResults) return;
-  const entries = [...guideResults.querySelectorAll("[data-guide-entry]")];
-  const query = (guideSearch?.value || "").trim().toLocaleLowerCase("ru");
-  const maxSpoiler = Number(guideSpoilers?.value || 0);
-  const type = guideType?.value || "all";
-  let shown = 0;
-  entries.forEach((entry) => {
-    const searchable = (entry.dataset.search || entry.textContent).toLocaleLowerCase("ru");
-    const spoiler = Number(entry.dataset.spoiler || 0);
-    const matches = (!query || searchable.includes(query)) &&
-      spoiler <= maxSpoiler &&
-      (type === "all" || entry.dataset.type === type);
-    entry.hidden = !matches;
-    if (matches) shown++;
+// Dynamic encyclopedia: versioned records, reading progress and category filters.
+const guideRoot=document.querySelector(".guide-dictionary");
+if(guideRoot){
+ const guideSearch=document.querySelector("#guide-search");
+ const guideSlider=document.querySelector("#guide-progress-slider");
+ const guideCurrent=document.querySelector("#guide-progress-current");
+ const guidePoints=document.querySelector("#guide-progress-points");
+ const guideTagOptions=document.querySelector("#guide-tag-options");
+ const guideResults=document.querySelector("#guide-results");
+ const guideStages=[
+  {book:"Порабощение",phase:"Повествование"},
+  {book:"Порабощение",phase:"Финал"},
+  {book:"Артефакт",phase:"Повествование"},
+  {book:"Артефакт",phase:"Финал"},
+  {book:"Золотые крылья",phase:"Повествование"},
+  {book:"Золотые крылья",phase:"Финал"},
+  {book:"???",phase:"Повествование"},
+  {book:"???",phase:"Финал"}
+ ];
+ const guideCategories=[
+  ["Персонаж","user-round"],["Биология","dna"],["Власть","crown"],["Культура","landmark"],
+  ["Магия","wand-sparkles"],["Место","map-pin"],["Фракция","users"],["Объект","gem"],
+  ["Религия","church"],["История","scroll-text"]
+ ];
+ const guideIconPaths={
+  "sliders-horizontal":'<path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M2 14h4m4-6h4m4 8h4"/>',
+  "user-round":'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',
+  "dna":'<path d="M7 3c10 0 10 18 0 18"/><path d="M17 3C7 3 7 21 17 21"/><path d="M8 7h8M7 12h10M8 17h8"/>',
+  "crown":'<path d="m2 7 5 4 5-7 5 7 5-4-2 13H4L2 7Z"/><path d="M4 17h16"/>',
+  "landmark":'<path d="m3 9 9-6 9 6H3Z"/><path d="M4 21h16M5 10v8m5-8v8m4-8v8m5-8v8M3 21h18"/>',
+  "wand-sparkles":'<path d="m15 4 5 5M4 20 16 8M3 6l1-3 1 3 3 1-3 1-1 3-1-3-3-1 3-1Zm14 12 1-2 1 2 2 1-2 1-1 2-1-2-2-1 2-1Z"/>',
+  "map-pin":'<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+  "users":'<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  "gem":'<path d="M6 3h12l4 6-10 12L2 9l4-6Z"/><path d="m2 9 20 0M6 3l3 6 3 12 3-12 3-6"/>',
+  "church":'<path d="M12 2v5m-3-2h6M4 10l8-5 8 5v11H4V10Z"/><path d="M9 21v-6h6v6M2 21h20"/>',
+  "scroll-text":'<path d="M8 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1Z"/><path d="M8 3v14a2 2 0 0 1-2 2m6-10h5m-5 4h5"/>'
+ };
+ const guideIcon=name=>'<svg class="guide-inline-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(guideIconPaths[name]||"")+'</svg>';
+ const escapeGuide=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+ let guideProgress=1;
+ try{const saved=Number(localStorage.getItem("tranquil-guide-progress"));if(Number.isInteger(saved)&&saved>=1&&saved<=8)guideProgress=saved;}catch(e){}
+ guideSlider.value=String(guideProgress);
+ guidePoints.innerHTML=guideStages.map((stage,index)=>'<span class="guide-progress-point" data-stage="'+(index+1)+'"><i></i><small>'+escapeGuide(stage.book)+'<br>'+escapeGuide(stage.phase)+'</small></span>').join("");
+ guideTagOptions.innerHTML='<button type="button" class="guide-tag-all is-active" data-guide-tag-all aria-pressed="true">Все</button>'+guideCategories.map(([label,icon])=>'<label class="guide-tag-option"><input type="checkbox" value="'+escapeGuide(label)+'"><span class="guide-tag-option-icon">'+guideIcon(icon)+'</span><span>'+escapeGuide(label)+'</span></label>').join("");
+ const filterHeadingIcon=document.querySelector(".guide-filter-heading-icon");
+ if(filterHeadingIcon)filterHeadingIcon.innerHTML=guideIcon("sliders-horizontal");
+ let guideGroups=[];
+ const selectedVersions=new Map();
+ const categoryIcon=new Map(guideCategories);
+ function updateProgressDisplay(){
+  const stage=guideStages[guideProgress-1];
+  guideCurrent.textContent=stage.book+" · "+stage.phase;
+  guideSlider.style.setProperty("--guide-progress",((guideProgress-1)/7*100)+"%");
+  guidePoints.querySelectorAll(".guide-progress-point").forEach(point=>{
+   const n=Number(point.dataset.stage);point.classList.toggle("is-past",n<guideProgress);point.classList.toggle("is-current",n===guideProgress);
   });
-  const empty = guideResults.querySelector(".guide-empty");
-  if (empty) empty.hidden = entries.length > 0 && shown > 0;
-  const noMatches = guideResults.querySelector(".guide-no-matches");
-  if (entries.length > 0 && shown === 0 && !noMatches) {
-    const message = document.createElement("p");
-    message.className = "guide-no-matches";
-    message.textContent = "По заданным условиям ничего не найдено.";
-    guideResults.append(message);
-  } else if (noMatches) {
-    noMatches.hidden = shown > 0;
+ }
+ function makeSnapshots(records){
+  const state={};const fields=["name","portrait","description","tags"];
+  return records.map(record=>{
+   fields.forEach(field=>{if(Object.prototype.hasOwnProperty.call(record,field))state[field]=record[field];});
+   return {record:record,state:{...state,tags:Array.isArray(state.tags)?state.tags.slice():state.tags}};
+  });
+ }
+ function versionLabel(version){
+  const stage=guideStages[version-1]||{book:"???",phase:""};
+  return stage.book+" · "+stage.phase;
+ }
+ function portraitFolder(tags){
+  if(tags.includes("Персонаж"))return "characters";
+  if(tags.includes("Место"))return "places";
+  if(tags.includes("Фракция"))return "factions";
+  if(tags.includes("Объект"))return "objects";
+  return "characters";
+ }
+ function renderCard(group){
+  const available=group.snapshots.filter(item=>item.record.version<=guideProgress);
+  if(!available.length)return "";
+  const lastAvailable=available[available.length-1];
+  let active=lastAvailable;
+  const remembered=selectedVersions.get(String(group.objectId));
+  if(remembered){const match=available.find(item=>String(item.record.recordId)===String(remembered));if(match)active=match;}
+  const state=active.state;
+  const name=state.name||"Без названия";
+  const tags=Array.isArray(state.tags)?state.tags.filter(tag=>categoryIcon.has(tag)):[];
+  const desc=state.description==null?"":String(state.description);
+  const portrait=state.portrait?"/assets/images/guide/"+portraitFolder(tags)+"/"+encodeURIComponent(state.portrait):"";
+  const tagMarkup=tags.map(tag=>'<span class="guide-entry-tag">'+guideIcon(categoryIcon.get(tag))+'<span>'+escapeGuide(tag)+'</span></span>').join("");
+  const tabs=group.snapshots.map(item=>{
+   const locked=item.record.version>guideProgress;
+   const label=versionLabel(item.record.version);
+   const activeTab=!locked&&String(item.record.recordId)===String(active.record.recordId);
+   return '<button type="button" class="guide-version-tab'+(activeTab?' is-active':'')+(locked?' is-locked':'')+'" data-guide-version="'+escapeGuide(item.record.recordId)+'" data-guide-stage="'+item.record.version+'" aria-pressed="'+String(activeTab)+'" title="'+(locked?'Откроется после чтения: '+label:label)+'">'+(locked?'<span class="guide-lock-symbol">⌑</span>':'')+'<span>'+escapeGuide(label)+'</span></button>';
+  }).join("");
+  const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version)].join(" ").toLocaleLowerCase("ru");
+  const portraitMarkup=portrait?'<img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.parentElement.classList.add(&quot;is-fallback&quot;)">':'';
+  return '<article class="guide-card" data-guide-entry data-object-id="'+escapeGuide(group.objectId)+'" data-search="'+escapeGuide(searchText)+'" data-tags="'+escapeGuide(tags.join("|"))+'">'+
+   '<div class="guide-card-main"><div class="guide-card-portrait'+(portrait?'':' is-fallback')+'">'+portraitMarkup+'<span aria-hidden="true">'+escapeGuide(name.trim().slice(0,1).toLocaleUpperCase("ru"))+'</span></div>'+
+   '<div class="guide-card-content"><div class="guide-card-title-row"><h3>'+escapeGuide(name)+'</h3><span class="guide-object-id">#'+escapeGuide(group.objectId)+'</span></div>'+
+   '<div class="guide-entry-tags">'+tagMarkup+'</div><p class="guide-card-description">'+(desc?escapeGuide(desc):'<span class="guide-no-description">Описание пока отсутствует.</span>')+'</p></div></div>'+
+   '<div class="guide-card-versions" aria-label="Версии записи">'+tabs+'</div><p class="guide-lock-note" role="status" hidden></p></article>';
+ }
+ function applyGuideFilters(){
+  const query=(guideSearch.value||"").trim().toLocaleLowerCase("ru");
+  const checked=[...guideTagOptions.querySelectorAll('input[type="checkbox"]:checked')].map(input=>input.value);
+  const cards=[...guideResults.querySelectorAll("[data-guide-entry]")];let visible=0;
+  cards.forEach(card=>{
+   const tags=(card.dataset.tags||"").split("|").filter(Boolean);
+   const matchesQuery=!query||(card.dataset.search||"").includes(query);
+   const matchesTags=!checked.length||tags.some(tag=>checked.includes(tag));
+   card.hidden=!(matchesQuery&&matchesTags);if(!card.hidden)visible++;
+  });
+  let empty=guideResults.querySelector(".guide-no-matches");
+  if(!visible&&cards.length){if(!empty){empty=document.createElement("p");empty.className="guide-no-matches";empty.textContent="По заданным условиям ничего не найдено.";guideResults.append(empty);}empty.hidden=false;}
+  else if(empty)empty.hidden=true;
+ }
+ function renderCards(){
+  updateProgressDisplay();
+  const sorted=guideGroups.slice().sort((a,b)=>{
+   const an=(a.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").toLocaleLowerCase("ru");
+   const bn=(b.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").toLocaleLowerCase("ru");
+   return an.localeCompare(bn,"ru");
+  });
+  const cards=sorted.map(renderCard).filter(Boolean);
+  guideResults.innerHTML=cards.length?'<div class="guide-card-grid">'+cards.join("")+'</div>':'<div class="guide-empty"><span class="guide-empty-mark">⌕</span><h2>Пока нет доступных записей</h2><p>На выбранном этапе чтения справочник ещё не содержит открытых материалов.</p></div>';
+  applyGuideFilters();
+ }
+ guideSlider.addEventListener("input",()=>{
+  guideProgress=Number(guideSlider.value);selectedVersions.clear();
+  try{localStorage.setItem("tranquil-guide-progress",String(guideProgress));}catch(e){}
+  renderCards();
+ });
+ guideSearch.addEventListener("input",applyGuideFilters);
+ guideTagOptions.addEventListener("change",event=>{
+  if(event.target.matches('input[type="checkbox"]')){
+   const allButton=guideTagOptions.querySelector("[data-guide-tag-all]");
+   const any=[...guideTagOptions.querySelectorAll('input[type="checkbox"]')].some(input=>input.checked);
+   allButton.classList.toggle("is-active",!any);allButton.setAttribute("aria-pressed",String(!any));applyGuideFilters();
   }
+ });
+ guideTagOptions.addEventListener("click",event=>{
+  const allButton=event.target.closest("[data-guide-tag-all]");
+  if(!allButton)return;
+  guideTagOptions.querySelectorAll('input[type="checkbox"]').forEach(input=>input.checked=false);
+  allButton.classList.add("is-active");allButton.setAttribute("aria-pressed","true");applyGuideFilters();
+ });
+ guideResults.addEventListener("click",event=>{
+  const tab=event.target.closest("[data-guide-version]");if(!tab)return;
+  const stage=Number(tab.dataset.guideStage);
+  const card=tab.closest("[data-object-id]");
+  if(stage>guideProgress){
+   const note=card.querySelector(".guide-lock-note");
+   note.textContent="Эта версия откроется после чтения «"+versionLabel(stage)+"». Передвиньте ползунок «Ваш прогресс чтения» на соответствующий этап.";
+   note.hidden=false;return;
+  }
+  const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
+ });
+ async function loadGuide(){
+  try{
+   const response=await fetch("/assets/data/guide/entries.json?v=20261124-guide-data");
+   if(!response.ok)throw new Error("Не удалось загрузить файл справочника.");
+   const payload=await response.json();
+   if(!payload||!Array.isArray(payload.entries))throw new Error("Структура файла справочника некорректна.");
+   const byObject=new Map();
+   payload.entries.forEach(record=>{
+    const key=String(record.objectId);
+    if(!byObject.has(key))byObject.set(key,{objectId:record.objectId,records:[]});
+    byObject.get(key).records.push(record);
+   });
+   guideGroups=[...byObject.values()].map(group=>{
+    group.records.sort((a,b)=>a.version-b.version);
+    group.snapshots=makeSnapshots(group.records);return group;
+   });
+   renderCards();
+  }catch(error){
+   guideResults.innerHTML='<div class="guide-empty"><h2>Не удалось загрузить справочник</h2><p>'+escapeGuide(error.message||"Попробуйте обновить страницу позже.")+'</p></div>';
+  }
+ }
+ loadGuide();
 }
-[guideSearch, guideSpoilers, guideType].forEach((control) => {
-  control?.addEventListener("input", filterGuideEntries);
-  control?.addEventListener("change", filterGuideEntries);
-});
-filterGuideEntries();
