@@ -1503,6 +1503,31 @@ html { scroll-behavior:smooth; }
 html, body {
   cursor: image-set(url("/assets/images/cursor/default.png") 2x) 0 0, auto;
 }
-a[href], area[href] {
+
+/* Custom pointer for every interactive control, including in-page actions */
+a[href],
+area[href],
+button:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="range"],
+select:not(:disabled),
+summary,
+label,
+[role="button"],
+[role="tab"],
+[role="slider"],
+.guide-progress-slider,
+.guide-progress-point:not(.is-disabled),
+.guide-tag-option,
+.guide-tag-all,
+.guide-portrait-open,
+.guide-version-tab,
+.guide-image-viewer,
+.guide-image-viewer > img,
+.guide-image-viewer-close {
   cursor: image-set(url("/assets/images/cursor/pointer.png") 2x) 0 0, pointer;
 }
