@@ -1352,43 +1352,38 @@ html { scroll-behavior:smooth; }
 @media(min-width:601px){.guide-lock-symbol{width:26px;height:26px}.guide-lock-symbol svg{width:23px;height:23px}}
 
 
-/* Final guide progress layout: one shared coordinate system for slider and covers */
-@property --guide-fill-color {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #c2768a;
-}
-@keyframes guide-progress-color-cycle {
-  0%, 100% { --guide-fill-color: #b85c75; }
-  50% { --guide-fill-color: #f0a2b7; }
-}
+/* Final guide progress layout: shared thumb/cover coordinates and animated fill element */
 .guide-progress-slider {
-  --guide-fill-color: #b85c75;
-  height: 14px;
-  width: calc(100% - 22px);
-  margin: 0 11px;
-  border-radius: 999px;
-  background: linear-gradient(to right, var(--guide-fill-color) 0 var(--guide-progress), #303a3e var(--guide-progress) 100%);
-  animation: guide-progress-color-cycle 3s ease-in-out infinite !important;
-  animation-duration: 3s !important;
-  animation-iteration-count: infinite !important;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 .guide-progress-slider::-webkit-slider-runnable-track {
   height: 14px;
   border: 0;
   border-radius: 999px;
-  background: transparent;
+  background: #303a3e;
 }
 .guide-progress-slider::-moz-range-track {
   height: 14px;
   border: 0;
   border-radius: 999px;
-  background: transparent;
+  background: #303a3e;
 }
 .guide-progress-slider::-webkit-slider-thumb {
   width: 22px;
   height: 22px;
   margin-top: -4px;
+  appearance: none;
   border: 3px solid #f0dfe3;
   border-radius: 50%;
   background: #87384d;
@@ -1402,11 +1397,41 @@ html { scroll-behavior:smooth; }
   background: #87384d;
   box-shadow: 0 0 0 4px rgba(135,56,77,.28);
 }
+.guide-progress-control { position: relative; padding-top: 0; }
+.guide-progress-fill {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  left: 11px;
+  right: 11px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  pointer-events: none;
+}
+.guide-progress-fill::before {
+  content: "";
+  display: block;
+  width: var(--guide-progress, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg,#b64e6d 0%,#f3a2b8 48%,#b64e6d 100%);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  animation: guide-fill-shimmer 2.2s linear infinite;
+}
+@keyframes guide-fill-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guide-progress-fill::before { animation: none; }
+}
 .guide-progress-points {
   position: relative;
   display: block;
   width: calc(100% - 22px);
-  height: 100px;
+  height: 116px;
   margin: 0 0 0 11px;
 }
 .guide-progress-point {
@@ -1421,17 +1446,17 @@ html { scroll-behavior:smooth; }
   overflow: visible;
 }
 .guide-progress-point:nth-child(1) { left: 0%; }
-.guide-progress-point:nth-child(2) { left: 14.285714%; }
-.guide-progress-point:nth-child(3) { left: 28.571429%; }
-.guide-progress-point:nth-child(4) { left: 42.857143%; }
-.guide-progress-point:nth-child(5) { left: 57.142857%; }
-.guide-progress-point:nth-child(6) { left: 71.428571%; }
-.guide-progress-point:nth-child(7) { left: 85.714286%; }
+.guide-progress-point:nth-child(2) { left: 14.2857142857%; }
+.guide-progress-point:nth-child(3) { left: 28.5714285714%; }
+.guide-progress-point:nth-child(4) { left: 42.8571428571%; }
+.guide-progress-point:nth-child(5) { left: 57.1428571429%; }
+.guide-progress-point:nth-child(6) { left: 71.4285714286%; }
+.guide-progress-point:nth-child(7) { left: 85.7142857143%; }
 .guide-progress-point:nth-child(8) { left: 100%; }
 .guide-progress-point img {
   display: block;
-  width: 40px;
-  height: 57px;
+  width: 54px;
+  height: 77px;
   margin: 0 0 5px;
   border: 1px solid rgba(194,118,138,.55);
   object-fit: cover;
@@ -1439,38 +1464,38 @@ html { scroll-behavior:smooth; }
 }
 .guide-progress-point small {
   display: block;
-  width: 88px;
+  width: 96px;
   font-size: 9px;
   line-height: 1.2;
   text-align: center;
 }
 .guide-progress-point .guide-progress-final-check {
   position: absolute;
-  z-index: 2;
-  top: 42px;
-  left: -5px;
+  z-index: 3;
+  top: 66px;
+  left: -21px;
   display: grid;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   place-items: center;
   border: 2px solid #d5f1dc;
   border-radius: 50%;
   background: #238b48;
   color: #fff;
-  font: 700 14px/1 "PT Sans", Arial, sans-serif;
-  box-shadow: 0 2px 6px rgba(0,0,0,.55);
+  font: 700 15px/1 "PT Sans", Arial, sans-serif;
+  box-shadow: 0 2px 6px rgba(0,0,0,.6);
 }
-.guide-progress-point.is-past i,
-.guide-progress-point.is-current i { border-color: var(--guide-accent-light); background: var(--guide-accent-light); }
+.guide-progress-point.is-disabled { cursor: not-allowed; }
 @media(max-width:600px) {
-  .guide-progress-points { height: 82px; }
-  .guide-progress-point img { width: 27px; height: 39px; }
+  .guide-progress-points { height: 84px; }
+  .guide-progress-point img { width: 28px; height: 40px; }
   .guide-progress-point small { width: 48px; font-size: 7px; }
   .guide-progress-point .guide-progress-final-check {
-    top: 28px;
-    left: -4px;
-    width: 16px;
-    height: 16px;
+    top: 32px;
+    left: -11px;
+    width: 17px;
+    height: 17px;
     font-size: 11px;
   }
+  .guide-progress-fill { top: 4px; }
 }
