@@ -1499,7 +1499,10 @@ html { scroll-behavior:smooth; }
 }
 
 
-/* Custom site cursor */
+/* Custom site cursors */
 html, body {
-  cursor: url("/assets/images/cursor/default.svg") 0 0, auto;
+  cursor: image-set(url("/assets/images/cursor/default.png") 2x) 0 0, auto;
+}
+a[href], area[href] {
+  cursor: image-set(url("/assets/images/cursor/pointer.png") 2x) 0 0, pointer;
 }
