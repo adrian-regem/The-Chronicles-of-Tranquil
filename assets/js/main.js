@@ -328,13 +328,13 @@ if(guideRoot){
   {book:"Артефакт",phase:"Финал",cover:"Обложка Артефакт.png"},
   {book:"Золотые крылья",phase:"Повествование",cover:"Обложка Золотые крылья.png"},
   {book:"Золотые крылья",phase:"Финал",cover:"Обложка Золотые крылья.png"},
-  {book:"???",phase:"Повествование",disabled:true},
-  {book:"???",phase:"Финал",disabled:true}
+  {book:"???",phase:"Повествование",cover:"Обложка Неизвестно.png",disabled:true},
+  {book:"???",phase:"Финал",cover:"Обложка Неизвестно.png",disabled:true}
  ];
  const guideCategories=[
-  ["Персонаж","user-round"],["Биология","dna"],["Власть","crown"],["Культура","landmark"],
-  ["Магия","wand-sparkles"],["Место","map-pin"],["Фракция","users"],["Объект","gem"],
-  ["Религия","church"],["История","scroll-text"]
+  ["Персонаж","user-round"],["Место","map-pin"],["Власть","crown"],["Фракция","users"],
+  ["Магия","wand-sparkles"],["История","scroll-text"],["Культура","landmark"],["Религия","church"],
+  ["Биология","dna"],["Объект","gem"]
  ];
  const guideIconPaths={
   "sliders-horizontal":'<path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M2 14h4m4-6h4m4 8h4"/>',
@@ -418,7 +418,7 @@ if(guideRoot){
    const locked=item.record.version>guideProgress;
    const label=versionLabel(item.record.version);
    const activeTab=!locked&&String(item.record.recordId)===String(active.record.recordId);
-   return '<button type="button" class="guide-version-tab'+(activeTab?' is-active':'')+(locked?' is-locked':'')+'" data-guide-version="'+escapeGuide(item.record.recordId)+'" data-guide-stage="'+item.record.version+'" aria-pressed="'+String(activeTab)+'" title="'+(locked?'Откроется после чтения: '+label:label)+'">'+(locked?'<span class="guide-lock-symbol">⌑</span>':'')+'<span>'+escapeGuide(label)+'</span></button>';
+   return '<button type="button" class="guide-version-tab'+(activeTab?' is-active':'')+(locked?' is-locked':'')+'" data-guide-version="'+escapeGuide(item.record.recordId)+'" data-guide-stage="'+item.record.version+'" aria-pressed="'+String(activeTab)+'" title="'+(locked?'Откроется после чтения: '+label:label)+'">'+(locked?'<span class="guide-lock-symbol" aria-label="Заблокировано"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>':'')+'<span>'+escapeGuide(label)+'</span></button>';
   }).join("");
   const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version)].join(" ").toLocaleLowerCase("ru");
   const portraitMarkup=portrait?'<button type="button" class="guide-portrait-open" aria-label="Открыть портрет: '+escapeGuide(name)+'"><img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.closest(&quot;.guide-card-portrait&quot;).classList.add(&quot;is-fallback&quot;)"></button>':'';
@@ -459,6 +459,11 @@ if(guideRoot){
   guideResults.innerHTML=cards.length?'<div class="guide-card-grid">'+cards.join("")+'</div>':'<div class="guide-empty"><span class="guide-empty-mark">⌕</span><h2>Пока нет доступных записей</h2><p>На выбранном этапе чтения справочник ещё не содержит открытых материалов.</p></div>';
   applyGuideFilters();
  }
+ guidePoints.addEventListener("click",event=>{
+  const point=event.target.closest(".guide-progress-point");if(!point||point.classList.contains("is-disabled"))return;
+  const stage=Number(point.dataset.stage);if(stage<1||stage>6)return;
+  guideSlider.value=String(stage);guideSlider.dispatchEvent(new Event("input",{bubbles:true}));
+ });
  guideSlider.addEventListener("input",()=>{
   guideProgress=Math.min(6,Number(guideSlider.value));guideSlider.value=String(guideProgress);selectedVersions.clear();
   try{localStorage.setItem("tranquil-guide-progress",String(guideProgress));}catch(e){}
@@ -496,7 +501,7 @@ if(guideRoot){
   const card=tab.closest("[data-object-id]");
   if(stage>guideProgress){
    const note=card.querySelector(".guide-lock-note");
-   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок «Ваш прогресс чтения» на соответствующий этап.";
+   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок Ваш прогресс чтения на соответствующий этап.";
    note.hidden=false;return;
   }
   const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
