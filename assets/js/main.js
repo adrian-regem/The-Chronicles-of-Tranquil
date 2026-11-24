@@ -317,6 +317,7 @@ const guideRoot=document.querySelector(".guide-dictionary");
 if(guideRoot){
  const guideSearch=document.querySelector("#guide-search");
  const guideSlider=document.querySelector("#guide-progress-slider");
+ const guideFill=document.querySelector("#guide-progress-fill");
  const guideCurrent=document.querySelector("#guide-progress-current");
  const guidePoints=document.querySelector("#guide-progress-points");
  const guideTagOptions=document.querySelector("#guide-tag-options");
@@ -338,6 +339,7 @@ if(guideRoot){
  ];
  const guideIconPaths={
   "sliders-horizontal":'<path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M2 14h4m4-6h4m4 8h4"/>',
+  "image":'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
   "user-round":'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',
   "dna":'<path d="M7 3c10 0 10 18 0 18"/><path d="M17 3C7 3 7 21 17 21"/><path d="M8 7h8M7 12h10M8 17h8"/>',
   "crown":'<path d="m2 7 5 4 5-7 5 7 5-4-2 13H4L2 7Z"/><path d="M4 17h16"/>',
@@ -369,7 +371,7 @@ if(guideRoot){
   const cover=stage.cover?'<img src="/assets/images/books/'+encodeURIComponent(stage.cover)+'" alt="">'+(stage.phase==="Финал"?'<span class="guide-progress-final-check" aria-label="Книга дочитана">✓</span>':""):"";
   return '<span class="guide-progress-point'+(stage.disabled?' is-disabled':'')+'" data-stage="'+(index+1)+'"><i></i>'+cover+'<small>'+escapeGuide(stage.book)+'<br>'+escapeGuide(stage.phase)+'</small></span>';
  }).join("");
- guideTagOptions.innerHTML='<button type="button" class="guide-tag-all is-active" data-guide-tag-all aria-pressed="true">Все</button>'+guideCategories.map(([label,icon])=>'<label class="guide-tag-option"><input type="checkbox" value="'+escapeGuide(label)+'"><span class="guide-tag-option-icon">'+guideIcon(icon)+'</span><span>'+escapeGuide(label)+'</span></label>').join("");
+ guideTagOptions.innerHTML='<button type="button" class="guide-tag-all is-active" data-guide-tag-all aria-pressed="true">Все</button>'+guideCategories.map(([label,icon])=>'<label class="guide-tag-option"><input type="checkbox" value="'+escapeGuide(label)+'"><span class="guide-tag-option-icon">'+guideIcon(icon)+'</span><span>'+escapeGuide(label)+'</span></label>').join("")+'<label class="guide-tag-option"><input type="checkbox" value="__portrait"><span class="guide-tag-option-icon">'+guideIcon("image")+'</span><span>Портрет</span></label>';
  const filterHeadingIcon=document.querySelector(".guide-filter-heading-icon");
  if(filterHeadingIcon)filterHeadingIcon.innerHTML=guideIcon("sliders-horizontal");
  let guideGroups=[];
@@ -378,7 +380,9 @@ if(guideRoot){
  function updateProgressDisplay(){
   const stage=guideStages[guideProgress-1];
   guideCurrent.textContent=stage.book+" · "+stage.phase;
-  guideSlider.style.setProperty("--guide-progress",((guideProgress-1)/7*100)+"%");
+  const fillPercent=((guideProgress-1)/7*100);
+  guideSlider.style.setProperty("--guide-progress",fillPercent+"%");
+  if(guideFill)guideFill.style.setProperty("--guide-progress",fillPercent+"%");
   guidePoints.querySelectorAll(".guide-progress-point").forEach(point=>{
    const n=Number(point.dataset.stage);point.classList.toggle("is-past",n<guideProgress);point.classList.toggle("is-current",n===guideProgress);
   });
@@ -423,7 +427,7 @@ if(guideRoot){
   const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version),String(group.objectId)].join(" ").toLocaleLowerCase("ru");
   const portraitMarkup=portrait?'<button type="button" class="guide-portrait-open" aria-label="Открыть портрет: '+escapeGuide(name)+'"><img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.closest(&quot;.guide-card-portrait&quot;).classList.add(&quot;is-fallback&quot;)"></button>':'';
   const query=(guideSearch.value||"").trim();
-  return '<article class="guide-card" data-guide-entry data-object-id="'+escapeGuide(group.objectId)+'" data-search="'+escapeGuide(searchText)+'" data-tags="'+escapeGuide(tags.join("|"))+'">'+
+  return '<article class="guide-card" data-guide-entry data-object-id="'+escapeGuide(group.objectId)+'" data-search="'+escapeGuide(searchText)+'" data-tags="'+escapeGuide(tags.join("|"))+'" data-has-portrait="'+String(Boolean(portrait))+'">'+
    '<div class="guide-card-main"><div class="guide-card-portrait'+(portrait?'':' is-fallback')+'">'+portraitMarkup+'<span aria-hidden="true">'+escapeGuide(name.trim().slice(0,1).toLocaleUpperCase("ru"))+'</span></div>'+
    '<div class="guide-card-content"><div class="guide-card-title-row"><h3 data-guide-name="'+escapeGuide(name)+'">'+highlightGuide(name,query)+'</h3><span class="guide-object-id">#'+escapeGuide(group.objectId)+'</span></div>'+
    '<div class="guide-entry-tags">'+tagMarkup+'</div><p class="guide-card-description" data-guide-description="'+escapeGuide(desc)+'">'+(desc?highlightGuide(desc,query):'<span class="guide-no-description">Описание пока отсутствует.</span>')+'</p></div></div>'+
@@ -431,13 +435,16 @@ if(guideRoot){
  }
  function applyGuideFilters(){
   const query=(guideSearch.value||"").trim().toLocaleLowerCase("ru");
-  const checked=[...guideTagOptions.querySelectorAll('input[type="checkbox"]:checked')].map(input=>input.value);
+  const checkedInputs=[...guideTagOptions.querySelectorAll('input[type="checkbox"]:checked')];
+  const portraitOnly=checkedInputs.some(input=>input.value==="__portrait");
+  const checked=checkedInputs.filter(input=>input.value!=="__portrait").map(input=>input.value);
   const cards=[...guideResults.querySelectorAll("[data-guide-entry]")];let visible=0;
   cards.forEach(card=>{
    const tags=(card.dataset.tags||"").split("|").filter(Boolean);
    const matchesQuery=!query||(card.dataset.search||"").includes(query);
    const matchesTags=!checked.length||tags.some(tag=>checked.includes(tag));
-   card.hidden=!(matchesQuery&&matchesTags);if(!card.hidden)visible++;
+   const matchesPortrait=!portraitOnly||card.dataset.hasPortrait==="true";
+   card.hidden=!(matchesQuery&&matchesTags&&matchesPortrait);if(!card.hidden)visible++;
    const name=card.querySelector("[data-guide-name]"),description=card.querySelector("[data-guide-description]");
    if(name)name.innerHTML=highlightGuide(name.dataset.guideName,query);
    if(description)description.innerHTML=description.dataset.guideDescription?highlightGuide(description.dataset.guideDescription,query):'<span class="guide-no-description">Описание пока отсутствует.</span>';
@@ -491,7 +498,7 @@ if(guideRoot){
    if(!viewer){
     viewer=document.createElement("div");viewer.className="guide-image-viewer";viewer.innerHTML='<button type="button" class="guide-image-viewer-close" aria-label="Закрыть изображение">×</button><img alt="">';
     document.body.append(viewer);
-    viewer.addEventListener("click",e=>{if(e.target===viewer||e.target.closest(".guide-image-viewer-close"))viewer.classList.remove("is-open");});
+    viewer.addEventListener("click",e=>{if(e.target===viewer||e.target===viewer.querySelector(":scope > img")||e.target.closest(".guide-image-viewer-close"))viewer.classList.remove("is-open");});
     document.addEventListener("keydown",e=>{if(e.key==="Escape")viewer.classList.remove("is-open");});
    }
    const large=viewer.querySelector("img");large.src=image.src;large.alt=image.alt;viewer.classList.add("is-open");return;
@@ -501,7 +508,7 @@ if(guideRoot){
   const card=tab.closest("[data-object-id]");
   if(stage>guideProgress){
    const note=card.querySelector(".guide-lock-note");
-   note.textContent="Эта версия откроется после чтения: \""+versionLabel(stage)+"\". Передвиньте ползунок \"Ваш прогресс чтения\" на соответствующий этап.";
+   note.textContent="Эта версия откроется после чтения: \""+versionLabel(stage)+"\".";
    note.hidden=false;return;
   }
   const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
