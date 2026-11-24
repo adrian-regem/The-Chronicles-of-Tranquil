@@ -1471,7 +1471,7 @@ html { scroll-behavior:smooth; }
   position: absolute;
   z-index: 3;
   top: 66px;
-  left: -21px;
+  left: 16px;
   display: grid;
   width: 22px;
   height: 22px;
@@ -1489,8 +1489,8 @@ html { scroll-behavior:smooth; }
   .guide-progress-point img { width: 28px; height: 40px; }
   .guide-progress-point small { width: 48px; font-size: 7px; }
   .guide-progress-point .guide-progress-final-check {
-    top: 32px;
-    left: -11px;
+    top: 31.5px;
+    left: 5.5px;
     width: 17px;
     height: 17px;
     font-size: 11px;
