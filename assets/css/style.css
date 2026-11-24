@@ -1497,3 +1497,9 @@ html { scroll-behavior:smooth; }
   }
   .guide-progress-fill { top: 4px; }
 }
+
+
+/* Custom site cursor */
+html, body {
+  cursor: url("/assets/images/cursor/default.png") 0 0, auto;
+}
