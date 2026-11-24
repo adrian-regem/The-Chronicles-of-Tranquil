@@ -366,7 +366,7 @@ if(guideRoot){
  try{const saved=Number(localStorage.getItem("tranquil-guide-progress"));if(Number.isInteger(saved)&&saved>=1&&saved<=6)guideProgress=saved;}catch(e){}
  guideSlider.value=String(guideProgress);
  guidePoints.innerHTML=guideStages.map((stage,index)=>{
-  const cover=stage.cover?'<img src="/assets/images/books/'+encodeURIComponent(stage.cover)+'" alt="">':"";
+  const cover=stage.cover?'<img src="/assets/images/books/'+encodeURIComponent(stage.cover)+'" alt="">'+(stage.phase==="Финал"?'<span class="guide-progress-final-check" aria-label="Книга дочитана">✓</span>':""):"";
   return '<span class="guide-progress-point'+(stage.disabled?' is-disabled':'')+'" data-stage="'+(index+1)+'"><i></i>'+cover+'<small>'+escapeGuide(stage.book)+'<br>'+escapeGuide(stage.phase)+'</small></span>';
  }).join("");
  guideTagOptions.innerHTML='<button type="button" class="guide-tag-all is-active" data-guide-tag-all aria-pressed="true">Все</button>'+guideCategories.map(([label,icon])=>'<label class="guide-tag-option"><input type="checkbox" value="'+escapeGuide(label)+'"><span class="guide-tag-option-icon">'+guideIcon(icon)+'</span><span>'+escapeGuide(label)+'</span></label>').join("");
@@ -501,7 +501,7 @@ if(guideRoot){
   const card=tab.closest("[data-object-id]");
   if(stage>guideProgress){
    const note=card.querySelector(".guide-lock-note");
-   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок \"Ваш прогресс чтения\" на соответствующий этап.";
+   note.textContent="Эта версия откроется после чтения: \""+versionLabel(stage)+"\". Передвиньте ползунок \"Ваш прогресс чтения\" на соответствующий этап.";
    note.hidden=false;return;
   }
   const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
