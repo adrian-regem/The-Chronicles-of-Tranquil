@@ -1531,3 +1531,217 @@ label,
 .guide-image-viewer-close {
   cursor: image-set(url("/assets/images/cursor/pointer.png") 2x) 0 0, pointer;
 }
+
+
+/* ===== Unified burgundy theme for the complete Lore section ===== */
+body.lore-page {
+  --bg:#100d10;
+  --bg-soft:#191217;
+  --panel:#21171d;
+  --panel-raised:#2b1c24;
+  --slate:#382630;
+  --asphalt:#261a21;
+  --teal:#87384d;
+  --teal-bright:#c2768a;
+  --rust:#87384d;
+  --rust-bright:#c2768a;
+  --text:#eee6e9;
+  --muted:#b4a5ab;
+  --line:rgba(194,118,138,.19);
+  --line-strong:rgba(194,118,138,.36);
+  --glow-teal:0 0 0 1px rgba(135,56,77,.5),0 0 22px rgba(135,56,77,.2);
+  --glow-rust:0 0 0 1px rgba(135,56,77,.5),0 0 22px rgba(135,56,77,.2);
+  --guide-accent:#87384d;
+  --guide-accent-light:#c2768a;
+  --guide-accent-soft:rgba(135,56,77,.16);
+  background:var(--bg);
+  color:var(--text);
+}
+body.lore-page .site-header,
+body.lore-page .page-header {
+  background:rgba(16,11,15,.94);
+  border-color:var(--line);
+}
+body.lore-page .brand-name span,
+body.lore-page .menu-toggle span { color:var(--teal-bright); background:var(--teal-bright); }
+body.lore-page .main-nav a:hover,
+body.lore-page .main-nav a.active {
+  color:#f4dce3;
+  text-shadow:0 0 14px rgba(194,118,138,.55);
+}
+body.lore-page .page-heading {
+  background:radial-gradient(ellipse at 50% 0%,rgba(135,56,77,.23),transparent 68%),linear-gradient(135deg,#1c1218,#151015 72%);
+  border-color:var(--line);
+}
+body.lore-page .page-heading h1,
+body.lore-page .content-section h2,
+body.lore-page .placeholder-panel h2 { color:#f0e5e9; }
+body.lore-page .page-heading .eyebrow { color:#d28da0; text-shadow:0 2px 12px #000; }
+body.lore-page .page-heading .page-lead { color:#d5c6cc; text-shadow:0 2px 12px #000; }
+body.lore-page .page-content { color:var(--text); }
+body.lore-page .placeholder-card,
+body.lore-page .placeholder-panel,
+body.lore-page .info-tile {
+  border-color:var(--line);
+  background:linear-gradient(145deg,rgba(135,56,77,.11),rgba(24,17,22,.97) 70%);
+}
+body.lore-page .placeholder-card h3,
+body.lore-page .link-card h2,
+body.lore-page .info-tile h3 { color:#eee3e7; }
+body.lore-page .placeholder-card p,
+body.lore-page .placeholder-panel p,
+body.lore-page .info-tile p { color:var(--muted); }
+body.lore-page .tile-number,
+body.lore-page .tile-arrow,
+body.lore-page .placeholder-symbol { color:var(--teal-bright); }
+body.lore-page .link-card:hover,
+body.lore-page .info-tile:hover,
+body.lore-page .placeholder-card a:hover {
+  border-color:var(--teal-bright);
+  box-shadow:var(--glow-teal);
+}
+body.lore-page .article-list a:hover { background:rgba(135,56,77,.11); border-color:var(--teal); }
+body.lore-page .section-return {
+  border-color:var(--line-strong);
+  color:#d28da0;
+}
+body.lore-page .section-return:hover {
+  border-color:var(--teal-bright);
+  box-shadow:var(--glow-teal);
+}
+body.lore-page .site-footer {
+  background:#0d090c;
+  border-color:var(--line);
+  color:#a99aa1;
+}
+body.lore-page .footer-brand,
+body.lore-page .site-footer a:hover { color:#d28da0; }
+body.lore-page a:focus-visible,
+body.lore-page button:focus-visible,
+body.lore-page input:focus-visible,
+body.lore-page select:focus-visible {
+  outline-color:var(--teal-bright);
+}
+body.lore-page .map-switcher,
+body.lore-page .map-zoom-controls {
+  border-color:var(--line);
+  background:rgba(19,12,17,.92);
+}
+body.lore-page .map-period-button {
+  border-color:var(--line);
+  background:#21151c;
+  color:#d8c8ce;
+}
+body.lore-page .map-period-button.active,
+body.lore-page .map-period-button[aria-pressed="true"] {
+  border-color:var(--teal-bright);
+  background:rgba(135,56,77,.28);
+  color:#f4e4e9;
+}
+body.lore-page .map-zoom-controls,
+body.lore-page .map-zoom-controls label,
+body.lore-page .map-zoom-controls output { color:#e3d5da; }
+body.lore-page .map-zoom-controls button {
+  border-color:var(--line-strong);
+  background:#2a1a22;
+  color:#e9d9df;
+}
+body.lore-page .map-pan-hint { background:rgba(19,12,17,.82); color:#e0cbd2; }
+body.lore-page .map-coming-soon { background:rgba(19,12,17,.94); color:#f0dce2; }
+body.lore-page .guide-dictionary {
+  --guide-accent:#87384d;
+  --guide-accent-light:#c2768a;
+  --guide-accent-soft:rgba(135,56,77,.16);
+  border-color:rgba(194,118,138,.25);
+}
+body.lore-page .guide-search-wrap input,
+body.lore-page .guide-filters select,
+body.lore-page .guide-tag-all,
+body.lore-page .guide-tag-option,
+body.lore-page .guide-version-tab { background:#1b1218; }
+body.lore-page .guide-card { background:linear-gradient(145deg,rgba(65,34,43,.42),rgba(15,12,16,.98)); }
+body.lore-page .guide-progress-fill { background:#38232c; }
+body.lore-page .guide-image-viewer { background:rgba(8,5,8,.95); }
+
+.language-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.language-card {
+  position:relative;
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  padding:clamp(22px,3vw,32px);
+  overflow:hidden;
+  border:1px solid rgba(194,118,138,.22);
+  background:linear-gradient(145deg,rgba(135,56,77,.13),rgba(26,17,23,.98) 68%);
+  box-shadow:0 12px 32px rgba(0,0,0,.12);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.language-card::before {
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:3px;
+  background:linear-gradient(180deg,#c2768a,rgba(135,56,77,.18));
+}
+.language-card:hover {
+  transform:translateY(-3px);
+  border-color:rgba(194,118,138,.52);
+  box-shadow:0 12px 32px rgba(0,0,0,.22),0 0 22px rgba(135,56,77,.1);
+}
+.language-card-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+.language-number {
+  color:#c2768a;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+.language-origin {
+  padding:4px 9px;
+  border:1px solid rgba(194,118,138,.25);
+  color:#d3a2b0;
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.language-card h2 {
+  margin:0 0 13px;
+  color:#f0e5e9;
+  font:500 clamp(27px,3vw,36px)/1.05 "Yanone Kaffeesatz",sans-serif;
+}
+.language-card p {
+  margin:0;
+  color:#bcaeb4;
+  font-size:14px;
+  line-height:1.8;
+}
+.language-speakers {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:baseline;
+  margin-top:auto !important;
+  padding-top:20px;
+  color:#d6c4cb !important;
+  font-size:12px !important;
+}
+.language-speakers strong {
+  color:#d28da0;
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+@media(max-width:700px) {
+  .language-list { grid-template-columns:1fr; gap:13px; }
+  .language-card { padding:22px; }
+  .language-card p { font-size:13px; }
+}
