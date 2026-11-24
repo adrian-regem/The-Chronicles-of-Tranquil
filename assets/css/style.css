@@ -1364,3 +1364,23 @@ html { scroll-behavior:smooth; }
 .guide-progress-point:nth-child(8){left:100%}
 .guide-progress-point img{width:30px;height:43px}
 @media(max-width:600px){.guide-progress-point img{width:22px;height:32px}}
+
+
+/* Animated reading-progress track */
+@property --guide-fill-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c2768a;
+}
+@keyframes guide-progress-color-cycle {
+  0%,100% { --guide-fill-color: #c2768a; }
+  50% { --guide-fill-color: #e1a0b1; }
+}
+.guide-progress-slider {
+  height: 10px;
+  background: linear-gradient(to right,var(--guide-fill-color) 0 var(--guide-progress),#303a3e var(--guide-progress) 100%);
+  animation: guide-progress-color-cycle 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .guide-progress-slider { animation: none; }
+}
