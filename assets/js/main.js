@@ -420,7 +420,7 @@ if(guideRoot){
    const activeTab=!locked&&String(item.record.recordId)===String(active.record.recordId);
    return '<button type="button" class="guide-version-tab'+(activeTab?' is-active':'')+(locked?' is-locked':'')+'" data-guide-version="'+escapeGuide(item.record.recordId)+'" data-guide-stage="'+item.record.version+'" aria-pressed="'+String(activeTab)+'" title="'+(locked?'Откроется после чтения: '+label:label)+'">'+(locked?'<span class="guide-lock-symbol" aria-label="Заблокировано"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>':'')+'<span>'+escapeGuide(label)+'</span></button>';
   }).join("");
-  const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version)].join(" ").toLocaleLowerCase("ru");
+  const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version),String(group.objectId)].join(" ").toLocaleLowerCase("ru");
   const portraitMarkup=portrait?'<button type="button" class="guide-portrait-open" aria-label="Открыть портрет: '+escapeGuide(name)+'"><img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.closest(&quot;.guide-card-portrait&quot;).classList.add(&quot;is-fallback&quot;)"></button>':'';
   const query=(guideSearch.value||"").trim();
   return '<article class="guide-card" data-guide-entry data-object-id="'+escapeGuide(group.objectId)+'" data-search="'+escapeGuide(searchText)+'" data-tags="'+escapeGuide(tags.join("|"))+'">'+
@@ -451,7 +451,7 @@ if(guideRoot){
   const sorted=guideGroups.slice().sort((a,b)=>{
    const an=(a.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").trim();
    const bn=(b.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").trim();
-   const aq=/^[«„“"']/.test(an),bq=/^[«„“"']/.test(bn);
+   const aq=/^[\u00ab\u201e\u201c"']/.test(an),bq=/^[\u00ab\u201e\u201c"']/.test(bn);
    if(aq!==bq)return aq?1:-1;
    return an.localeCompare(bn,"ru");
   });
@@ -501,7 +501,7 @@ if(guideRoot){
   const card=tab.closest("[data-object-id]");
   if(stage>guideProgress){
    const note=card.querySelector(".guide-lock-note");
-   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок Ваш прогресс чтения на соответствующий этап.";
+   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок \"Ваш прогресс чтения\" на соответствующий этап.";
    note.hidden=false;return;
   }
   const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
