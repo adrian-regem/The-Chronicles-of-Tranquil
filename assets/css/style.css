@@ -1501,5 +1501,5 @@ html { scroll-behavior:smooth; }
 
 /* Custom site cursor */
 html, body {
-  cursor: url("/assets/images/cursor/default.png") 0 0, auto;
+  cursor: url("/assets/images/cursor/default.svg") 0 0, auto;
 }
