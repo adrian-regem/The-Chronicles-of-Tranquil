@@ -2002,3 +2002,10 @@ body.news-page a:focus-visible,
 body.news-page button:focus-visible,
 body.books-page a:focus-visible,
 body.books-page button:focus-visible { outline-color:var(--section-bright); }
+
+
+/* White header crests for Marma gonia and Rodda-Kira; footer crests stay untouched. */
+body.author-page .site-header .brand-crest,
+body.lore-page .site-header .brand-crest {
+  filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,.14)) !important;
+}
