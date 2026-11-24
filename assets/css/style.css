@@ -1365,8 +1365,8 @@ html { scroll-behavior:smooth; }
 .guide-progress-slider {
   --guide-fill-color: #b85c75;
   height: 14px;
-  width: calc(100% - 19px);
-  margin: 0 9.5px;
+  width: calc(100% - 22px);
+  margin: 0 11px;
   border-radius: 999px;
   background: linear-gradient(to right, var(--guide-fill-color) 0 var(--guide-progress), #303a3e var(--guide-progress) 100%);
   animation: guide-progress-color-cycle 3s ease-in-out infinite !important;
@@ -1405,9 +1405,9 @@ html { scroll-behavior:smooth; }
 .guide-progress-points {
   position: relative;
   display: block;
-  width: calc(100% - 19px);
+  width: calc(100% - 22px);
   height: 100px;
-  margin: 0 0 0 9.5px;
+  margin: 0 0 0 11px;
 }
 .guide-progress-point {
   position: absolute;
@@ -1447,7 +1447,7 @@ html { scroll-behavior:smooth; }
 .guide-progress-point .guide-progress-final-check {
   position: absolute;
   z-index: 2;
-  top: 48px;
+  top: 42px;
   left: -5px;
   display: grid;
   width: 20px;
@@ -1467,7 +1467,7 @@ html { scroll-behavior:smooth; }
   .guide-progress-point img { width: 27px; height: 39px; }
   .guide-progress-point small { width: 48px; font-size: 7px; }
   .guide-progress-point .guide-progress-final-check {
-    top: 32px;
+    top: 28px;
     left: -4px;
     width: 16px;
     height: 16px;
