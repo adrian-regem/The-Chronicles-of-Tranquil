@@ -1340,3 +1340,13 @@ html { scroll-behavior:smooth; }
 .guide-progress-point:nth-child(7){left:calc(9.5px + (100% - 19px) * 6/7)}
 .guide-progress-point:nth-child(8){left:calc(9.5px + (100% - 19px) * 7/7)}
 @media(max-width:600px){.guide-progress-explanation{font-size:11px}.guide-progress-points{height:70px}.guide-progress-point{width:12.5%}.guide-progress-point img{width:19px;height:28px}.guide-progress-point small{font-size:7px}}
+
+/* Follow-up guide refinements */
+.guide-progress-point i{display:none!important}
+.guide-progress-point{cursor:pointer}
+.guide-progress-point img,.guide-progress-point small{cursor:pointer}
+.guide-progress-point.is-disabled{cursor:not-allowed}
+.guide-lock-symbol{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:22px;height:22px;color:#e5a9b8}
+.guide-lock-symbol svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.guide-version-tab.is-locked{color:#d4a9b4;border-color:rgba(212,169,180,.45);gap:7px}
+@media(min-width:601px){.guide-lock-symbol{width:26px;height:26px}.guide-lock-symbol svg{width:23px;height:23px}}
