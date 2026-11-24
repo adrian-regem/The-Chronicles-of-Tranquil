@@ -1371,13 +1371,13 @@ html { scroll-behavior:smooth; }
   height: 14px;
   border: 0;
   border-radius: 999px;
-  background: #303a3e;
+  background: transparent;
 }
 .guide-progress-slider::-moz-range-track {
   height: 14px;
   border: 0;
   border-radius: 999px;
-  background: #303a3e;
+  background: transparent;
 }
 .guide-progress-slider::-webkit-slider-thumb {
   width: 22px;
@@ -1407,6 +1407,7 @@ html { scroll-behavior:smooth; }
   height: 14px;
   overflow: hidden;
   border-radius: 999px;
+  background: #303a3e;
   pointer-events: none;
 }
 .guide-progress-fill::before {
@@ -1423,9 +1424,6 @@ html { scroll-behavior:smooth; }
 @keyframes guide-fill-shimmer {
   from { background-position: 0% 50%; }
   to { background-position: 200% 50%; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .guide-progress-fill::before { animation: none; }
 }
 .guide-progress-points {
   position: relative;
