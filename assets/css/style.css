@@ -1350,3 +1350,17 @@ html { scroll-behavior:smooth; }
 .guide-lock-symbol svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .guide-version-tab.is-locked{color:#d4a9b4;border-color:rgba(212,169,180,.45);gap:7px}
 @media(min-width:601px){.guide-lock-symbol{width:26px;height:26px}.guide-lock-symbol svg{width:23px;height:23px}}
+
+
+/* Guide progress alignment and cover sizing */
+.guide-progress-points{width:calc(100% - 19px);margin:0 0 0 9.5px}
+.guide-progress-point:nth-child(1){left:0%}
+.guide-progress-point:nth-child(2){left:14.285714%}
+.guide-progress-point:nth-child(3){left:28.571429%}
+.guide-progress-point:nth-child(4){left:42.857143%}
+.guide-progress-point:nth-child(5){left:57.142857%}
+.guide-progress-point:nth-child(6){left:71.428571%}
+.guide-progress-point:nth-child(7){left:85.714286%}
+.guide-progress-point:nth-child(8){left:100%}
+.guide-progress-point img{width:30px;height:43px}
+@media(max-width:600px){.guide-progress-point img{width:22px;height:32px}}
