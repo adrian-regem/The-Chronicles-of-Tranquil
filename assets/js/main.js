@@ -322,14 +322,14 @@ if(guideRoot){
  const guideTagOptions=document.querySelector("#guide-tag-options");
  const guideResults=document.querySelector("#guide-results");
  const guideStages=[
-  {book:"Порабощение",phase:"Повествование"},
-  {book:"Порабощение",phase:"Финал"},
-  {book:"Артефакт",phase:"Повествование"},
-  {book:"Артефакт",phase:"Финал"},
-  {book:"Золотые крылья",phase:"Повествование"},
-  {book:"Золотые крылья",phase:"Финал"},
-  {book:"???",phase:"Повествование"},
-  {book:"???",phase:"Финал"}
+  {book:"Порабощение",phase:"Повествование",cover:"Обложка Порабощение.png"},
+  {book:"Порабощение",phase:"Финал",cover:"Обложка Порабощение.png"},
+  {book:"Артефакт",phase:"Повествование",cover:"Обложка Артефакт.png"},
+  {book:"Артефакт",phase:"Финал",cover:"Обложка Артефакт.png"},
+  {book:"Золотые крылья",phase:"Повествование",cover:"Обложка Золотые крылья.png"},
+  {book:"Золотые крылья",phase:"Финал",cover:"Обложка Золотые крылья.png"},
+  {book:"???",phase:"Повествование",disabled:true},
+  {book:"???",phase:"Финал",disabled:true}
  ];
  const guideCategories=[
   ["Персонаж","user-round"],["Биология","dna"],["Власть","crown"],["Культура","landmark"],
@@ -351,10 +351,24 @@ if(guideRoot){
  };
  const guideIcon=name=>'<svg class="guide-inline-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(guideIconPaths[name]||"")+'</svg>';
  const escapeGuide=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+ const highlightGuide=(value,query)=>{
+  const source=String(value??"");if(!query)return escapeGuide(source);
+  const lower=source.toLocaleLowerCase("ru"),needle=query.toLocaleLowerCase("ru");
+  let result="",position=0,found;
+  while((found=lower.indexOf(needle,position))!==-1){
+   result+=escapeGuide(source.slice(position,found))+'<mark class="guide-search-match">'+escapeGuide(source.slice(found,found+query.length))+'</mark>';
+   position=found+query.length;
+  }
+  return result+escapeGuide(source.slice(position));
+ };
  let guideProgress=1;
- try{const saved=Number(localStorage.getItem("tranquil-guide-progress"));if(Number.isInteger(saved)&&saved>=1&&saved<=8)guideProgress=saved;}catch(e){}
+ guideSlider.max="8";
+ try{const saved=Number(localStorage.getItem("tranquil-guide-progress"));if(Number.isInteger(saved)&&saved>=1&&saved<=6)guideProgress=saved;}catch(e){}
  guideSlider.value=String(guideProgress);
- guidePoints.innerHTML=guideStages.map((stage,index)=>'<span class="guide-progress-point" data-stage="'+(index+1)+'"><i></i><small>'+escapeGuide(stage.book)+'<br>'+escapeGuide(stage.phase)+'</small></span>').join("");
+ guidePoints.innerHTML=guideStages.map((stage,index)=>{
+  const cover=stage.cover?'<img src="/assets/images/books/'+encodeURIComponent(stage.cover)+'" alt="">':"";
+  return '<span class="guide-progress-point'+(stage.disabled?' is-disabled':'')+'" data-stage="'+(index+1)+'"><i></i>'+cover+'<small>'+escapeGuide(stage.book)+'<br>'+escapeGuide(stage.phase)+'</small></span>';
+ }).join("");
  guideTagOptions.innerHTML='<button type="button" class="guide-tag-all is-active" data-guide-tag-all aria-pressed="true">Все</button>'+guideCategories.map(([label,icon])=>'<label class="guide-tag-option"><input type="checkbox" value="'+escapeGuide(label)+'"><span class="guide-tag-option-icon">'+guideIcon(icon)+'</span><span>'+escapeGuide(label)+'</span></label>').join("");
  const filterHeadingIcon=document.querySelector(".guide-filter-heading-icon");
  if(filterHeadingIcon)filterHeadingIcon.innerHTML=guideIcon("sliders-horizontal");
@@ -407,11 +421,12 @@ if(guideRoot){
    return '<button type="button" class="guide-version-tab'+(activeTab?' is-active':'')+(locked?' is-locked':'')+'" data-guide-version="'+escapeGuide(item.record.recordId)+'" data-guide-stage="'+item.record.version+'" aria-pressed="'+String(activeTab)+'" title="'+(locked?'Откроется после чтения: '+label:label)+'">'+(locked?'<span class="guide-lock-symbol">⌑</span>':'')+'<span>'+escapeGuide(label)+'</span></button>';
   }).join("");
   const searchText=[name,desc,tags.join(" "),versionLabel(active.record.version)].join(" ").toLocaleLowerCase("ru");
-  const portraitMarkup=portrait?'<img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.parentElement.classList.add(&quot;is-fallback&quot;)">':'';
+  const portraitMarkup=portrait?'<button type="button" class="guide-portrait-open" aria-label="Открыть портрет: '+escapeGuide(name)+'"><img src="'+portrait+'" alt="Портрет: '+escapeGuide(name)+'" loading="lazy" onerror="this.hidden=true;this.closest(&quot;.guide-card-portrait&quot;).classList.add(&quot;is-fallback&quot;)"></button>':'';
+  const query=(guideSearch.value||"").trim();
   return '<article class="guide-card" data-guide-entry data-object-id="'+escapeGuide(group.objectId)+'" data-search="'+escapeGuide(searchText)+'" data-tags="'+escapeGuide(tags.join("|"))+'">'+
    '<div class="guide-card-main"><div class="guide-card-portrait'+(portrait?'':' is-fallback')+'">'+portraitMarkup+'<span aria-hidden="true">'+escapeGuide(name.trim().slice(0,1).toLocaleUpperCase("ru"))+'</span></div>'+
-   '<div class="guide-card-content"><div class="guide-card-title-row"><h3>'+escapeGuide(name)+'</h3><span class="guide-object-id">#'+escapeGuide(group.objectId)+'</span></div>'+
-   '<div class="guide-entry-tags">'+tagMarkup+'</div><p class="guide-card-description">'+(desc?escapeGuide(desc):'<span class="guide-no-description">Описание пока отсутствует.</span>')+'</p></div></div>'+
+   '<div class="guide-card-content"><div class="guide-card-title-row"><h3 data-guide-name="'+escapeGuide(name)+'">'+highlightGuide(name,query)+'</h3><span class="guide-object-id">#'+escapeGuide(group.objectId)+'</span></div>'+
+   '<div class="guide-entry-tags">'+tagMarkup+'</div><p class="guide-card-description" data-guide-description="'+escapeGuide(desc)+'">'+(desc?highlightGuide(desc,query):'<span class="guide-no-description">Описание пока отсутствует.</span>')+'</p></div></div>'+
    '<div class="guide-card-versions" aria-label="Версии записи">'+tabs+'</div><p class="guide-lock-note" role="status" hidden></p></article>';
  }
  function applyGuideFilters(){
@@ -423,6 +438,9 @@ if(guideRoot){
    const matchesQuery=!query||(card.dataset.search||"").includes(query);
    const matchesTags=!checked.length||tags.some(tag=>checked.includes(tag));
    card.hidden=!(matchesQuery&&matchesTags);if(!card.hidden)visible++;
+   const name=card.querySelector("[data-guide-name]"),description=card.querySelector("[data-guide-description]");
+   if(name)name.innerHTML=highlightGuide(name.dataset.guideName,query);
+   if(description)description.innerHTML=description.dataset.guideDescription?highlightGuide(description.dataset.guideDescription,query):'<span class="guide-no-description">Описание пока отсутствует.</span>';
   });
   let empty=guideResults.querySelector(".guide-no-matches");
   if(!visible&&cards.length){if(!empty){empty=document.createElement("p");empty.className="guide-no-matches";empty.textContent="По заданным условиям ничего не найдено.";guideResults.append(empty);}empty.hidden=false;}
@@ -431,8 +449,10 @@ if(guideRoot){
  function renderCards(){
   updateProgressDisplay();
   const sorted=guideGroups.slice().sort((a,b)=>{
-   const an=(a.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").toLocaleLowerCase("ru");
-   const bn=(b.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").toLocaleLowerCase("ru");
+   const an=(a.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").trim();
+   const bn=(b.snapshots.filter(x=>x.record.version<=guideProgress).slice(-1)[0]?.state.name||"").trim();
+   const aq=/^[«„“"']/.test(an),bq=/^[«„“"']/.test(bn);
+   if(aq!==bq)return aq?1:-1;
    return an.localeCompare(bn,"ru");
   });
   const cards=sorted.map(renderCard).filter(Boolean);
@@ -440,7 +460,7 @@ if(guideRoot){
   applyGuideFilters();
  }
  guideSlider.addEventListener("input",()=>{
-  guideProgress=Number(guideSlider.value);selectedVersions.clear();
+  guideProgress=Math.min(6,Number(guideSlider.value));guideSlider.value=String(guideProgress);selectedVersions.clear();
   try{localStorage.setItem("tranquil-guide-progress",String(guideProgress));}catch(e){}
   renderCards();
  });
@@ -459,12 +479,24 @@ if(guideRoot){
   allButton.classList.add("is-active");allButton.setAttribute("aria-pressed","true");applyGuideFilters();
  });
  guideResults.addEventListener("click",event=>{
+  const portraitButton=event.target.closest(".guide-portrait-open");
+  if(portraitButton){
+   const image=portraitButton.querySelector("img");if(!image||image.hidden)return;
+   let viewer=document.querySelector(".guide-image-viewer");
+   if(!viewer){
+    viewer=document.createElement("div");viewer.className="guide-image-viewer";viewer.innerHTML='<button type="button" class="guide-image-viewer-close" aria-label="Закрыть изображение">×</button><img alt="">';
+    document.body.append(viewer);
+    viewer.addEventListener("click",e=>{if(e.target===viewer||e.target.closest(".guide-image-viewer-close"))viewer.classList.remove("is-open");});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")viewer.classList.remove("is-open");});
+   }
+   const large=viewer.querySelector("img");large.src=image.src;large.alt=image.alt;viewer.classList.add("is-open");return;
+  }
   const tab=event.target.closest("[data-guide-version]");if(!tab)return;
   const stage=Number(tab.dataset.guideStage);
   const card=tab.closest("[data-object-id]");
   if(stage>guideProgress){
    const note=card.querySelector(".guide-lock-note");
-   note.textContent="Эта версия откроется после чтения «"+versionLabel(stage)+"». Передвиньте ползунок «Ваш прогресс чтения» на соответствующий этап.";
+   note.textContent="Эта версия откроется после чтения: "+versionLabel(stage)+". Передвиньте ползунок «Ваш прогресс чтения» на соответствующий этап.";
    note.hidden=false;return;
   }
   const objectId=card.dataset.objectId;selectedVersions.set(objectId,tab.dataset.guideVersion);renderCards();
