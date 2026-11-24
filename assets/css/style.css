@@ -2009,3 +2009,69 @@ body.author-page .site-header .brand-crest,
 body.lore-page .site-header .brand-crest {
   filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,.14)) !important;
 }
+
+
+/* ===== Final country background tones and translucent action buttons ===== */
+/* Kartarad homepage */
+body:not(.page-shell) {
+  --bg:#0d1414;
+  --bg-soft:#121d1d;
+  background:#0d1414;
+}
+body:not(.page-shell) .quote-section { background:#101a1a; }
+body:not(.page-shell) .outline-button#new-quote {
+  border-color:rgba(101,164,162,.58);
+  background:rgba(62,126,126,.22);
+  color:#a5d4d1;
+}
+body:not(.page-shell) .outline-button#new-quote:hover {
+  background:rgba(62,126,126,.34);
+  box-shadow:0 0 0 1px rgba(101,164,162,.24),0 0 20px rgba(62,126,126,.2);
+}
+
+/* Rupida books */
+body.books-page {
+  --bg:#0d0d14;
+  --bg-soft:#141421;
+  background:#0d0d14;
+}
+body.books-page .page-header { background:#10101a; }
+body.books-page .page-heading {
+  background:radial-gradient(ellipse at 50% 0%,rgba(65,111,157,.2),transparent 68%),linear-gradient(135deg,#171b29,#10101a 72%);
+}
+body.books-page .book-store-link,
+body.books-page .book-for-link,
+body.books-page .book-cycle-link {
+  border-color:rgba(131,181,231,.34);
+  background:rgba(65,111,157,.2);
+  color:#dcecff;
+}
+body.books-page .book-store-link:hover,
+body.books-page .book-for-link:hover,
+body.books-page .book-cycle-link:hover {
+  border-color:#83b5e7;
+  background:rgba(65,111,157,.34);
+  box-shadow:0 0 0 1px rgba(65,111,157,.28),0 0 18px rgba(65,111,157,.18);
+}
+
+/* Ansprand news */
+body.news-page {
+  --bg:#14130d;
+  --bg-soft:#1c1a11;
+  background:#14130d;
+}
+body.news-page .page-header { background:#19170f; }
+body.news-page .page-heading {
+  background:radial-gradient(ellipse at 50% 0%,rgba(169,133,39,.19),transparent 68%),linear-gradient(135deg,#211d12,#17150e 72%);
+}
+
+/* Marmagonia author */
+body.author-page {
+  --bg:#140d0d;
+  --bg-soft:#1d1314;
+  background:#140d0d;
+}
+body.author-page .page-header { background:#1a1112; }
+body.author-page .page-heading {
+  background:radial-gradient(ellipse at 50% 0%,rgba(168,61,67,.2),transparent 68%),linear-gradient(135deg,#211416,#171011 72%);
+}
