@@ -569,13 +569,13 @@ if(quoteRoot){
   const full=String(record.quote||"").trim();
   quoteId.textContent="№ "+record.id;
   quoteSource.textContent=record.source||"";
-  quoteText.textContent="";
-  if(!animate){quoteText.textContent=full;return;}
+  quoteText.textContent=animate?'"':'"'+full+'"';
+  if(!animate)return;
   const words=full.split(/\s+/);let index=0;
   typeTimer=setInterval(()=>{
    quoteText.textContent+=(index?" ":"")+words[index];
    index++;
-   if(index>=words.length)clearInterval(typeTimer);
+   if(index>=words.length){quoteText.textContent+='"';clearInterval(typeTimer);}
   },105);
  }
  function pickQuote(){
@@ -602,7 +602,7 @@ if(quoteRoot){
   ctx.strokeStyle="rgba(220,235,230,.28)";ctx.lineWidth=2;ctx.strokeRect(54,54,972,972);
   ctx.strokeStyle="rgba(220,235,230,.16)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(390,150);ctx.lineTo(690,150);ctx.stroke();
   ctx.textAlign="center";ctx.textBaseline="middle";
-  const text=String(activeQuote.quote||"").trim();
+  const text='"'+String(activeQuote.quote||"").trim()+'"';
   let fontSize=54;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";
   const words=text.split(/\s+/);let lines=[],line="";
   words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>820&&line){lines.push(line);line=word;}else line=test;});if(line)lines.push(line);
