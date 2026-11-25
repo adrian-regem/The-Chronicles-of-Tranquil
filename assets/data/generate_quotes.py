@@ -12,6 +12,27 @@ EXPECTED_COUNT = 134
 
 
 def main() -> None:
+    # Apply the requested source correction directly to the workbook before export.
+    editable_workbook = load_workbook(SOURCE)
+    editable_sheet = editable_workbook.active
+    editable_headers = [editable_sheet.cell(1, column).value for column in range(1, 5)]
+    if editable_headers != ["ID", "Цитата", "Источник", "Темы"]:
+        raise ValueError(f"Unexpected spreadsheet headers: {editable_headers!r}")
+    id_column = editable_headers.index("ID") + 1
+    quote_column = editable_headers.index("Цитата") + 1
+    for row_number in range(2, editable_sheet.max_row + 1):
+        if editable_sheet.cell(row_number, id_column).value == 120:
+            cell = editable_sheet.cell(row_number, quote_column)
+            corrected = str(cell.value or "").replace("это пору", "эту пору")
+            if corrected != cell.value:
+                cell.value = corrected
+                editable_workbook.save(SOURCE)
+                print("Corrected quote ID 120 in source workbook")
+            break
+    else:
+        raise ValueError("Quote ID 120 was not found")
+    editable_workbook.close()
+
     workbook = load_workbook(SOURCE, read_only=True, data_only=True)
     sheet = workbook.active
     headers = [sheet.cell(1, column).value for column in range(1, 5)]
