@@ -453,7 +453,7 @@ if(guideRoot){
   let empty=guideResults.querySelector(".guide-no-matches");
   if(!visible&&cards.length){if(!empty){empty=document.createElement("p");empty.className="guide-no-matches";empty.textContent="По заданным условиям ничего не найдено.";guideResults.append(empty);}empty.hidden=false;}
   else if(empty)empty.hidden=true;
-  if(guideResultsCount)guideResultsCount.textContent=visible+" из "+guideGroups.length+" сущностей";
+  if(guideResultsCount)guideResultsCount.textContent=visible+"/"+guideGroups.length;
  }
  function renderCards(){
   updateProgressDisplay();
