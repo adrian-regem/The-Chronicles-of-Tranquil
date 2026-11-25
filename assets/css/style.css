@@ -2151,3 +2151,8 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
  .quote-display.is-message { min-height:120px; }
  .quote-display.is-message blockquote { font-size:15px; }
 }
+
+
+/* Quote generator button icons and undistorted heraldry. */
+.quote-button-icon { width:15px; height:15px; flex:0 0 15px; margin-right:7px; vertical-align:-3px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.quote-actions .outline-button,.quote-image-actions .outline-button { display:inline-flex; align-items:center; justify-content:center; }
