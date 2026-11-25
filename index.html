@@ -66,9 +66,28 @@
           <button class="outline-button quote-secondary-button" id="make-quote-image" type="button"><svg class="quote-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Картинка</button>
         </div>
         <div class="quote-image-panel" id="quote-image-panel" hidden>
+          <div class="quote-image-controls">
+            <label class="quote-image-control">Формат
+              <select id="quote-image-format">
+                <option value="square">Квадрат · 1:1</option>
+                <option value="landscape">Альбомный · 16:9</option>
+                <option value="portrait">Вертикальный · 9:16</option>
+              </select>
+            </label>
+            <label class="quote-image-control">Стиль
+              <select id="quote-image-style">
+                <option value="classic">Классика</option>
+                <option value="editorial">Редакционный</option>
+                <option value="minimal">Минимализм</option>
+                <option value="geometry">Геометрия</option>
+                <option value="ornament">Орнамент</option>
+              </select>
+            </label>
+            <button class="outline-button" id="quote-image-background" type="button">Сменить градиент</button>
+            <span class="quote-image-palette-name" id="quote-image-palette-name">Угольный</span>
+          </div>
           <canvas id="quote-image-canvas" width="1080" height="1080" aria-label="Изображение с цитатой"></canvas>
           <div class="quote-image-actions">
-            <button class="outline-button" id="quote-image-background" type="button"><svg class="quote-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m5 19 14-14M3 13 13 3M11 21 21 11"/></svg>Сменить фон</button>
             <button class="outline-button" id="quote-image-crest" type="button"><svg class="quote-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>Сменить герб</button>
             <button class="outline-button" id="quote-image-copy" type="button"><svg class="quote-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Копировать изображение</button>
             <button class="outline-button" id="quote-image-download" type="button"><svg class="quote-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3h12l4 4v14H3V3h2Z"/><path d="M7 3v6h10V3M7 21v-7h10v7"/></svg>Скачать</button>
