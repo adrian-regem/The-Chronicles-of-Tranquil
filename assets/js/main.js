@@ -806,6 +806,7 @@ if (bookProgressRoot) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
+  const reduceProgressMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const escapeBookProgress = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -815,12 +816,13 @@ if (bookProgressRoot) {
   const isPortrait = (stage) => stage.startsWith("Портрет ");
 
   function displayProjectName(project) {
-    if (project.name === "Книга") return "Хроники Транквила: ???";
-    if (project.name === "Путеводитель") return 'Путеводитель по "???"';
+    const censored = "▓▓▓▓▓▓▓▓▓▓▓▓";
+    if (project.name === "Книга") return "Хроники Транквила: " + censored;
+    if (project.name === "Путеводитель") return 'Путеводитель по "' + censored + '"';
     return project.name;
   }
 
-  function renderOverallRing(project) {
+  function renderOverallRing(project, key) {
     const total = project.items.reduce((sum, item) => sum + item.weight, 0);
     const completed = project.items.reduce(
       (sum, item) => sum + (item.status === "done" ? item.weight : 0), 0
@@ -828,35 +830,33 @@ if (bookProgressRoot) {
     const percent = Math.min(100, Math.max(0, Math.round((completed / total) * 10000) / 100));
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
-    const offset = circumference * (1 - percent / 100);
 
     return `
       <div class="progress-overall">
         <div class="progress-ring" role="img" aria-label="Общая готовность: ${progressNumber.format(percent)}%">
           <svg viewBox="0 0 104 104" aria-hidden="true">
             <circle class="progress-ring-track" cx="52" cy="52" r="${radius}"></circle>
-            <circle class="progress-ring-value" cx="52" cy="52" r="${radius}"
-              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+            <circle class="progress-ring-value" data-progress-ring="${key}" data-target-offset="${circumference * (1 - percent / 100)}"
+              cx="52" cy="52" r="${radius}" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"></circle>
           </svg>
-          <span class="progress-ring-number">${progressNumber.format(percent)}%</span>
+          <span class="progress-ring-number" data-progress-number="${key}" data-target-percent="${percent}">0%</span>
         </div>
         <span class="progress-overall-label">Общая готовность</span>
       </div>`;
   }
 
-  function renderSegmentedProgress(items, label) {
+  function renderSegmentedProgress(items, label, key) {
     const completed = items.filter(item => item.status === "done").length;
     const segments = items.map((item, index) => {
-      const isLit = index < completed;
       const flex = label === "Рукопись" && (item.stage === "Пролог" || item.stage === "Эпилог") ? 0.2 : 1;
-      return `<span class="progress-segment${isLit ? " is-filled" : ""}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
+      return `<span class="progress-segment" data-segment-index="${index}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
     }).join("");
 
     return `
-      <div class="progress-segmented-block">
+      <div class="progress-segmented-block" data-segmented-progress="${key}" data-completed-count="${completed}">
         <div class="progress-segmented-heading">
           <span>${escapeBookProgress(label)}</span>
-          <strong>${completed}/${items.length}</strong>
+          <strong data-segment-counter="${key}" data-target-count="${completed}">0/${items.length}</strong>
         </div>
         <div class="progress-segments" role="img"
           aria-label="${escapeBookProgress(label)}: ${completed} из ${items.length}">
@@ -865,34 +865,98 @@ if (bookProgressRoot) {
       </div>`;
   }
 
-  function renderOtherTasks(items) {
+  function renderOtherTasks(items, key) {
     if (!items.length) return "";
     return `
       <ul class="progress-other-tasks">
-        ${items.map(item => {
+        ${items.map((item, index) => {
           const completed = item.status === "done";
           return `
-            <li class="progress-other-task${completed ? " is-done" : ""}">
-              <span class="progress-other-mark" aria-hidden="true">${completed ? "✓" : ""}</span>
+            <li class="progress-other-task" data-other-task data-done="${completed}" data-task-index="${index}" data-project-key="${key}">
+              <span class="progress-other-mark" aria-hidden="true"></span>
               <span>${escapeBookProgress(item.stage)}</span>
             </li>`;
         }).join("")}
       </ul>`;
   }
 
-  function renderProject(project) {
+  function renderProject(project, key) {
     const guide = project.name.startsWith("Путеводитель");
     const individual = project.items.filter(item => guide ? isPortrait(item.stage) : isManuscriptPart(item.stage));
     const other = project.items.filter(item => !individual.includes(item));
     if (!individual.length) throw new Error("Не найдены этапы для сегментированной шкалы проекта «" + project.name + "».");
 
     return `
-      <article class="progress-project-column">
+      <article class="progress-project-column" data-progress-project="${key}">
         <h3>${escapeBookProgress(displayProjectName(project))}</h3>
-        ${renderOverallRing(project)}
-        ${renderSegmentedProgress(individual, guide ? "Портреты персонажей" : "Рукопись")}
-        ${renderOtherTasks(other)}
+        ${renderOverallRing(project, key)}
+        ${renderSegmentedProgress(individual, guide ? "Портреты персонажей" : "Рукопись", key)}
+        ${renderOtherTasks(other, key)}
       </article>`;
+  }
+
+  function animateCounter(element, target) {
+    if (reduceProgressMotion) {
+      element.textContent = progressNumber.format(target) + "%";
+      return;
+    }
+    const duration = 850;
+    const startTime = performance.now();
+    const tick = (now) => {
+      const progress = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = progressNumber.format(target * eased) + "%";
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  function animateProject(key) {
+    const projectRoot = projectsRoot.querySelector('[data-progress-project="' + key + '"]');
+    if (!projectRoot) return;
+
+    const ring = projectRoot.querySelector("[data-progress-ring]");
+    const number = projectRoot.querySelector("[data-progress-number]");
+    const targetOffset = Number(ring.dataset.targetOffset);
+    const targetPercent = Number(number.dataset.targetPercent);
+    const segmentBlock = projectRoot.querySelector("[data-segmented-progress]");
+    const segments = [...segmentBlock.querySelectorAll(".progress-segment")];
+    const completed = Number(segmentBlock.dataset.completedCount);
+    const counter = projectRoot.querySelector("[data-segment-counter]");
+    const tasks = [...projectRoot.querySelectorAll("[data-other-task][data-done='true']")];
+
+    if (reduceProgressMotion) {
+      ring.style.strokeDashoffset = String(targetOffset);
+      number.textContent = progressNumber.format(targetPercent) + "%";
+      segments.slice(0, completed).forEach(segment => segment.classList.add("is-filled"));
+      counter.textContent = completed + "/" + segments.length;
+      tasks.forEach(task => {
+        task.classList.add("is-done");
+        task.querySelector(".progress-other-mark").textContent = "✓";
+      });
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      ring.style.strokeDashoffset = String(targetOffset);
+      animateCounter(number, targetPercent);
+    });
+
+    const segmentDelay = 42;
+    segments.slice(0, completed).forEach((segment, index) => {
+      window.setTimeout(() => {
+        segment.classList.add("is-filled");
+        counter.textContent = (index + 1) + "/" + segments.length;
+      }, 100 + index * segmentDelay);
+    });
+    counter.textContent = "0/" + segments.length;
+
+    tasks.forEach((task, index) => {
+      window.setTimeout(() => {
+        task.classList.add("is-done");
+        task.querySelector(".progress-other-mark").textContent = "✓";
+      }, 130 + index * 85);
+    });
   }
 
   fetch("/assets/data/book-progress.json?v=20261125-progress-1")
@@ -932,7 +996,10 @@ if (bookProgressRoot) {
       const bookProject = projects.find(project => !project.name.startsWith("Путеводитель"));
       const guideProject = projects.find(project => project.name.startsWith("Путеводитель"));
       if (!bookProject || !guideProject) throw new Error("Не удалось разделить книгу и путеводитель.");
-      projectsRoot.innerHTML = renderProject(bookProject) + renderProject(guideProject);
+
+      projectsRoot.innerHTML = renderProject(bookProject, "book") + renderProject(guideProject, "guide");
+      animateProject("book");
+      animateProject("guide");
     })
     .catch(error => {
       projectsRoot.innerHTML = '<p class="progress-error">' +
