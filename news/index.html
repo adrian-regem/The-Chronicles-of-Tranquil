@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Yanone+Kaffeesatz:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css?v=20261125-crest-colors">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20261125-book-progress">
 </head>
 <body class="page-shell top-level-page news-page">
 <header class="site-header page-header">
@@ -32,12 +32,30 @@
   </section>
   <div class="page-content">
 
-    <section class="content-section"><div class="placeholder-panel"><h2>Пока новостей нет</h2><p>Новые публикации появятся здесь в хронологическом порядке.</p></div></section>
+    <section class="news-progress content-section" id="book-progress" aria-labelledby="book-progress-title">
+      <div class="news-progress-layout">
+        <div class="news-progress-overview">
+          <p class="eyebrow">Работа над следующим изданием</p>
+          <h2 id="book-progress-title">За кулисами новой книги</h2>
+          <p class="news-progress-lead">От первых страниц рукописи до публикации книги и путеводителя по ней.</p>
+          <div class="progress-rings" id="book-progress-rings" aria-live="polite">
+            <p class="progress-loading">Загружаем данные о ходе работы...</p>
+          </div>
+        </div>
+        <div class="progress-checklist" id="book-progress-checklist" aria-label="Этапы подготовки книги и путеводителя">
+          <p class="progress-loading">Загружаем список этапов...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section news-feed" aria-label="Последние новости">
+      <div class="placeholder-panel"><h2>Пока новостей нет</h2><p>Новые публикации появятся здесь в хронологическом порядке.</p></div>
+    </section>
 
   </div>
 <div class="page-content section-return-wrap"><a class="section-return" href="/">← На главную</a></div>
 </main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-heading"><img src="/assets/images/countries/%D0%93%D0%B5%D1%80%D0%B1%20%D0%9A%D0%B0%D1%80%D1%82%D1%80%D0%B0%D0%B4%D0%B0%20%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80.png?v=20261125-white-crests" alt="" class="footer-crest"><h2>Транквильский вестник</h2></div><div class="footer-copy"><p>Дмитричев Никита.</p><p>© 2026. Все материалы вселенной &quot;Хроники Транквила&quot;<br>защищены авторским правом.</p></div></div></footer>
-<script src="/assets/js/main.js"></script>
+<script src="/assets/js/main.js?v=20261125-book-progress"></script>
 </body>
 </html>
