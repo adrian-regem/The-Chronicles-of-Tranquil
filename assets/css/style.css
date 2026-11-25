@@ -2112,3 +2112,23 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
  .quote-display blockquote { font-size:clamp(27px,8vw,38px); }
  .quote-actions .outline-button,.quote-image-actions .outline-button { min-width:0; flex:1 1 42%; }
 }
+
+
+/* Quote generator refinements */
+.quote-book-filter img { width:50px; height:69px; }
+.quote-book-filter span { font-size:13px; }
+.quote-filter-all { width:50px; height:69px; font-size:17px !important; }
+.quote-book-coming { cursor:help !important; }
+.quote-book-coming img { opacity:.68; filter:grayscale(.25); }
+.quote-theme-filters { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin:-18px auto 26px; }
+.quote-theme-filter { padding:9px 15px; border:1px solid rgba(101,164,162,.24); border-radius:3px; background:rgba(255,255,255,.025); color:#9eaeac; font:400 12px 'PT Sans',sans-serif; transition:all .2s; }
+.quote-theme-filter:hover { border-color:rgba(101,164,162,.6); color:#d7e8e5; }
+.quote-theme-filter.is-active { border-color:#65a4a2; background:rgba(62,126,126,.17); color:#d7e8e5; }
+.quote-image-status { min-height:18px; margin:12px 0 0; color:#8fc4bf; font-size:11px; text-align:center; }
+@media(max-width:680px){
+ .quote-book-filter img { width:41px; height:57px; }
+ .quote-filter-all { width:41px; height:57px; }
+ .quote-book-filter span { font-size:12px; }
+ .quote-theme-filters { gap:6px; margin:-8px auto 20px; }
+ .quote-theme-filter { padding:8px 10px; font-size:11px; }
+}
