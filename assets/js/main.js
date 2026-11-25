@@ -554,7 +554,8 @@ if(quoteRoot){
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
   const bookSourceTitles={"Порабощение":'"Хроники Транквила. Порабощение"',"Артефакт":'"Хроники Транквила. Артефакт"',"Золотые крылья":'"Золотые крылья"'};
- let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
+ const themeNames=["Размышления","Чувства","Мрак","Остроумие"];
+  let quoteRecords=[],activeQuote=null,selectedBooks=[],selectedThemes=[...themeNames],lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
@@ -583,7 +584,7 @@ if(quoteRoot){
   return quoteRecords.filter(item=>{
    const source=String(item.source||"");
    const bookMatch=selectedBooks.some(name=>source.startsWith(bookSourceTitles[name]));
-   const themeMatch=activeTheme==="all"||(Array.isArray(item.tags)&&item.tags.includes(activeTheme));
+   const themeMatch=selectedThemes.some(theme=>Array.isArray(item.tags)&&item.tags.includes(theme));
    return bookMatch&&themeMatch;
   });
  }
@@ -593,6 +594,15 @@ if(quoteRoot){
   allButton.classList.toggle("is-active",allSelected);allButton.setAttribute("aria-pressed",String(allSelected));
   bookFilters.querySelectorAll("[data-quote-book]:not([data-quote-book=all])").forEach(button=>{
    const active=selectedBooks.includes(button.dataset.quoteBook);
+   button.classList.toggle("is-active",active);button.setAttribute("aria-pressed",String(active));
+  });
+ }
+ function syncThemeFilters(){
+  const allSelected=selectedThemes.length===themeNames.length&&themeNames.every(name=>selectedThemes.includes(name));
+  const allButton=themeFilters.querySelector('[data-quote-theme="all"]');
+  allButton.classList.toggle("is-active",allSelected);allButton.setAttribute("aria-pressed",String(allSelected));
+  themeFilters.querySelectorAll("[data-quote-theme]:not([data-quote-theme=all])").forEach(button=>{
+   const active=selectedThemes.includes(button.dataset.quoteTheme);
    button.classList.toggle("is-active",active);button.setAttribute("aria-pressed",String(active));
   });
  }
@@ -733,7 +743,7 @@ if(quoteRoot){
  }
   function copyQuote(){
   if(!activeQuote)return;
-  const text=String(activeQuote.quote||"").trim()+"\n"+authorName+" "+String(activeQuote.source||"");
+  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+" "+String(activeQuote.source||"");
   navigator.clipboard?.writeText(text).then(()=>{quoteStatus.textContent="Цитата скопирована.";}).catch(()=>{quoteStatus.textContent="Не удалось скопировать автоматически.";});
  }
  bookFilters?.addEventListener("click",event=>{
@@ -750,11 +760,15 @@ if(quoteRoot){
  });
  themeFilters?.addEventListener("click",event=>{
   const button=event.target.closest("[data-quote-theme]");if(!button)return;
-  activeTheme=button.dataset.quoteTheme;
-  themeFilters.querySelectorAll("[data-quote-theme]").forEach(item=>{
-   const active=item===button;item.classList.toggle("is-active",active);item.setAttribute("aria-pressed",String(active));
-  });
-  lastQuoteId=null;pickQuote();
+  const theme=button.dataset.quoteTheme;
+  if(theme==="all"){
+   if(selectedThemes.length===themeNames.length)selectedThemes=[];
+   else selectedThemes=[...themeNames];
+  }else{
+   if(selectedThemes.includes(theme))selectedThemes=selectedThemes.filter(name=>name!==theme);
+   else selectedThemes.push(theme);
+  }
+  syncThemeFilters();lastQuoteId=null;pickQuote();
  });
  document.querySelector("#new-quote")?.addEventListener("click",pickQuote);
  document.querySelector("#copy-quote")?.addEventListener("click",copyQuote);
@@ -774,7 +788,7 @@ if(quoteRoot){
   try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}
   catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
  });
- syncBookFilters();
+ syncBookFilters();syncThemeFilters();
  fetch("/assets/data/quotes.json?v=20261125-real-pool-1").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
   if(!Array.isArray(payload.quotes)||payload.quotes.length!==134)throw new Error("Файл цитат имеет неверный формат или неверное количество записей.");
   quoteRecords=payload.quotes;pickQuote();
