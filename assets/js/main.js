@@ -553,6 +553,7 @@ if(quoteRoot){
  const imageContext=imageCanvas?.getContext("2d");
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
+  const bookSourceTitles={"Порабощение":'"Хроники Транквила. Порабощение"',"Артефакт":'"Хроники Транквила. Артефакт"',"Золотые крылья":'"Золотые крылья"'};
  let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
@@ -580,7 +581,8 @@ if(quoteRoot){
  const quoteBackgroundButton=document.querySelector("#quote-image-background");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
-   const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
+   const source=String(item.source||"");
+   const bookMatch=selectedBooks.some(name=>source.startsWith(bookSourceTitles[name]));
    const themeMatch=activeTheme==="all"||(Array.isArray(item.tags)&&item.tags.includes(activeTheme));
    return bookMatch&&themeMatch;
   });
@@ -601,13 +603,15 @@ if(quoteRoot){
   if(typeTimer)clearInterval(typeTimer);
   const full=String(record.quote||"").trim();
   quoteSource.textContent=record.source||"";
-  quoteText.textContent=animate?'"':'"'+full+'"';
-  if(!animate)return;
-  const words=full.split(/\s+/);let index=0;
-  typeTimer=setInterval(()=>{
-   quoteText.textContent+=(index?" ":"")+words[index];index++;
-   if(index>=words.length){quoteText.textContent+='"';clearInterval(typeTimer);}
-  },105);
+  if(!animate){quoteText.textContent=full;return;}
+  const words=full.split(/\s+/);
+  const fragments=words.map((word,index)=>{
+   const span=document.createElement("span");
+   span.className="quote-word";span.textContent=word+(index<words.length-1?" ":"");
+   span.style.animationDelay=(index*105)+"ms";
+   return span;
+  });
+  quoteText.replaceChildren(...fragments);
  }
  function showQuoteMessage(message){
   if(typeTimer)clearInterval(typeTimer);
@@ -663,7 +667,7 @@ if(quoteRoot){
   ctx.font="700 "+(minSide*1.76)+"px 'PT Sans',Arial,sans-serif";
   ctx.fillText("“",-minSide*.04,-minSide*.04);
   ctx.restore();
-  const quote='“'+String(activeQuote.quote||"").trim()+'”';
+  const quote=String(activeQuote.quote||"").trim();
   const left=style==="editorial"?frameX+minSide*.095:style==="dossier"?frameX+minSide*.22:style==="split"?w*.43:style==="poster"?frameX+minSide*.035:portrait?innerX:frameX+minSide*.075;
   const right=style==="dossier"?w-frameX-minSide*.075:style==="split"?w-frameX-minSide*.065:portrait?w-innerX:w-frameX-minSide*.075;
   const maxWidth=right-left;
@@ -729,7 +733,7 @@ if(quoteRoot){
  }
   function copyQuote(){
   if(!activeQuote)return;
-  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+" "+String(activeQuote.source||"");
+  const text=String(activeQuote.quote||"").trim()+"\n"+authorName+" "+String(activeQuote.source||"");
   navigator.clipboard?.writeText(text).then(()=>{quoteStatus.textContent="Цитата скопирована.";}).catch(()=>{quoteStatus.textContent="Не удалось скопировать автоматически.";});
  }
  bookFilters?.addEventListener("click",event=>{
