@@ -646,7 +646,7 @@ if(quoteRoot){
    ctx.strokeStyle=light?"rgba(30,48,53,.2)":"rgba(220,235,230,.18)";ctx.beginPath();ctx.moveTo(cx-minSide*.14,h*.145);ctx.lineTo(cx+minSide*.14,h*.145);ctx.stroke();
   }else if(style==="editorial"){
    ctx.fillStyle=accent;ctx.fillRect(margin,h*.15,Math.max(7,minSide*.009),h*.54);
-   ctx.globalAlpha=.13;ctx.fillStyle=ink;ctx.font="700 "+(minSide*.34)+"px Georgia,serif";ctx.textAlign="left";ctx.fillText("“",margin+minSide*.02,h*.38);ctx.globalAlpha=1;
+   ctx.globalAlpha=.13;ctx.fillStyle=ink;ctx.font="700 "+(minSide*.34)+"px 'PT Sans', Arial, sans-serif";ctx.textAlign="left";ctx.fillText("“",margin+minSide*.02,h*.38);ctx.globalAlpha=1;
   }else if(style==="minimal"){
    ctx.fillStyle=accent;ctx.fillRect(margin,h*.16,Math.max(4,minSide*.006),h*.68);
   }else if(style==="geometry"){
