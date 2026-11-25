@@ -536,3 +536,112 @@ if(guideRoot){
  }
  loadGuide();
 }
+
+
+// Homepage quote generator.
+const quoteRoot=document.querySelector(".quote-generator");
+if(quoteRoot){
+ const quoteText=document.querySelector("#quote-text");
+ const quoteId=document.querySelector("#quote-id");
+ const quoteSource=document.querySelector("#quote-source");
+ const quoteStatus=document.querySelector("#quote-status");
+ const bookFilters=document.querySelector("#quote-book-filters");
+ const imagePanel=document.querySelector("#quote-image-panel");
+ const imageCanvas=document.querySelector("#quote-image-canvas");
+ const imageContext=imageCanvas?.getContext("2d");
+ const authorName="Дмитричев Никита";
+ let quoteRecords=[],activeQuote=null,activeBook="all",lastQuoteId=null,backgroundIndex=0,typeTimer=null;
+ const imageBackgrounds=[
+  ["#0b1718","#245052","#101b22"],
+  ["#10151e","#263d5b","#111a2b"],
+  ["#102019","#315c45","#101a17"],
+  ["#211617","#633b3d","#171113"],
+  ["#17191d","#454c50","#111518"],
+  ["#171426","#40345d","#111522"],
+  ["#17201e","#3d5146","#101815"],
+  ["#1b1a13","#554b2c","#17150f"]
+ ];
+ const escapeQuote=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+ function availableQuotes(){return quoteRecords.filter(item=>activeBook==="all"||String(item.source||"").startsWith('"'+activeBook+'"'));}
+ function showQuote(record,animate=true){
+  activeQuote=record;lastQuoteId=record.id;
+  if(typeTimer)clearInterval(typeTimer);
+  const full=String(record.quote||"").trim();
+  quoteId.textContent="№ "+record.id;
+  quoteSource.textContent=record.source||"";
+  quoteText.textContent="";
+  if(!animate){quoteText.textContent=full;return;}
+  const words=full.split(/\s+/);let index=0;
+  typeTimer=setInterval(()=>{
+   quoteText.textContent+=(index?" ":"")+words[index];
+   index++;
+   if(index>=words.length)clearInterval(typeTimer);
+  },105);
+ }
+ function pickQuote(){
+  const pool=availableQuotes();
+  if(!pool.length){quoteText.textContent="";quoteId.textContent="";quoteSource.textContent="";activeQuote=null;quoteStatus.textContent="В этой подборке пока нет цитат.";return;}
+  const choices=pool.length>1?pool.filter(item=>String(item.id)!==String(lastQuoteId)):pool;
+  const chosen=choices[Math.floor(Math.random()*choices.length)];
+  showQuote(chosen,true);quoteStatus.textContent="";imagePanel.hidden=true;
+ }
+ function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=text.split(/\s+/);let line="",lines=[];
+  words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;});
+  if(line)lines.push(line);
+  const total=(lines.length-1)*lineHeight;
+  lines.forEach((part,index)=>ctx.fillText(part,x,y-total/2+index*lineHeight));
+ }
+ function drawQuoteImage(){
+  if(!activeQuote||!imageContext)return;
+  const ctx=imageContext,w=1080,h=1080,colors=imageBackgrounds[backgroundIndex%imageBackgrounds.length];
+  const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,colors[0]);gradient.addColorStop(.52,colors[1]);gradient.addColorStop(1,colors[2]);
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
+  const glow=ctx.createRadialGradient(540,360,30,540,520,700);glow.addColorStop(0,"rgba(255,255,255,.10)");glow.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle="rgba(220,235,230,.28)";ctx.lineWidth=2;ctx.strokeRect(54,54,972,972);
+  ctx.strokeStyle="rgba(220,235,230,.16)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(390,150);ctx.lineTo(690,150);ctx.stroke();
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  const text=String(activeQuote.quote||"").trim();
+  let fontSize=54;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";
+  const words=text.split(/\s+/);let lines=[],line="";
+  words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>820&&line){lines.push(line);line=word;}else line=test;});if(line)lines.push(line);
+  while(lines.length>11&&fontSize>34){fontSize-=2;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";lines=[];line="";words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>820&&line){lines.push(line);line=word;}else line=test;});if(line)lines.push(line);}
+  const lineHeight=fontSize*1.42;const quoteHeight=lines.length*lineHeight;
+  const quoteTop=480-quoteHeight/2;
+  ctx.fillStyle="#f0f3ef";ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
+  lines.forEach((part,index)=>ctx.fillText(part,540,quoteTop+index*lineHeight));
+  const metaY=Math.min(quoteTop+quoteHeight+90,850);
+  ctx.fillStyle="rgba(225,239,231,.88)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);
+  ctx.fillStyle="rgba(225,239,231,.65)";ctx.font="400 22px 'PT Sans', Arial, sans-serif";ctx.fillText(String(activeQuote.source||""),540,metaY+46);
+  ctx.fillStyle="rgba(225,239,231,.42)";ctx.font="400 18px 'PT Sans', Arial, sans-serif";ctx.fillText("ТРАНКВИЛЬСКИЙ ВЕСТНИК",540,940);
+ }
+ function copyQuote(){
+  if(!activeQuote)return;
+  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+"\n"+String(activeQuote.source||"");
+  navigator.clipboard?.writeText(text).then(()=>{quoteStatus.textContent="Цитата скопирована.";}).catch(()=>{quoteStatus.textContent="Не удалось скопировать автоматически.";});
+ }
+ bookFilters?.addEventListener("click",event=>{
+  const button=event.target.closest("[data-quote-book]");if(!button)return;
+  activeBook=button.dataset.quoteBook;
+  bookFilters.querySelectorAll("[data-quote-book]").forEach(item=>{const active=item===button;item.classList.toggle("is-active",active);item.setAttribute("aria-pressed",String(active));});
+  lastQuoteId=null;pickQuote();
+ });
+ document.querySelector("#new-quote")?.addEventListener("click",pickQuote);
+ document.querySelector("#copy-quote")?.addEventListener("click",copyQuote);
+ document.querySelector("#make-quote-image")?.addEventListener("click",()=>{
+  if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
+ });
+ document.querySelector("#quote-image-background")?.addEventListener("click",()=>{backgroundIndex=(backgroundIndex+1)%imageBackgrounds.length;drawQuoteImage();});
+ document.querySelector("#quote-image-download")?.addEventListener("click",()=>{
+  if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
+ });
+ document.querySelector("#quote-image-copy")?.addEventListener("click",async()=>{
+  if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){quoteStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
+  try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);quoteStatus.textContent="Изображение скопировано.";}catch(error){quoteStatus.textContent="Не удалось скопировать изображение.";}
+ });
+ fetch("/assets/data/quotes.json?v=20261125-test-pool").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
+  if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
+  quoteRecords=payload.quotes;pickQuote();
+ }).catch(error=>{quoteStatus.textContent=error.message||"Не удалось загрузить цитаты.";});
+}
