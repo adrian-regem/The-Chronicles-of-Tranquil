@@ -657,8 +657,8 @@ if(quoteRoot){
   ctx.save();
   ctx.textAlign="left";ctx.textBaseline="top";
   ctx.fillStyle=light?"rgba(49,95,101,.20)":"rgba(240,243,239,.20)";
-  ctx.font="700 "+(minSide*.88)+"px 'PT Sans',Arial,sans-serif";
-  ctx.fillText("“",frameX-minSide*.025,frameY-minSide*.025);
+  ctx.font="700 "+(minSide*1.76)+"px 'PT Sans',Arial,sans-serif";
+  ctx.fillText("“",-minSide*.04,-minSide*.04);
   ctx.restore();
   const quote='“'+String(activeQuote.quote||"").trim()+'”';
   const left=style==="editorial"?frameX+minSide*.095:style==="dossier"?frameX+minSide*.22:style==="split"?w*.43:style==="poster"?frameX+minSide*.035:portrait?innerX:frameX+minSide*.075;
@@ -673,8 +673,12 @@ if(quoteRoot){
   measureQuote();
   while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.024){fontSize-=2;measureQuote();}
   const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
-  const quoteCenter=portrait?.405:landscape?.445:style==="poster"?.54:style==="editorial"?.52:style==="dossier"?.52:style==="split"?.51:.47;
-  const quoteTop=h*quoteCenter-quoteHeight/2-120;
+  const logoY=h-frameY-minSide*.066;
+  const metaY=logoY-minSide*.002-163;
+  const quoteAreaTop=frameY+minSide*.14;
+  const quoteAreaBottom=metaY-minSide*.09;
+  const quoteCenter=(quoteAreaTop+quoteAreaBottom)/2;
+  const quoteTop=quoteCenter-quoteHeight/2;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
   const logoY=h-frameY-minSide*.066;
