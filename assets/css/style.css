@@ -2628,3 +2628,20 @@ body.news-page .progress-project-column {
 @media(prefers-reduced-motion:reduce) {
   .progress-segment,.progress-overall .progress-ring-value { transition:none; }
 }
+
+
+/* News progress: animated reveal on page entry. */
+body.news-page .progress-segment {
+  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+body.news-page .progress-overall .progress-ring-value {
+  transition:stroke-dashoffset .9s cubic-bezier(.2,.75,.25,1);
+}
+body.news-page .progress-other-mark {
+  transition:background .16s ease,border-color .16s ease,color .16s ease;
+}
+@media(prefers-reduced-motion:reduce) {
+  body.news-page .progress-segment,
+  body.news-page .progress-overall .progress-ring-value,
+  body.news-page .progress-other-mark { transition:none !important; }
+}
