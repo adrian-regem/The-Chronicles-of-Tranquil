@@ -851,7 +851,7 @@ if (bookProgressRoot) {
     const completed = items.filter(item => item.status === "done").length;
     const segments = items.map((item, index) => {
       const flex = label === "Главы" && (item.stage === "Пролог" || item.stage === "Эпилог") ? 0.2 : 1;
-      return `<span class="progress-segment" data-segment-index="${index}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
+      return `<span class="progress-segment" data-segment-index="${index}" data-done="${item.status === "done"}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
     }).join("");
 
     return `
@@ -924,13 +924,14 @@ if (bookProgressRoot) {
     const segmentBlock = projectRoot.querySelector("[data-segmented-progress]");
     const segments = [...segmentBlock.querySelectorAll(".progress-segment")];
     const completed = Number(segmentBlock.dataset.completedCount);
+    const completedSegments = segments.filter(segment => segment.dataset.done === "true");
     const counter = projectRoot.querySelector("[data-segment-counter]");
     const tasks = [...projectRoot.querySelectorAll("[data-other-task][data-done='true']")];
 
     if (reduceProgressMotion) {
       ring.style.strokeDashoffset = String(targetOffset);
       number.textContent = progressNumber.format(targetPercent) + "%";
-      segments.slice(0, completed).forEach(segment => segment.classList.add("is-filled"));
+      completedSegments.forEach(segment => segment.classList.add("is-filled"));
       counter.textContent = completed + "/" + segments.length;
       tasks.forEach(task => {
         task.classList.add("is-done");
@@ -947,7 +948,7 @@ if (bookProgressRoot) {
     });
 
     const segmentDelay = 55;
-    segments.slice(0, completed).forEach((segment, index) => {
+    completedSegments.forEach((segment, index) => {
       window.setTimeout(() => {
         segment.classList.add("is-filled");
         counter.textContent = (index + 1) + "/" + segments.length;
@@ -963,7 +964,7 @@ if (bookProgressRoot) {
     });
   }
 
-  fetch("/assets/data/book-progress.json?v=20261126-task-status-cache-fix")
+  fetch("/assets/data/book-progress.json?v=" + Date.now(), { cache: "no-store" })
     .then(response => {
       if (!response.ok) throw new Error("Не удалось загрузить таблицу прогресса.");
       return response.json();
