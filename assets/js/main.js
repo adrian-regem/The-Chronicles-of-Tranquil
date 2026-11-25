@@ -813,7 +813,7 @@ if (bookProgressRoot) {
   })[char]);
 
   const isManuscriptPart = (stage) => /^(Пролог|Глава \d+|Эпилог)$/.test(stage);
-  const isPortrait = (stage) => /^Портрет персонажа \d+$/.test(stage);
+  const isPortrait = (stage) => stage.startsWith("Портрет ");
 
   function renderProgressRing(project, index) {
     const total = project.items.reduce((sum, item) => sum + item.weight, 0);
