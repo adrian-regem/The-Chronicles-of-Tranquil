@@ -657,7 +657,7 @@ if(quoteRoot){
   ctx.save();
   ctx.textAlign="left";ctx.textBaseline="top";
   ctx.fillStyle=light?"rgba(49,95,101,.20)":"rgba(240,243,239,.20)";
-  ctx.font="700 "+(minSide*.22)+"px 'PT Sans',Arial,sans-serif";
+  ctx.font="700 "+(minSide*.88)+"px 'PT Sans',Arial,sans-serif";
   ctx.fillText("“",frameX+minSide*.045,frameY+minSide*.055);
   ctx.restore();
   const quote='“'+String(activeQuote.quote||"").trim()+'”';
@@ -680,7 +680,7 @@ if(quoteRoot){
   const logoY=h-frameY-minSide*.066;
   const crest=crestImages[crestIndex];
   const crestMaxW=minSide*.078,crestMaxH=minSide*.078;
-  const crestX=frameX+minSide*.035-17;
+  const crestX=frameX+minSide*.035-17+(crestIndex===3?8:0);
   let logoTextX=crestX+minSide*.098-10;
   let crestW=crestMaxW,crestH=crestMaxH;
   if(crest?.complete&&crest.naturalWidth){
@@ -706,7 +706,7 @@ if(quoteRoot){
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor=light?"rgba(255,255,255,.45)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
   ctx.fillStyle=ink;ctx.font="600 "+(minSide*.0361)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002+11);
-  ctx.fillStyle=light?"#315f65":"#f0f3ef";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
+  ctx.fillStyle=light?"#315f65":"#30363b";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
   ctx.restore();
 
   const source=String(activeQuote.source||"");
