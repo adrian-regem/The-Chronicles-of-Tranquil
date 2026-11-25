@@ -862,13 +862,19 @@ if (bookProgressRoot) {
       </section>`;
   }
 
+  function displayProjectName(project) {
+    if (project.name === "Книга") return "Хроники Транквила: ???";
+    if (project.name === "Путеводитель") return 'Путеводитель по "???"';
+    return project.name;
+  }
+
   function renderProjectChecklist(project) {
     const guide = project.name.startsWith("Путеводитель");
     const individualItems = project.items.filter(item => guide ? isPortrait(item.stage) : isManuscriptPart(item.stage));
     const remainingItems = project.items.filter(item => !individualItems.includes(item));
     return `
       <section class="progress-project">
-        <h3>${escapeBookProgress(project.name)}</h3>
+        <h3>${escapeBookProgress(displayProjectName(project))}</h3>
         ${renderTaskGroup(guide ? "Портреты персонажей" : "Написание рукописи", individualItems, "progress-task-group-individual")}
         ${renderTaskGroup(guide ? "Подготовка и публикация путеводителя" : "Подготовка и публикация книги", remainingItems)}
       </section>`;
