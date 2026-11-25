@@ -557,20 +557,20 @@ if(quoteRoot){
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
  const imageBackgrounds=[
-  {name:"Картрадский",colors:["#142b2c","#3e7e7d","#183536"],light:false},
-  {name:"Графитовый",colors:["#17191d","#454b52","#202329"],light:false},
-  {name:"Ночная синева",colors:["#080f20","#233d68","#101a32"],light:false},
-  {name:"Глубокий океан",colors:["#07191d","#17616a","#0c292f"],light:false},
-  {name:"Тёмная бирюза",colors:["#0b1718","#245052","#101b22"],light:false},
-  {name:"Бордовый",colors:["#1b0d15","#65283d","#29121e"],light:false},
-  {name:"Индиго",colors:["#15102c","#493a78","#21183e"],light:false},
-  {name:"Изумрудный",colors:["#0b1b15","#276b4c","#10291e"],light:false},
+  {name:"Картрадский",colors:["#142b2c","#3e7e7d","#183536"],light:false,logoAccent:"#8edbd4"},
+  {name:"Графитовый",colors:["#17191d","#454b52","#202329"],light:false,logoAccent:"#e5c27a"},
+  {name:"Ночная синева",colors:["#080f20","#233d68","#101a32"],light:false,logoAccent:"#a9c5ff"},
+  {name:"Глубокий океан",colors:["#07191d","#17616a","#0c292f"],light:false,logoAccent:"#79dce0"},
+  {name:"Тёмная бирюза",colors:["#0b1718","#245052","#101b22"],light:false,logoAccent:"#91d8c9"},
+  {name:"Бордовый",colors:["#1b0d15","#65283d","#29121e"],light:false,logoAccent:"#f0a9bd"},
+  {name:"Индиго",colors:["#15102c","#493a78","#21183e"],light:false,logoAccent:"#c4b2ff"},
+  {name:"Изумрудный",colors:["#0b1b15","#276b4c","#10291e"],light:false,logoAccent:"#a1e2b7"},
   {name:"Ледяной",colors:["#dceef2","#91c6d2","#edf5f4"],light:true},
   {name:"Стальной",colors:["#b9c4cc","#718795","#dce2e5"],light:true},
-  {name:"Янтарный",colors:["#49280d","#bd7629","#6c3d16"],light:false},
-  {name:"Медный",colors:["#321b16","#a65b3e","#5b3025"],light:false},
-  {name:"Терракотовый",colors:["#51251d","#c16b4b","#783a2b"],light:false},
-  {name:"Винный",colors:["#260f20","#773b60","#421b36"],light:false},
+  {name:"Янтарный",colors:["#49280d","#bd7629","#6c3d16"],light:false,logoAccent:"#ffda8b"},
+  {name:"Медный",colors:["#321b16","#a65b3e","#5b3025"],light:false,logoAccent:"#ffc0a3"},
+  {name:"Терракотовый",colors:["#51251d","#c16b4b","#783a2b"],light:false,logoAccent:"#ffd0b8"},
+  {name:"Винный",colors:["#260f20","#773b60","#421b36"],light:false,logoAccent:"#f0b6dc"},
   {name:"Белый",colors:["#ffffff","#e7eaed","#f8f9fa"],light:true},
   {name:"Серебристый",colors:["#f0f1f2","#b9c1c8","#e3e7ea"],light:true},
   {name:"Жемчужный",colors:["#f7f0e7","#d8c9b8","#fffaf3"],light:true},
@@ -709,7 +709,7 @@ if(quoteRoot){
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor=light?"rgba(255,255,255,.45)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
   ctx.fillStyle=ink;ctx.font="600 "+(minSide*.0361)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002+11);
-  ctx.fillStyle=light?"#315f65":"#30363b";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";if(!light){ctx.lineWidth=1;ctx.strokeStyle="#ffffff";ctx.strokeText("вестник",logoTextX,logoY+minSide*.032+11);}ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
+  ctx.fillStyle=light?"#315f65":palette.logoAccent;ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
   ctx.restore();
 
   const source=String(activeQuote.source||"");
