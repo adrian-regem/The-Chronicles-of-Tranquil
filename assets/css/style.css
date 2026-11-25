@@ -2150,3 +2150,18 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
 /* Quote generator button icons and undistorted heraldry. */
 .quote-button-icon { width:15px; height:15px; flex:0 0 15px; margin-right:7px; vertical-align:-3px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .quote-actions .outline-button,.quote-image-actions .outline-button { display:inline-flex; align-items:center; justify-content:center; }
+
+
+/* Quote image designer controls */
+.quote-image-controls { display:flex; align-items:end; justify-content:center; flex-wrap:wrap; gap:12px; margin:0 0 18px; }
+.quote-image-control { display:flex; flex-direction:column; gap:7px; color:#9eaeac; font:400 11px 'PT Sans',sans-serif; letter-spacing:.06em; text-align:left; }
+.quote-image-control select { min-width:155px; padding:11px 34px 11px 12px; border:1px solid rgba(101,164,162,.42); border-radius:3px; outline:none; background:#111a1c; color:#d7e8e5; font:400 12px 'PT Sans',sans-serif; }
+.quote-image-control select:focus { border-color:#65a4a2; }
+.quote-image-palette-name { min-width:105px; padding:11px 8px; color:#8fc4bf; font:400 11px 'PT Sans',sans-serif; text-align:center; }
+.quote-image-controls .outline-button { min-height:39px; margin:0; padding:10px 14px; border-color:rgba(101,164,162,.42); background:rgba(62,126,126,.13); color:#b6d9d5; font-size:11px; }
+@media(max-width:680px) {
+ .quote-image-controls { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+ .quote-image-control select { width:100%; min-width:0; }
+ .quote-image-controls .outline-button { width:100%; min-width:0; grid-column:1 / -1; }
+ .quote-image-palette-name { grid-column:1 / -1; padding:0; }
+}
