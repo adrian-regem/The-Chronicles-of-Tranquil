@@ -681,7 +681,6 @@ if(quoteRoot){
   const quoteTop=quoteCenter-quoteHeight/2;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
-  const logoY=h-frameY-minSide*.066;
   const crest=crestImages[crestIndex];
   const crestMaxW=minSide*.078,crestMaxH=minSide*.078;
   const crestX=frameX+minSide*.035-17+(crestIndex===3?12:0);
@@ -717,7 +716,6 @@ if(quoteRoot){
   const match=source.match(/^(".*?"): ?(.*)$/);
   const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
   const metaX=w-frameX-minSide*.035;
-  const metaY=logoY-minSide*.002-163;
   ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";
   ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";
   ctx.fillText("Дмитричев Никита",metaX,metaY);
