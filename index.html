@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Yanone+Kaffeesatz:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261125-quote-generator-1">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261125-quote-generator-2">
 </head>
 <body>
   <header class="site-header">
@@ -46,11 +46,17 @@
           <button class="quote-book-filter" type="button" data-quote-book="Порабощение" aria-pressed="false"><img src="/assets/images/books/Обложка%20Порабощение.png" alt=""><span>Порабощение</span></button>
           <button class="quote-book-filter" type="button" data-quote-book="Артефакт" aria-pressed="false"><img src="/assets/images/books/Обложка%20Артефакт.png" alt=""><span>Артефакт</span></button>
           <button class="quote-book-filter" type="button" data-quote-book="Золотые крылья" aria-pressed="false"><img src="/assets/images/books/Обложка%20Золотые%20крылья.png" alt=""><span>Золотые крылья</span></button>
-          <button class="quote-book-filter is-disabled" type="button" disabled aria-disabled="true"><span class="quote-filter-unknown">???</span><span>Неизвестно</span></button>
+          <div class="quote-book-filter is-disabled quote-book-coming" title="Скоро" aria-label="??? — Скоро"><img src="/assets/images/books/Обложка%20Неизвестно.png" alt=""><span>???</span></div>
+        </div>
+        <div class="quote-theme-filters" id="quote-theme-filters" aria-label="Фильтр по тематике">
+          <button class="quote-theme-filter is-active" type="button" data-quote-theme="all" aria-pressed="true">Все темы</button>
+          <button class="quote-theme-filter" type="button" data-quote-theme="Философия" aria-pressed="false">Философия</button>
+          <button class="quote-theme-filter" type="button" data-quote-theme="Ирония" aria-pressed="false">Ирония</button>
+          <button class="quote-theme-filter" type="button" data-quote-theme="Чувства" aria-pressed="false">Чувства</button>
+          <button class="quote-theme-filter" type="button" data-quote-theme="Власть и конфликт" aria-pressed="false">Власть и конфликт</button>
         </div>
         <div class="quote-display" aria-live="polite">
           <blockquote id="quote-text"></blockquote>
-          <p class="quote-id" id="quote-id"></p>
           <p class="quote-source" id="quote-source"></p>
         </div>
         <div class="quote-actions">
@@ -66,6 +72,7 @@
             <button class="outline-button" id="quote-image-copy" type="button">Копировать изображение</button>
             <button class="outline-button" id="quote-image-download" type="button">Скачать</button>
           </div>
+          <p class="quote-image-status" id="quote-image-status" role="status"></p>
         </div>
       </div>
     </section>
