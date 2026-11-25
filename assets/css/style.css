@@ -2132,3 +2132,22 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
  .quote-theme-filters { gap:6px; margin:-8px auto 20px; }
  .quote-theme-filter { padding:8px 10px; font-size:11px; }
 }
+
+
+/* Quote generator: filter cards, feedback placement and empty states. */
+.quote-book-filter { width:108px; min-height:124px; padding:8px 7px 9px; gap:7px; }
+.quote-book-filter img { width:50px; height:69px; }
+.quote-book-filter span { font-size:13px; }
+.quote-filter-all { width:50px; height:69px; }
+.quote-note { margin:8px 0 18px; min-height:18px; text-align:center; }
+.quote-display.is-message { min-height:130px; }
+.quote-display.is-message blockquote { max-width:650px; margin:0 auto; font:400 18px/1.55 'PT Sans',sans-serif; color:#aebfbc; letter-spacing:0; }
+.quote-display.is-message .quote-source { display:none; }
+.quote-display blockquote:not(:empty) { text-shadow:0 3px 9px rgba(0,0,0,.48); }
+@media(max-width:680px) {
+ .quote-book-filter { width:calc(33.333% - 8px); min-width:88px; min-height:112px; padding:7px 5px; gap:6px; }
+ .quote-book-filter img,.quote-filter-all { width:41px; height:57px; }
+ .quote-book-filter span { font-size:12px; }
+ .quote-display.is-message { min-height:120px; }
+ .quote-display.is-message blockquote { font-size:15px; }
+}
