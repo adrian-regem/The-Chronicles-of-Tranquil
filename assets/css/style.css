@@ -310,7 +310,7 @@ h1,h2,h3,h4,blockquote,.brand-name,.footer-brand,.page-heading h1,.placeholder-c
   object-fit:contain;
   object-position:center;
   flex:0 0 auto;
-  filter:brightness(0) invert(1) drop-shadow(0 0 5px rgba(255,255,255,.16)) !important;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.16)) !important;
 }
 .brand-name {
   display:block;
@@ -574,7 +574,6 @@ body:not(.page-shell) .scroll-mark:hover {
   width:44px;
   height:44px;
   object-fit:contain;
-  filter:brightness(0) invert(1);
 }
 .footer-heading h2 {
   margin:0;
@@ -2004,11 +2003,6 @@ body.books-page a:focus-visible,
 body.books-page button:focus-visible { outline-color:var(--section-bright); }
 
 
-/* White header crests for Marma gonia and Rodda-Kira; footer crests stay untouched. */
-body.author-page .site-header .brand-crest,
-body.lore-page .site-header .brand-crest {
-  filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,.14)) !important;
-}
 
 
 /* ===== Final country background tones and translucent action buttons ===== */
