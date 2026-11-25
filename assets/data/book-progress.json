@@ -75,7 +75,7 @@
     {
       "book": "Книга",
       "stage": "Глава 12",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
@@ -177,7 +177,7 @@
     {
       "book": "Путеводитель",
       "stage": "Портрет Адриан Рэгем",
-      "status": "in_progress",
+      "status": "done",
       "weight": 2.78
     },
     {
