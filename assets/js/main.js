@@ -700,7 +700,7 @@ if(quoteRoot){
   const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
   ctx.fillStyle=muted;ctx.font="400 "+(minSide*.019)+"px 'PT Sans', Arial, sans-serif";ctx.fillText(bookLine,cx,metaY+minSide*.043);
   if(chapterLine)ctx.fillText(chapterLine,cx,metaY+minSide*.073);
-  const crest=crestImages[crestIndex],logoY=h*.925;
+  const crest=crestImages[crestIndex],logoY=h*.885;
   if(crest?.complete&&crest.naturalWidth){
    ctx.save();ctx.shadowColor=light?"rgba(0,0,0,.22)":"rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=3;
    const maxW=minSide*.05,maxH=minSide*.065,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
