@@ -658,7 +658,7 @@ if(quoteRoot){
   ctx.textAlign="left";ctx.textBaseline="top";
   ctx.fillStyle=light?"rgba(49,95,101,.20)":"rgba(240,243,239,.20)";
   ctx.font="700 "+(minSide*.88)+"px 'PT Sans',Arial,sans-serif";
-  ctx.fillText("“",frameX+minSide*.045,frameY+minSide*.055);
+  ctx.fillText("“",frameX-minSide*.025,frameY-minSide*.025);
   ctx.restore();
   const quote='“'+String(activeQuote.quote||"").trim()+'”';
   const left=style==="editorial"?frameX+minSide*.095:style==="dossier"?frameX+minSide*.22:style==="split"?w*.43:style==="poster"?frameX+minSide*.035:portrait?innerX:frameX+minSide*.075;
@@ -674,18 +674,18 @@ if(quoteRoot){
   while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.024){fontSize-=2;measureQuote();}
   const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
   const quoteCenter=portrait?.405:landscape?.445:style==="poster"?.54:style==="editorial"?.52:style==="dossier"?.52:style==="split"?.51:.47;
-  const quoteTop=h*quoteCenter-quoteHeight/2-140;
+  const quoteTop=h*quoteCenter-quoteHeight/2-120;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
   const logoY=h-frameY-minSide*.066;
   const crest=crestImages[crestIndex];
   const crestMaxW=minSide*.078,crestMaxH=minSide*.078;
-  const crestX=frameX+minSide*.035-17+(crestIndex===3?8:0);
-  let logoTextX=crestX+minSide*.098-10;
+  const crestX=frameX+minSide*.035-17+(crestIndex===3?12:0);
+  let logoTextX=frameX+minSide*.035-17+minSide*.098-10;
   let crestW=crestMaxW,crestH=crestMaxH;
   if(crest?.complete&&crest.naturalWidth){
    const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight);
-   crestW=crest.naturalWidth*scale;crestH=crest.naturalHeight*scale;
+   crestW=crest.naturalWidth*scale*(crestIndex===3?1.1:1);crestH=crest.naturalHeight*scale*(crestIndex===3?1.1:1);
    const crestY=logoY+minSide*.014-crestH/2-7;
    ctx.save();
    ctx.shadowColor=light?"rgba(23,33,38,.18)":"rgba(0,0,0,.35)";
@@ -706,7 +706,7 @@ if(quoteRoot){
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor=light?"rgba(255,255,255,.45)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
   ctx.fillStyle=ink;ctx.font="600 "+(minSide*.0361)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002+11);
-  ctx.fillStyle=light?"#315f65":"#30363b";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
+  ctx.fillStyle=light?"#315f65":"#30363b";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";if(!light){ctx.lineWidth=1;ctx.strokeStyle="#ffffff";ctx.strokeText("вестник",logoTextX,logoY+minSide*.032+11);}ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
   ctx.restore();
 
   const source=String(activeQuote.source||"");
