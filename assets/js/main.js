@@ -581,7 +581,7 @@ if(quoteRoot){
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
-   const themeMatch=activeTheme==="all"||item.theme===activeTheme;
+   const themeMatch=activeTheme==="all"||(Array.isArray(item.tags)&&item.tags.includes(activeTheme));
    return bookMatch&&themeMatch;
   });
  }
@@ -771,8 +771,8 @@ if(quoteRoot){
   catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
  });
  syncBookFilters();
- fetch("/assets/data/quotes.json?v=20261125-test-pool-3").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
-  if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
+ fetch("/assets/data/quotes.json?v=20261125-real-pool-1").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
+  if(!Array.isArray(payload.quotes)||payload.quotes.length!==134)throw new Error("Файл цитат имеет неверный формат или неверное количество записей.");
   quoteRecords=payload.quotes;pickQuote();
  }).catch(error=>{quoteStatus.textContent=error.message||"Не удалось загрузить цитаты.";});
 }
