@@ -680,7 +680,7 @@ if(quoteRoot){
   if(crest?.complete&&crest.naturalWidth){
    const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight);
    crestW=crest.naturalWidth*scale;crestH=crest.naturalHeight*scale;
-   const crestY=logoY-minSide*.014-crestH/2;
+   const crestY=logoY+minSide*.014-crestH/2;
    ctx.save();
    ctx.shadowColor=light?"rgba(23,33,38,.18)":"rgba(0,0,0,.35)";
    ctx.shadowBlur=8;ctx.shadowOffsetY=2;
