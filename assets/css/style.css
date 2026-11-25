@@ -2635,7 +2635,7 @@ body.news-page .progress-segment {
   transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;
 }
 body.news-page .progress-overall .progress-ring-value {
-  transition:stroke-dashoffset .9s cubic-bezier(.2,.75,.25,1);
+  transition:stroke-dashoffset 1.17s cubic-bezier(.2,.75,.25,1);
 }
 body.news-page .progress-other-mark {
   transition:background .16s ease,border-color .16s ease,color .16s ease;
