@@ -552,16 +552,34 @@ if(quoteRoot){
  const imageContext=imageCanvas?.getContext("2d");
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
- let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
+ let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,quoteFormat="square",quoteStyle="classic",typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
  const imageBackgrounds=[
-  ["#0b1718","#245052","#101b22"],["#10151e","#263d5b","#111a2b"],
-  ["#102019","#315c45","#101a17"],["#211617","#633b3d","#171113"],
-  ["#17191d","#454c50","#111518"],["#171426","#40345d","#111522"],
-  ["#17201e","#3d5146","#101815"],["#1b1a13","#554b2c","#17150f"]
+  {name:"Угольный",colors:["#080a0c","#242a30","#101317"],light:false},
+  {name:"Графитовый",colors:["#17191d","#454b52","#202329"],light:false},
+  {name:"Ночная синева",colors:["#080f20","#233d68","#101a32"],light:false},
+  {name:"Глубокий океан",colors:["#07191d","#17616a","#0c292f"],light:false},
+  {name:"Тёмная бирюза",colors:["#0b1718","#245052","#101b22"],light:false},
+  {name:"Бордовый",colors:["#1b0d15","#65283d","#29121e"],light:false},
+  {name:"Индиго",colors:["#15102c","#493a78","#21183e"],light:false},
+  {name:"Изумрудный",colors:["#0b1b15","#276b4c","#10291e"],light:false},
+  {name:"Ледяной",colors:["#dceef2","#91c6d2","#edf5f4"],light:true},
+  {name:"Стальной",colors:["#b9c4cc","#718795","#dce2e5"],light:true},
+  {name:"Янтарный",colors:["#49280d","#bd7629","#6c3d16"],light:false},
+  {name:"Медный",colors:["#321b16","#a65b3e","#5b3025"],light:false},
+  {name:"Терракотовый",colors:["#51251d","#c16b4b","#783a2b"],light:false},
+  {name:"Винный",colors:["#260f20","#773b60","#421b36"],light:false},
+  {name:"Белый",colors:["#ffffff","#e7eaed","#f8f9fa"],light:true},
+  {name:"Серебристый",colors:["#f0f1f2","#b9c1c8","#e3e7ea"],light:true},
+  {name:"Жемчужный",colors:["#f7f0e7","#d8c9b8","#fffaf3"],light:true},
+  {name:"Светлая бирюза",colors:["#e5f5f1","#9bcfc4","#f4fbf8"],light:true}
  ];
+ const quoteFormats={square:[1080,1080],landscape:[1920,1080],portrait:[1080,1920]};
+ const quoteFormatSelect=document.querySelector("#quote-image-format");
+ const quoteStyleSelect=document.querySelector("#quote-image-style");
+ const paletteName=document.querySelector("#quote-image-palette-name");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
@@ -613,41 +631,77 @@ if(quoteRoot){
  }
  function drawQuoteImage(){
   if(!activeQuote||!imageContext)return;
-  const ctx=imageContext,w=1080,h=1080,colors=imageBackgrounds[backgroundIndex%imageBackgrounds.length];
+  const [w,h]=quoteFormats[quoteFormat]||quoteFormats.square;
+  if(imageCanvas.width!==w||imageCanvas.height!==h){imageCanvas.width=w;imageCanvas.height=h;}
+  const ctx=imageContext,palette=imageBackgrounds[backgroundIndex%imageBackgrounds.length],colors=palette.colors;
+  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.72)":"rgba(225,239,231,.72)",accent=light?"#315f65":"#a5d4d1";
+  const cx=w/2,margin=w*.075,minSide=Math.min(w,h);
   const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,colors[0]);gradient.addColorStop(.52,colors[1]);gradient.addColorStop(1,colors[2]);
   ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
-  const glow=ctx.createRadialGradient(540,360,30,540,520,700);glow.addColorStop(0,"rgba(255,255,255,.10)");glow.addColorStop(1,"rgba(255,255,255,0)");
+  const glow=ctx.createRadialGradient(cx,h*.34,20,cx,h*.45,minSide*.78);glow.addColorStop(0,light?"rgba(255,255,255,.28)":"rgba(255,255,255,.10)");glow.addColorStop(1,"rgba(255,255,255,0)");
   ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
-  ctx.strokeStyle="rgba(220,235,230,.28)";ctx.lineWidth=2;ctx.strokeRect(54,54,972,972);
-  ctx.strokeStyle="rgba(220,235,230,.16)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(390,150);ctx.lineTo(690,150);ctx.stroke();
-  const text='"'+String(activeQuote.quote||"").trim()+'"';
-  let fontSize=54;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";
-  let lines=wrapLines(ctx,text,820);
-  while(lines.length>11&&fontSize>34){fontSize-=2;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";lines=wrapLines(ctx,text,820);}
-  const lineHeight=fontSize*1.42,quoteHeight=lines.length*lineHeight,quoteTop=480-quoteHeight/2;
-  ctx.fillStyle="#f0f3ef";ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textAlign="center";ctx.textBaseline="top";
-  lines.forEach((part,index)=>ctx.fillText(part,540,quoteTop+index*lineHeight));
-  const metaY=Math.min(quoteTop+quoteHeight+180,790);
-  ctx.save();ctx.shadowColor="rgba(0,0,0,.48)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
-  ctx.fillStyle="rgba(225,239,231,.9)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);ctx.restore();
+  const style=quoteStyle;
+  if(style==="classic"){
+   ctx.strokeStyle=light?"rgba(30,48,53,.35)":"rgba(220,235,230,.30)";ctx.lineWidth=Math.max(2,minSide*.002);ctx.strokeRect(margin,margin,w-2*margin,h-2*margin);
+   ctx.strokeStyle=light?"rgba(30,48,53,.2)":"rgba(220,235,230,.18)";ctx.beginPath();ctx.moveTo(cx-minSide*.14,h*.145);ctx.lineTo(cx+minSide*.14,h*.145);ctx.stroke();
+  }else if(style==="editorial"){
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.15,Math.max(7,minSide*.009),h*.54);
+   ctx.globalAlpha=.13;ctx.fillStyle=ink;ctx.font="700 "+(minSide*.34)+"px Georgia,serif";ctx.textAlign="left";ctx.fillText("“",margin+minSide*.02,h*.38);ctx.globalAlpha=1;
+  }else if(style==="minimal"){
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.16,Math.max(4,minSide*.006),h*.68);
+  }else if(style==="geometry"){
+   ctx.fillStyle=accent;ctx.globalAlpha=.18;ctx.beginPath();ctx.moveTo(w,h*.08);ctx.lineTo(w,h*.43);ctx.lineTo(w*.78,h*.31);ctx.closePath();ctx.fill();
+   ctx.globalAlpha=.14;ctx.beginPath();ctx.arc(margin,h*.18,minSide*.15,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+   ctx.fillStyle=light?"rgba(255,255,255,.55)":"rgba(0,0,0,.20)";ctx.fillRect(margin*.7,h*.12,w-margin*1.4,h*.76);
+   ctx.strokeStyle=accent;ctx.lineWidth=Math.max(5,minSide*.009);ctx.strokeRect(margin*.7,h*.12,w-margin*1.4,h*.76);
+  }else if(style==="ornament"){
+   ctx.strokeStyle=accent;ctx.lineWidth=Math.max(2,minSide*.002);ctx.strokeRect(margin,h*.075,w-2*margin,h*.85);
+   ctx.strokeStyle=light?"rgba(23,33,38,.25)":"rgba(225,239,231,.25)";ctx.lineWidth=Math.max(1,minSide*.001);ctx.strokeRect(margin+minSide*.018,h*.075+minSide*.018,w-2*(margin+minSide*.018),h*.85-2*minSide*.018);
+   const mark=minSide*.035;ctx.fillStyle=accent;
+   [[margin,h*.075],[w-margin,h*.075],[margin,h*.925],[w-margin,h*.925]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,mark,0,Math.PI*2);ctx.fill();});
+  }
+  const quote='“'+String(activeQuote.quote||"").trim()+'”';
+  const textLeft=style==="editorial"||style==="minimal"?margin+minSide*.075:style==="geometry"?margin+minSide*.09:margin+minSide*.06;
+  const textRight=w-(style==="editorial"||style==="minimal"?margin+minSide*.045:margin+minSide*.06);
+  const maxWidth=textRight-textLeft;
+  let fontSize=minSide*(style==="editorial"?.062:style==="minimal"?.057:.052);
+  const lineLimit=h*.47;
+  let lines=[];
+  ctx.textAlign=style==="editorial"||style==="minimal"?"left":"center";
+  function measureQuote(){
+   ctx.font=(style==="editorial"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";
+   lines=wrapLines(ctx,quote,maxWidth);
+  }
+  measureQuote();
+  while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.025){fontSize-=2;measureQuote();}
+  const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
+  const quoteTop=h*.43-quoteHeight/2;
+  ctx.fillStyle=ink;ctx.font=(style==="editorial"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
+  lines.forEach((line,index)=>ctx.fillText(line,style==="editorial"||style==="minimal"?textLeft:cx,quoteTop+index*lineHeight));
+  if(style==="geometry"){
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.68,minSide*.11,Math.max(5,minSide*.007));
+  }
+  const metaY=h*.755;
+  ctx.textAlign="center";ctx.textBaseline="alphabetic";
+  ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans', Arial, sans-serif";ctx.fillText("Дмитричев Никита",cx,metaY);
   const source=String(activeQuote.source||"");
   const match=source.match(/^(".*?"): ?(.*)$/);
-  const bookLine=match?match[1]:source;
-  const chapterLine=match?match[2]:"";
-  ctx.fillStyle="rgba(225,239,231,.68)";ctx.font="400 21px 'PT Sans', Arial, sans-serif";
-  ctx.fillText(bookLine,540,metaY+43);
-  if(chapterLine)ctx.fillText(chapterLine,540,metaY+73);
-  const crest=crestImages[crestIndex];
+  const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
+  ctx.fillStyle=muted;ctx.font="400 "+(minSide*.019)+"px 'PT Sans', Arial, sans-serif";ctx.fillText(bookLine,cx,metaY+minSide*.043);
+  if(chapterLine)ctx.fillText(chapterLine,cx,metaY+minSide*.073);
+  const crest=crestImages[crestIndex],logoY=h*.925;
   if(crest?.complete&&crest.naturalWidth){
-   ctx.save();ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=4;
-   const maxW=53,maxH=70,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
+   ctx.save();ctx.shadowColor=light?"rgba(0,0,0,.22)":"rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=3;
+   const maxW=minSide*.05,maxH=minSide*.065,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
    const crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
-   ctx.drawImage(crest,82,949-crestH/2,crestW,crestH);ctx.restore();
+   if(light){ctx.fillStyle="rgba(20,30,34,.88)";ctx.fillRect(margin-minSide*.012,logoY-minSide*.057,minSide*.24,minSide*.09);}
+   ctx.drawImage(crest,margin,logoY-crestH/2,crestW,crestH);ctx.restore();
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
-  ctx.shadowColor="rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
-  ctx.fillStyle="#f0f3ef";ctx.font="600 35px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",148,946);
-  ctx.fillStyle="#a5d4d1";ctx.font="600 29px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",148,978);ctx.restore();
+  ctx.shadowColor=light?"rgba(255,255,255,.18)":"rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=2;
+  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",margin+minSide*.065,logoY-minSide*.002);
+  ctx.fillStyle=accent;ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",margin+minSide*.065,logoY+minSide*.027);ctx.restore();
+  if(paletteName)paletteName.textContent=palette.name;
  }
  function copyQuote(){
   if(!activeQuote)return;
@@ -680,9 +734,11 @@ if(quoteRoot){
   if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
  document.querySelector("#quote-image-background")?.addEventListener("click",()=>{backgroundIndex=(backgroundIndex+1)%imageBackgrounds.length;drawQuoteImage();});
+ quoteFormatSelect?.addEventListener("change",()=>{quoteFormat=quoteFormatSelect.value;drawQuoteImage();});
+ quoteStyleSelect?.addEventListener("change",()=>{quoteStyle=quoteStyleSelect.value;drawQuoteImage();});
  document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
  document.querySelector("#quote-image-download")?.addEventListener("click",()=>{
-  if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
+  if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
  });
  document.querySelector("#quote-image-copy")?.addEventListener("click",async()=>{
   if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
