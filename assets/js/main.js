@@ -801,8 +801,7 @@ if(quoteRoot){
 // Public progress tracker for the upcoming book and its companion guide.
 const bookProgressRoot = document.querySelector("#book-progress");
 if (bookProgressRoot) {
-  const ringsRoot = document.querySelector("#book-progress-rings");
-  const checklistRoot = document.querySelector("#book-progress-checklist");
+  const projectsRoot = document.querySelector("#book-progress-projects");
   const progressNumber = new Intl.NumberFormat("ru-RU", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
@@ -815,69 +814,85 @@ if (bookProgressRoot) {
   const isManuscriptPart = (stage) => /^(Пролог|Глава \d+|Эпилог)$/.test(stage);
   const isPortrait = (stage) => stage.startsWith("Портрет ");
 
-  function renderProgressRing(project, index) {
-    const total = project.items.reduce((sum, item) => sum + item.weight, 0);
-    const completed = project.items.reduce(
-      (sum, item) => sum + (item.status === "done" ? item.weight : 0), 0
-    );
-    const percent = Math.min(100, Math.max(0, Math.round((completed / total) * 10000) / 100));
-    const radius = 48;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference * (1 - percent / 100);
-    const label = project.name.startsWith("Путеводитель") ? "Путеводитель" : "Книга";
-
-    return `
-      <article class="progress-ring-card">
-        <div class="progress-ring" role="img" aria-label="${escapeBookProgress(label)}: готовность ${progressNumber.format(percent)} процента">
-          <svg viewBox="0 0 112 112" aria-hidden="true">
-            <circle class="progress-ring-track" cx="56" cy="56" r="${radius}"></circle>
-            <circle class="progress-ring-value" cx="56" cy="56" r="${radius}"
-              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
-          </svg>
-          <span class="progress-ring-number">${progressNumber.format(percent)}%</span>
-        </div>
-        <div class="progress-ring-caption">
-          <strong>${escapeBookProgress(label)}</strong>
-          <span>${project.items.filter(item => item.status === "done").length} из ${project.items.length} этапов</span>
-        </div>
-      </article>`;
-  }
-
-  function renderTask(item) {
-    const completed = item.status === "done";
-    return `
-      <li class="progress-task${completed ? " is-done" : " is-active"}">
-        <span class="progress-task-mark" aria-hidden="true">${completed ? "✓" : ""}</span>
-        <span class="progress-task-name">${escapeBookProgress(item.stage)}</span>
-        <span class="progress-task-status">${completed ? "Готово" : "В работе"}</span>
-      </li>`;
-  }
-
-  function renderTaskGroup(title, items, compactClass = "") {
-    if (!items.length) return "";
-    return `
-      <section class="progress-task-group ${compactClass}">
-        <h4>${escapeBookProgress(title)}</h4>
-        <ul class="progress-task-list">${items.map(renderTask).join("")}</ul>
-      </section>`;
-  }
-
   function displayProjectName(project) {
     if (project.name === "Книга") return "Хроники Транквила: ???";
     if (project.name === "Путеводитель") return 'Путеводитель по "???"';
     return project.name;
   }
 
-  function renderProjectChecklist(project) {
-    const guide = project.name.startsWith("Путеводитель");
-    const individualItems = project.items.filter(item => guide ? isPortrait(item.stage) : isManuscriptPart(item.stage));
-    const remainingItems = project.items.filter(item => !individualItems.includes(item));
+  function renderOverallRing(project) {
+    const total = project.items.reduce((sum, item) => sum + item.weight, 0);
+    const completed = project.items.reduce(
+      (sum, item) => sum + (item.status === "done" ? item.weight : 0), 0
+    );
+    const percent = Math.min(100, Math.max(0, Math.round((completed / total) * 10000) / 100));
+    const radius = 45;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference * (1 - percent / 100);
+
     return `
-      <section class="progress-project">
+      <div class="progress-overall">
+        <div class="progress-ring" role="img" aria-label="Общая готовность: ${progressNumber.format(percent)}%">
+          <svg viewBox="0 0 104 104" aria-hidden="true">
+            <circle class="progress-ring-track" cx="52" cy="52" r="${radius}"></circle>
+            <circle class="progress-ring-value" cx="52" cy="52" r="${radius}"
+              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+          </svg>
+          <span class="progress-ring-number">${progressNumber.format(percent)}%</span>
+        </div>
+        <span class="progress-overall-label">Общая готовность</span>
+      </div>`;
+  }
+
+  function renderSegmentedProgress(items, label) {
+    const completed = items.filter(item => item.status === "done").length;
+    const segments = items.map((item, index) => {
+      const isLit = index < completed;
+      const flex = label === "Рукопись" && (item.stage === "Пролог" || item.stage === "Эпилог") ? 0.2 : 1;
+      return `<span class="progress-segment${isLit ? " is-filled" : ""}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
+    }).join("");
+
+    return `
+      <div class="progress-segmented-block">
+        <div class="progress-segmented-heading">
+          <span>${escapeBookProgress(label)}</span>
+          <strong>${completed}/${items.length}</strong>
+        </div>
+        <div class="progress-segments" role="img"
+          aria-label="${escapeBookProgress(label)}: ${completed} из ${items.length}">
+          ${segments}
+        </div>
+      </div>`;
+  }
+
+  function renderOtherTasks(items) {
+    if (!items.length) return "";
+    return `
+      <ul class="progress-other-tasks">
+        ${items.map(item => {
+          const completed = item.status === "done";
+          return `
+            <li class="progress-other-task${completed ? " is-done" : ""}">
+              <span class="progress-other-mark" aria-hidden="true">${completed ? "✓" : ""}</span>
+              <span>${escapeBookProgress(item.stage)}</span>
+            </li>`;
+        }).join("")}
+      </ul>`;
+  }
+
+  function renderProject(project) {
+    const guide = project.name.startsWith("Путеводитель");
+    const individual = project.items.filter(item => guide ? isPortrait(item.stage) : isManuscriptPart(item.stage));
+    const other = project.items.filter(item => !individual.includes(item));
+    if (!individual.length) throw new Error("Не найдены этапы для сегментированной шкалы проекта «" + project.name + "».");
+
+    return `
+      <article class="progress-project-column">
         <h3>${escapeBookProgress(displayProjectName(project))}</h3>
-        ${renderTaskGroup(guide ? "Портреты персонажей" : "Написание рукописи", individualItems, "progress-task-group-individual")}
-        ${renderTaskGroup(guide ? "Подготовка и публикация путеводителя" : "Подготовка и публикация книги", remainingItems)}
-      </section>`;
+        ${renderOverallRing(project)}
+        ${renderSegmentedProgress(individual, guide ? "Портреты персонажей" : "Рукопись")}
+        ${renderOtherTasks(other)}
+      </article>`;
   }
 
   fetch("/assets/data/book-progress.json?v=20261125-progress-1")
@@ -899,7 +914,6 @@ if (bookProgressRoot) {
         }
         if (!projectsMap.has(item.book)) projectsMap.set(item.book, { name: item.book, items: [] });
         projectsMap.get(item.book).items.push({
-          book: item.book,
           stage: item.stage,
           status: item.status,
           weight: Number(item.weight)
@@ -910,17 +924,18 @@ if (bookProgressRoot) {
       if (projects.length !== 2) throw new Error("Ожидались две независимые шкалы прогресса.");
       projects.forEach(project => {
         const total = project.items.reduce((sum, item) => sum + item.weight, 0);
-        if (Math.abs(total - 100) > 0.01) {
+        if (Math.abs(total - 100) > 0.001) {
           throw new Error("Сумма весов проекта «" + project.name + "» должна составлять 100%.");
         }
       });
 
-      ringsRoot.innerHTML = projects.map(renderProgressRing).join("");
-      checklistRoot.innerHTML = projects.map(renderProjectChecklist).join("");
+      const bookProject = projects.find(project => !project.name.startsWith("Путеводитель"));
+      const guideProject = projects.find(project => project.name.startsWith("Путеводитель"));
+      if (!bookProject || !guideProject) throw new Error("Не удалось разделить книгу и путеводитель.");
+      projectsRoot.innerHTML = renderProject(bookProject) + renderProject(guideProject);
     })
     .catch(error => {
-      const message = escapeBookProgress(error.message || "Попробуйте обновить страницу позже.");
-      ringsRoot.innerHTML = '<p class="progress-error">' + message + '</p>';
-      checklistRoot.innerHTML = "";
+      projectsRoot.innerHTML = '<p class="progress-error">' +
+        escapeBookProgress(error.message || "Попробуйте обновить страницу позже.") + '</p>';
     });
 }
