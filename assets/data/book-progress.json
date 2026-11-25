@@ -135,7 +135,7 @@
     {
       "book": "Книга",
       "stage": "Провести редактуру и корректуру текста",
-      "status": "done",
+      "status": "in_progress",
       "weight": 10.0
     },
     {
@@ -249,19 +249,19 @@
     {
       "book": "Путеводитель",
       "stage": "Портрет Проспер Дивус",
-      "status": "done",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель",
-      "stage": "Портрет Рубина Санг",
       "status": "in_progress",
       "weight": 2.78
     },
     {
       "book": "Путеводитель",
-      "stage": "Портрет Сорция Век",
+      "stage": "Портрет Рубина Санг",
       "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Сорция Век",
+      "status": "in_progress",
       "weight": 2.78
     },
     {
@@ -285,7 +285,7 @@
     {
       "book": "Путеводитель",
       "stage": "Написать статьи",
-      "status": "done",
+      "status": "in_progress",
       "weight": 28.96
     },
     {
