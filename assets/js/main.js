@@ -554,7 +554,6 @@ if(quoteRoot){
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
  let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
- const whiteCrests=new Set([0,2,4]);
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file);return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
  const imageBackgrounds=[
@@ -641,7 +640,6 @@ if(quoteRoot){
   const crest=crestImages[crestIndex];
   if(crest?.complete&&crest.naturalWidth){
    ctx.save();ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=4;
-   if(whiteCrests.has(crestIndex))ctx.filter="brightness(0) invert(1)";
    const maxW=53,maxH=70,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
    const crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
    ctx.drawImage(crest,82,949-crestH/2,crestW,crestH);ctx.restore();
