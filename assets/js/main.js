@@ -552,7 +552,10 @@ if(quoteRoot){
  const imageContext=imageCanvas?.getContext("2d");
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
- let quoteRecords=[],activeQuote=null,selectedBooks=["Порабощение"],activeTheme="all",lastQuoteId=null,backgroundIndex=0,typeTimer=null;
+ let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
+ const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Рупида.png","Герб Родда-Киры вектор.png","Герб Мармагонии вектор.png"];
+ const whiteCrests=new Set([0,3,4]);
+ const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file);return img;});
  const imageBackgrounds=[
   ["#0b1718","#245052","#101b22"],["#10151e","#263d5b","#111a2b"],
   ["#102019","#315c45","#101a17"],["#211617","#633b3d","#171113"],
@@ -567,7 +570,7 @@ if(quoteRoot){
   });
  }
  function syncBookFilters(){
-  const allSelected=selectedBooks.length===bookNames.length;
+  const allSelected=selectedBooks.length===bookNames.length&&bookNames.every(name=>selectedBooks.includes(name));
   const allButton=bookFilters.querySelector('[data-quote-book="all"]');
   allButton.classList.toggle("is-active",allSelected);allButton.setAttribute("aria-pressed",String(allSelected));
   bookFilters.querySelectorAll("[data-quote-book]:not([data-quote-book=all])").forEach(button=>{
@@ -577,6 +580,7 @@ if(quoteRoot){
  }
  function showQuote(record,animate=true){
   activeQuote=record;lastQuoteId=record.id;
+  document.querySelector(".quote-display")?.classList.remove("is-message");
   if(typeTimer)clearInterval(typeTimer);
   const full=String(record.quote||"").trim();
   quoteSource.textContent=record.source||"";
@@ -588,9 +592,16 @@ if(quoteRoot){
    if(index>=words.length){quoteText.textContent+='"';clearInterval(typeTimer);}
   },105);
  }
+ function showQuoteMessage(message){
+  if(typeTimer)clearInterval(typeTimer);
+  activeQuote=null;quoteText.textContent=message;quoteSource.textContent="";
+  document.querySelector(".quote-display")?.classList.add("is-message");
+  quoteStatus.textContent="";imageStatus.textContent="";imagePanel.hidden=true;
+ }
  function pickQuote(){
+  if(!selectedBooks.length){showQuoteMessage("Выберите книгу, чтобы увидеть цитаты.");return;}
   const pool=availableQuotes();
-  if(!pool.length){quoteText.textContent="";quoteSource.textContent="";activeQuote=null;quoteStatus.textContent="В этой подборке пока нет цитат.";imagePanel.hidden=true;return;}
+  if(!pool.length){showQuoteMessage("Для выбранной комбинации не нашлось подходящих цитат. Выберите больше книг или измените тематику.");return;}
   const choices=pool.length>1?pool.filter(item=>String(item.id)!==String(lastQuoteId)):pool;
   showQuote(choices[Math.floor(Math.random()*choices.length)],true);
   quoteStatus.textContent="";imageStatus.textContent="";imagePanel.hidden=true;
@@ -617,31 +628,40 @@ if(quoteRoot){
   ctx.fillStyle="#f0f3ef";ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textAlign="center";ctx.textBaseline="top";
   lines.forEach((part,index)=>ctx.fillText(part,540,quoteTop+index*lineHeight));
   const metaY=Math.min(quoteTop+quoteHeight+180,790);
-  ctx.fillStyle="rgba(225,239,231,.9)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);
+  ctx.save();ctx.shadowColor="rgba(0,0,0,.48)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
+  ctx.fillStyle="rgba(225,239,231,.9)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);ctx.restore();
   const source=String(activeQuote.source||"");
   const match=source.match(/^(".*?"): ?(.*)$/);
   const bookLine=match?match[1]:source;
   const chapterLine=match?match[2]:"";
   ctx.fillStyle="rgba(225,239,231,.68)";ctx.font="400 21px 'PT Sans', Arial, sans-serif";
-  ctx.fillText(bookLine,540,metaY+78);
-  if(chapterLine)ctx.fillText(chapterLine,540,metaY+112);
-  ctx.fillStyle="rgba(225,239,231,.42)";ctx.font="400 18px 'PT Sans', Arial, sans-serif";ctx.fillText("ТРАНКВИЛЬСКИЙ ВЕСТНИК",540,950);
+  ctx.fillText(bookLine,540,metaY+43);
+  if(chapterLine)ctx.fillText(chapterLine,540,metaY+73);
+  const crest=crestImages[crestIndex];
+  if(crest?.complete&&crest.naturalWidth){
+   ctx.save();ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=4;
+   if(whiteCrests.has(crestIndex))ctx.filter="brightness(0) invert(1)";
+   ctx.drawImage(crest,82,916,48,64);ctx.restore();
+  }
+  ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
+  ctx.shadowColor="rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
+  ctx.fillStyle="#f0f3ef";ctx.font="600 35px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",148,946);
+  ctx.fillStyle="#a5d4d1";ctx.font="600 29px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",148,978);ctx.restore();
  }
  function copyQuote(){
   if(!activeQuote)return;
-  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+" — "+String(activeQuote.source||"");
+  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+" "+String(activeQuote.source||"");
   navigator.clipboard?.writeText(text).then(()=>{quoteStatus.textContent="Цитата скопирована.";}).catch(()=>{quoteStatus.textContent="Не удалось скопировать автоматически.";});
  }
  bookFilters?.addEventListener("click",event=>{
   const button=event.target.closest("[data-quote-book]");if(!button)return;
   const book=button.dataset.quoteBook;
   if(book==="all"){
-   if(selectedBooks.length===bookNames.length)selectedBooks=["Порабощение"];
+   if(selectedBooks.length===bookNames.length)selectedBooks=[];
    else selectedBooks=[...bookNames];
   }else{
    if(selectedBooks.includes(book))selectedBooks=selectedBooks.filter(name=>name!==book);
    else selectedBooks.push(book);
-   if(!selectedBooks.length)selectedBooks=["Порабощение"];
   }
   syncBookFilters();lastQuoteId=null;pickQuote();
  });
@@ -659,6 +679,7 @@ if(quoteRoot){
   if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
  document.querySelector("#quote-image-background")?.addEventListener("click",()=>{backgroundIndex=(backgroundIndex+1)%imageBackgrounds.length;drawQuoteImage();});
+ document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
  document.querySelector("#quote-image-download")?.addEventListener("click",()=>{
   if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
  });
@@ -668,7 +689,7 @@ if(quoteRoot){
   catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
  });
  syncBookFilters();
- fetch("/assets/data/quotes.json?v=20261125-test-pool-2").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
+ fetch("/assets/data/quotes.json?v=20261125-test-pool-3").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
   if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
   quoteRecords=payload.quotes;pickQuote();
  }).catch(error=>{quoteStatus.textContent=error.message||"Не удалось загрузить цитаты.";});
