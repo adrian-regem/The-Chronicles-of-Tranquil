@@ -593,13 +593,14 @@ if(quoteRoot){
    button.addEventListener("click",()=>{choose(item.value);trigger.querySelector(".quote-dropdown-current").textContent=item.label;root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
    menu.append(button);
   });
-  trigger.addEventListener("click",()=>{const open=!root.classList.contains("is-open");quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");});root.classList.toggle("is-open",open);trigger.setAttribute("aria-expanded",String(open));});
+  trigger.addEventListener("click",()=>{quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{if(el!==root){el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");}});root.classList.add("is-open");trigger.setAttribute("aria-expanded","true");});
   root.addEventListener("mouseenter",()=>{root.classList.add("is-open");trigger.setAttribute("aria-expanded","true");});
   root.addEventListener("mouseleave",()=>{root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
   root.append(trigger,menu);quoteControls.append(root);
  }
  function downloadQuoteImage(){if(!activeQuote)return;const a=document.createElement("a");a.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";a.href=imageCanvas.toDataURL("image/png");a.click();}
  async function copyQuoteImage(){if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}}
+ document.addEventListener("pointerdown",event=>{if(!event.target.closest(".quote-dropdown")){quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");});}});
  function buildQuoteControls(){
   quoteControls.innerHTML="";
   makeMenu("format","Формат",[{value:"square",label:"Квадрат 1:1",note:"1080 × 1080",previewClass:"preview-square"},{value:"landscape",label:"Альбомный 16:9",note:"1920 × 1080",previewClass:"preview-landscape"},{value:"portrait",label:"Вертикальный 9:16",note:"1080 × 1920",previewClass:"preview-portrait"}],quoteFormat,v=>{quoteFormat=v;drawQuoteImage();});
@@ -704,7 +705,7 @@ if(quoteRoot){
   const quoteTop=h*quoteCenter-quoteHeight/2;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
-  const metaY=portrait?h*.755:landscape?h*.735:h*.755;
+  const metaY=portrait?h*.785:landscape?h*.735:h*.755;
   ctx.textAlign="center";ctx.textBaseline="alphabetic";
   ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";ctx.fillText("Дмитричев Никита",cx,metaY);
   const source=String(activeQuote.source||"");
@@ -714,10 +715,10 @@ if(quoteRoot){
   ctx.fillText(bookLine,cx,metaY+minSide*.043);
   if(chapterLine)ctx.fillText(chapterLine,cx,metaY+minSide*.073);
   const crest=crestImages[crestIndex],logoY=portrait?h*.925:landscape?h*.885:h*.89;
-  const logoTextX=cx+minSide*.025,crestMaxW=minSide*.05,crestMaxH=minSide*.065;
+  const logoTextX=cx-minSide*.065,crestMaxW=minSide*.05,crestMaxH=minSide*.065;
   if(crest?.complete&&crest.naturalWidth){
    const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight),crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
-   const crestX=cx-minSide*.13-crestW/2,crestY=logoY-crestH*.72;
+   const crestX=cx-minSide*.14-crestW/2,crestY=logoY-crestH*.72;
    ctx.save();
    if(light){ctx.fillStyle="rgba(23,33,38,.88)";ctx.beginPath();ctx.arc(crestX+crestW/2,crestY+crestH/2,Math.max(crestW,crestH)*.66,0,Math.PI*2);ctx.fill();}
    ctx.shadowColor="rgba(0,0,0,.35)";ctx.shadowBlur=8;ctx.shadowOffsetY=2;ctx.drawImage(crest,crestX,crestY,crestW,crestH);ctx.restore();
