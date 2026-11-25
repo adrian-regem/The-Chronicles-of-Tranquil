@@ -796,3 +796,125 @@ if(quoteRoot){
   quoteRecords=payload.quotes;pickQuote();
  }).catch(error=>{quoteStatus.textContent=error.message||"Не удалось загрузить цитаты.";});
 }
+
+
+// Public progress tracker for the upcoming book and its companion guide.
+const bookProgressRoot = document.querySelector("#book-progress");
+if (bookProgressRoot) {
+  const ringsRoot = document.querySelector("#book-progress-rings");
+  const checklistRoot = document.querySelector("#book-progress-checklist");
+  const progressNumber = new Intl.NumberFormat("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  const escapeBookProgress = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
+
+  const isManuscriptPart = (stage) => /^(Пролог|Глава \d+|Эпилог)$/.test(stage);
+  const isPortrait = (stage) => /^Портрет персонажа \d+$/.test(stage);
+
+  function renderProgressRing(project, index) {
+    const total = project.items.reduce((sum, item) => sum + item.weight, 0);
+    const completed = project.items.reduce(
+      (sum, item) => sum + (item.status === "done" ? item.weight : 0), 0
+    );
+    const percent = Math.min(100, Math.max(0, Math.round((completed / total) * 10000) / 100));
+    const radius = 48;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference * (1 - percent / 100);
+    const label = project.name.startsWith("Путеводитель") ? "Путеводитель" : "Книга";
+
+    return `
+      <article class="progress-ring-card">
+        <div class="progress-ring" role="img" aria-label="${escapeBookProgress(label)}: готовность ${progressNumber.format(percent)} процента">
+          <svg viewBox="0 0 112 112" aria-hidden="true">
+            <circle class="progress-ring-track" cx="56" cy="56" r="${radius}"></circle>
+            <circle class="progress-ring-value" cx="56" cy="56" r="${radius}"
+              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+          </svg>
+          <span class="progress-ring-number">${progressNumber.format(percent)}%</span>
+        </div>
+        <div class="progress-ring-caption">
+          <strong>${escapeBookProgress(label)}</strong>
+          <span>${project.items.filter(item => item.status === "done").length} из ${project.items.length} этапов</span>
+        </div>
+      </article>`;
+  }
+
+  function renderTask(item) {
+    const completed = item.status === "done";
+    return `
+      <li class="progress-task${completed ? " is-done" : " is-active"}">
+        <span class="progress-task-mark" aria-hidden="true">${completed ? "✓" : ""}</span>
+        <span class="progress-task-name">${escapeBookProgress(item.stage)}</span>
+        <span class="progress-task-status">${completed ? "Готово" : "В работе"}</span>
+      </li>`;
+  }
+
+  function renderTaskGroup(title, items, compactClass = "") {
+    if (!items.length) return "";
+    return `
+      <section class="progress-task-group ${compactClass}">
+        <h4>${escapeBookProgress(title)}</h4>
+        <ul class="progress-task-list">${items.map(renderTask).join("")}</ul>
+      </section>`;
+  }
+
+  function renderProjectChecklist(project) {
+    const guide = project.name.startsWith("Путеводитель");
+    const individualItems = project.items.filter(item => guide ? isPortrait(item.stage) : isManuscriptPart(item.stage));
+    const remainingItems = project.items.filter(item => !individualItems.includes(item));
+    return `
+      <section class="progress-project">
+        <h3>${escapeBookProgress(project.name)}</h3>
+        ${renderTaskGroup(guide ? "Портреты персонажей" : "Написание рукописи", individualItems, "progress-task-group-individual")}
+        ${renderTaskGroup(guide ? "Подготовка и публикация путеводителя" : "Подготовка и публикация книги", remainingItems)}
+      </section>`;
+  }
+
+  fetch("/assets/data/book-progress.json?v=20261125-progress-1")
+    .then(response => {
+      if (!response.ok) throw new Error("Не удалось загрузить таблицу прогресса.");
+      return response.json();
+    })
+    .then(payload => {
+      if (!payload || !Array.isArray(payload.items) || !payload.items.length) {
+        throw new Error("Файл прогресса имеет неверную структуру.");
+      }
+
+      const projectsMap = new Map();
+      payload.items.forEach(item => {
+        if (!item || typeof item.book !== "string" || typeof item.stage !== "string" ||
+            !["in_progress", "done"].includes(item.status) ||
+            !Number.isFinite(Number(item.weight)) || Number(item.weight) <= 0) {
+          throw new Error("В таблице прогресса обнаружена некорректная строка.");
+        }
+        if (!projectsMap.has(item.book)) projectsMap.set(item.book, { name: item.book, items: [] });
+        projectsMap.get(item.book).items.push({
+          book: item.book,
+          stage: item.stage,
+          status: item.status,
+          weight: Number(item.weight)
+        });
+      });
+
+      const projects = [...projectsMap.values()];
+      if (projects.length !== 2) throw new Error("Ожидались две независимые шкалы прогресса.");
+      projects.forEach(project => {
+        const total = project.items.reduce((sum, item) => sum + item.weight, 0);
+        if (Math.abs(total - 100) > 0.01) {
+          throw new Error("Сумма весов проекта «" + project.name + "» должна составлять 100%.");
+        }
+      });
+
+      ringsRoot.innerHTML = projects.map(renderProgressRing).join("");
+      checklistRoot.innerHTML = projects.map(renderProjectChecklist).join("");
+    })
+    .catch(error => {
+      const message = escapeBookProgress(error.message || "Попробуйте обновить страницу позже.");
+      ringsRoot.innerHTML = '<p class="progress-error">' + message + '</p>';
+      checklistRoot.innerHTML = "";
+    });
+}
