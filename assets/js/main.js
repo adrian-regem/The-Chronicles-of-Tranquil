@@ -542,55 +542,63 @@ if(guideRoot){
 const quoteRoot=document.querySelector(".quote-generator");
 if(quoteRoot){
  const quoteText=document.querySelector("#quote-text");
- const quoteId=document.querySelector("#quote-id");
  const quoteSource=document.querySelector("#quote-source");
  const quoteStatus=document.querySelector("#quote-status");
+ const imageStatus=document.querySelector("#quote-image-status");
  const bookFilters=document.querySelector("#quote-book-filters");
+ const themeFilters=document.querySelector("#quote-theme-filters");
  const imagePanel=document.querySelector("#quote-image-panel");
  const imageCanvas=document.querySelector("#quote-image-canvas");
  const imageContext=imageCanvas?.getContext("2d");
  const authorName="Дмитричев Никита";
- let quoteRecords=[],activeQuote=null,activeBook="all",lastQuoteId=null,backgroundIndex=0,typeTimer=null;
+ const bookNames=["Порабощение","Артефакт","Золотые крылья"];
+ let quoteRecords=[],activeQuote=null,selectedBooks=["Порабощение"],activeTheme="all",lastQuoteId=null,backgroundIndex=0,typeTimer=null;
  const imageBackgrounds=[
-  ["#0b1718","#245052","#101b22"],
-  ["#10151e","#263d5b","#111a2b"],
-  ["#102019","#315c45","#101a17"],
-  ["#211617","#633b3d","#171113"],
-  ["#17191d","#454c50","#111518"],
-  ["#171426","#40345d","#111522"],
-  ["#17201e","#3d5146","#101815"],
-  ["#1b1a13","#554b2c","#17150f"]
+  ["#0b1718","#245052","#101b22"],["#10151e","#263d5b","#111a2b"],
+  ["#102019","#315c45","#101a17"],["#211617","#633b3d","#171113"],
+  ["#17191d","#454c50","#111518"],["#171426","#40345d","#111522"],
+  ["#17201e","#3d5146","#101815"],["#1b1a13","#554b2c","#17150f"]
  ];
- const escapeQuote=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
- function availableQuotes(){return quoteRecords.filter(item=>activeBook==="all"||String(item.source||"").startsWith('"'+activeBook+'"'));}
+ function availableQuotes(){
+  return quoteRecords.filter(item=>{
+   const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
+   const themeMatch=activeTheme==="all"||item.theme===activeTheme;
+   return bookMatch&&themeMatch;
+  });
+ }
+ function syncBookFilters(){
+  const allSelected=selectedBooks.length===bookNames.length;
+  const allButton=bookFilters.querySelector('[data-quote-book="all"]');
+  allButton.classList.toggle("is-active",allSelected);allButton.setAttribute("aria-pressed",String(allSelected));
+  bookFilters.querySelectorAll("[data-quote-book]:not([data-quote-book=all])").forEach(button=>{
+   const active=selectedBooks.includes(button.dataset.quoteBook);
+   button.classList.toggle("is-active",active);button.setAttribute("aria-pressed",String(active));
+  });
+ }
  function showQuote(record,animate=true){
   activeQuote=record;lastQuoteId=record.id;
   if(typeTimer)clearInterval(typeTimer);
   const full=String(record.quote||"").trim();
-  quoteId.textContent="№ "+record.id;
   quoteSource.textContent=record.source||"";
   quoteText.textContent=animate?'"':'"'+full+'"';
   if(!animate)return;
   const words=full.split(/\s+/);let index=0;
   typeTimer=setInterval(()=>{
-   quoteText.textContent+=(index?" ":"")+words[index];
-   index++;
+   quoteText.textContent+=(index?" ":"")+words[index];index++;
    if(index>=words.length){quoteText.textContent+='"';clearInterval(typeTimer);}
   },105);
  }
  function pickQuote(){
   const pool=availableQuotes();
-  if(!pool.length){quoteText.textContent="";quoteId.textContent="";quoteSource.textContent="";activeQuote=null;quoteStatus.textContent="В этой подборке пока нет цитат.";return;}
+  if(!pool.length){quoteText.textContent="";quoteSource.textContent="";activeQuote=null;quoteStatus.textContent="В этой подборке пока нет цитат.";imagePanel.hidden=true;return;}
   const choices=pool.length>1?pool.filter(item=>String(item.id)!==String(lastQuoteId)):pool;
-  const chosen=choices[Math.floor(Math.random()*choices.length)];
-  showQuote(chosen,true);quoteStatus.textContent="";imagePanel.hidden=true;
+  showQuote(choices[Math.floor(Math.random()*choices.length)],true);
+  quoteStatus.textContent="";imageStatus.textContent="";imagePanel.hidden=true;
  }
- function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
-  const words=text.split(/\s+/);let line="",lines=[];
+ function wrapLines(ctx,text,maxWidth){
+  const words=String(text||"").split(/\s+/);let line="",lines=[];
   words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;});
-  if(line)lines.push(line);
-  const total=(lines.length-1)*lineHeight;
-  lines.forEach((part,index)=>ctx.fillText(part,x,y-total/2+index*lineHeight));
+  if(line)lines.push(line);return lines;
  }
  function drawQuoteImage(){
   if(!activeQuote||!imageContext)return;
@@ -601,30 +609,48 @@ if(quoteRoot){
   ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
   ctx.strokeStyle="rgba(220,235,230,.28)";ctx.lineWidth=2;ctx.strokeRect(54,54,972,972);
   ctx.strokeStyle="rgba(220,235,230,.16)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(390,150);ctx.lineTo(690,150);ctx.stroke();
-  ctx.textAlign="center";ctx.textBaseline="middle";
   const text='"'+String(activeQuote.quote||"").trim()+'"';
   let fontSize=54;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";
-  const words=text.split(/\s+/);let lines=[],line="";
-  words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>820&&line){lines.push(line);line=word;}else line=test;});if(line)lines.push(line);
-  while(lines.length>11&&fontSize>34){fontSize-=2;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";lines=[];line="";words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>820&&line){lines.push(line);line=word;}else line=test;});if(line)lines.push(line);}
-  const lineHeight=fontSize*1.42;const quoteHeight=lines.length*lineHeight;
-  const quoteTop=480-quoteHeight/2;
-  ctx.fillStyle="#f0f3ef";ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
+  let lines=wrapLines(ctx,text,820);
+  while(lines.length>11&&fontSize>34){fontSize-=2;ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";lines=wrapLines(ctx,text,820);}
+  const lineHeight=fontSize*1.42,quoteHeight=lines.length*lineHeight,quoteTop=480-quoteHeight/2;
+  ctx.fillStyle="#f0f3ef";ctx.font="500 "+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textAlign="center";ctx.textBaseline="top";
   lines.forEach((part,index)=>ctx.fillText(part,540,quoteTop+index*lineHeight));
-  const metaY=Math.min(quoteTop+quoteHeight+90,850);
-  ctx.fillStyle="rgba(225,239,231,.88)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);
-  ctx.fillStyle="rgba(225,239,231,.65)";ctx.font="400 22px 'PT Sans', Arial, sans-serif";ctx.fillText(String(activeQuote.source||""),540,metaY+46);
-  ctx.fillStyle="rgba(225,239,231,.42)";ctx.font="400 18px 'PT Sans', Arial, sans-serif";ctx.fillText("ТРАНКВИЛЬСКИЙ ВЕСТНИК",540,940);
+  const metaY=Math.min(quoteTop+quoteHeight+180,790);
+  ctx.fillStyle="rgba(225,239,231,.9)";ctx.font="700 25px 'PT Sans', Arial, sans-serif";ctx.fillText(authorName,540,metaY);
+  const source=String(activeQuote.source||"");
+  const match=source.match(/^(".*?"): ?(.*)$/);
+  const bookLine=match?match[1]:source;
+  const chapterLine=match?match[2]:"";
+  ctx.fillStyle="rgba(225,239,231,.68)";ctx.font="400 21px 'PT Sans', Arial, sans-serif";
+  ctx.fillText(bookLine,540,metaY+78);
+  if(chapterLine)ctx.fillText(chapterLine,540,metaY+112);
+  ctx.fillStyle="rgba(225,239,231,.42)";ctx.font="400 18px 'PT Sans', Arial, sans-serif";ctx.fillText("ТРАНКВИЛЬСКИЙ ВЕСТНИК",540,950);
  }
  function copyQuote(){
   if(!activeQuote)return;
-  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+"\n"+String(activeQuote.source||"");
+  const text='"'+String(activeQuote.quote||"").trim()+'"\n'+authorName+" — "+String(activeQuote.source||"");
   navigator.clipboard?.writeText(text).then(()=>{quoteStatus.textContent="Цитата скопирована.";}).catch(()=>{quoteStatus.textContent="Не удалось скопировать автоматически.";});
  }
  bookFilters?.addEventListener("click",event=>{
   const button=event.target.closest("[data-quote-book]");if(!button)return;
-  activeBook=button.dataset.quoteBook;
-  bookFilters.querySelectorAll("[data-quote-book]").forEach(item=>{const active=item===button;item.classList.toggle("is-active",active);item.setAttribute("aria-pressed",String(active));});
+  const book=button.dataset.quoteBook;
+  if(book==="all"){
+   if(selectedBooks.length===bookNames.length)selectedBooks=["Порабощение"];
+   else selectedBooks=[...bookNames];
+  }else{
+   if(selectedBooks.includes(book))selectedBooks=selectedBooks.filter(name=>name!==book);
+   else selectedBooks.push(book);
+   if(!selectedBooks.length)selectedBooks=["Порабощение"];
+  }
+  syncBookFilters();lastQuoteId=null;pickQuote();
+ });
+ themeFilters?.addEventListener("click",event=>{
+  const button=event.target.closest("[data-quote-theme]");if(!button)return;
+  activeTheme=button.dataset.quoteTheme;
+  themeFilters.querySelectorAll("[data-quote-theme]").forEach(item=>{
+   const active=item===button;item.classList.toggle("is-active",active);item.setAttribute("aria-pressed",String(active));
+  });
   lastQuoteId=null;pickQuote();
  });
  document.querySelector("#new-quote")?.addEventListener("click",pickQuote);
@@ -637,10 +663,12 @@ if(quoteRoot){
   if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
  });
  document.querySelector("#quote-image-copy")?.addEventListener("click",async()=>{
-  if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){quoteStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
-  try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);quoteStatus.textContent="Изображение скопировано.";}catch(error){quoteStatus.textContent="Не удалось скопировать изображение.";}
+  if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
+  try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}
+  catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
  });
- fetch("/assets/data/quotes.json?v=20261125-test-pool").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
+ syncBookFilters();
+ fetch("/assets/data/quotes.json?v=20261125-test-pool-2").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
   if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
   quoteRecords=payload.quotes;pickQuote();
  }).catch(error=>{quoteStatus.textContent=error.message||"Не удалось загрузить цитаты.";});
