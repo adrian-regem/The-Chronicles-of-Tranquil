@@ -816,7 +816,7 @@ if (bookProgressRoot) {
   const isPortrait = (stage) => stage.startsWith("Портрет ");
 
   function displayProjectName(project) {
-    const censored = "▓▓▓▓▓▓▓▓▓▓▓▓";
+    const censored = "▓▓▓▓▓▓▓▓▓";
     if (project.name === "Книга") return "Хроники Транквила: " + censored;
     if (project.name === "Путеводитель") return 'Путеводитель по "' + censored + '"';
     return project.name;
