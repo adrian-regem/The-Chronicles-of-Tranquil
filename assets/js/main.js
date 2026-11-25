@@ -552,7 +552,7 @@ if(quoteRoot){
  const imageContext=imageCanvas?.getContext("2d");
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
- let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,quoteFormat="square",quoteStyle="classic",typeTimer=null;
+ let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
@@ -577,7 +577,6 @@ if(quoteRoot){
   {name:"Светлая бирюза",colors:["#e5f5f1","#9bcfc4","#f4fbf8"],light:true}
  ];
  const quoteBackgroundButton=document.querySelector("#quote-image-background");
- const quotePaletteName=document.querySelector("#quote-image-palette-name");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
@@ -629,11 +628,11 @@ if(quoteRoot){
  }
  function drawQuoteImage(){
   if(!activeQuote||!imageContext)return;
-  const [w,h]=quoteFormats.square;
+  const w=1080,h=1080;
   if(imageCanvas.width!==w||imageCanvas.height!==h){imageCanvas.width=w;imageCanvas.height=h;}
   const ctx=imageContext,palette=imageBackgrounds[backgroundIndex%imageBackgrounds.length],colors=palette.colors;
-  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.76)":"rgba(225,239,231,.76)",accent=light?"#315f65":"#a5d4d1";
-  const cx=w/2,minSide=Math.min(w,h),portrait=quoteFormat==="portrait",landscape=quoteFormat==="landscape";
+  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.76)":"rgba(225,239,231,.76)",accent=light?"#315f65":"#3e7e7d";
+  const cx=w/2,minSide=w,portrait=false,landscape=false;
   const frameX=minSide*.075,frameY=portrait?minSide*.045:minSide*.075,frameW=w-frameX*2,frameH=h-frameY*2;
   const innerX=portrait?w*.13:w*.13,innerW=w-innerX*2;
   const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,colors[0]);gradient.addColorStop(.52,colors[1]);gradient.addColorStop(1,colors[2]);
@@ -729,7 +728,6 @@ if(quoteRoot){
  });
  quoteBackgroundButton?.addEventListener("click",()=>{
   backgroundIndex=(backgroundIndex+1)%imageBackgrounds.length;
-  if(quotePaletteName)quotePaletteName.textContent=imageBackgrounds[backgroundIndex].name;
   drawQuoteImage();
  });
  document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
