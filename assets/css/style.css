@@ -2195,3 +2195,73 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
 .quote-image-controls,.quote-image-controls *{cursor:image-set(url("/assets/images/cursor/pointer.png") 2x) 0 0,pointer}
 .quote-image-panel{position:relative;z-index:1}
 @media(max-width:680px){.quote-image-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.quote-dropdown{min-width:0}.quote-dropdown-trigger{min-height:46px;padding:7px 9px}.quote-dropdown-menu{min-width:min(250px,82vw);max-height:280px}.quote-dropdown:nth-child(5){grid-column:1/-1}.quote-dropdown:nth-child(5) .quote-dropdown-menu{left:auto;right:0}}
+
+
+/* Final quote-generator interaction and Kartarad homepage palette */
+.quote-dropdown-menu{top:100%!important;margin:0!important}
+.quote-dropdown.is-open .quote-dropdown-menu{display:block}
+.quote-dropdown:focus-within .quote-dropdown-menu{display:none}
+.quote-dropdown.is-open:focus-within .quote-dropdown-menu{display:block}
+.quote-dropdown-option{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer}
+.quote-dropdown-trigger{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer}
+.quote-image-controls,.quote-image-controls *{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer!important}
+.quote-dropdown-menu{z-index:500;overscroll-behavior:contain}
+.quote-dropdown-option:focus-visible,.quote-dropdown-trigger:focus-visible{outline:1px solid #8fc4bf;outline-offset:-2px}
+
+/* The homepage takes its entire visual language from Kartarad teal #3e7e7d. */
+body:not(.page-shell){
+  --teal:#3e7e7d;
+  --teal-bright:#8fc4bf;
+  --glow-teal:0 0 0 1px rgba(62,126,125,.36),0 0 24px rgba(62,126,125,.15);
+  --line:rgba(62,126,125,.22);
+  --gold:#3e7e7d;
+  --gold-light:#a5d4d1;
+  --muted:#9bb2b0;
+  background:#0b1213;
+}
+body:not(.page-shell) .site-header{background:rgba(8,16,17,.88);border-bottom-color:rgba(62,126,125,.22)}
+body:not(.page-shell) .brand-name span,
+body:not(.page-shell) .main-nav a:hover,
+body:not(.page-shell) .main-nav a.active,
+body:not(.page-shell) .eyebrow,
+body:not(.page-shell) .ornament,
+body:not(.page-shell) .hero-bottom .scroll-mark{color:#8fc4bf}
+body:not(.page-shell) .hero{
+  background:radial-gradient(ellipse at 72% 40%,rgba(62,126,125,.22),transparent 48%),linear-gradient(112deg,#0a1112 8%,#101e1f 57%,#0a1112);
+}
+body:not(.page-shell) .hero::before{background:repeating-linear-gradient(115deg,transparent 0 90px,rgba(62,126,125,.075) 91px,transparent 92px 180px)}
+body:not(.page-shell) .hero-shade{background:linear-gradient(90deg,rgba(9,17,18,.97),rgba(9,17,18,.68) 52%,rgba(9,17,18,.16))}
+body:not(.page-shell) .quote-section,
+body:not(.page-shell) .news-section{background:linear-gradient(145deg,rgba(62,126,125,.075),rgba(12,21,22,.98) 65%);border-color:rgba(62,126,125,.2)}
+body:not(.page-shell) .feature-section,
+body:not(.page-shell) .feature-image{background:linear-gradient(145deg,rgba(62,126,125,.12),#0d1718 72%);border-color:rgba(62,126,125,.2)}
+body:not(.page-shell) .info-tile,
+body:not(.page-shell) .empty-news{
+  border-color:rgba(62,126,125,.25);
+  background:linear-gradient(145deg,rgba(62,126,125,.12),rgba(13,22,23,.96) 72%);
+}
+body:not(.page-shell) .info-tile:hover{border-color:rgba(143,196,191,.62);background:linear-gradient(145deg,rgba(62,126,125,.2),rgba(13,22,23,.98) 72%)}
+body:not(.page-shell) .tile-number,
+body:not(.page-shell) .tile-arrow,
+body:not(.page-shell) .quote-source,
+body:not(.page-shell) .footer-brand{color:#8fc4bf}
+body:not(.page-shell) .text-link,
+body:not(.page-shell) .outline-button,
+body:not(.page-shell) .quote-actions .outline-button,
+body:not(.page-shell) .quote-image-actions .outline-button{
+  border-color:rgba(62,126,125,.55);
+  color:#a5d4d1;
+  background:rgba(62,126,125,.13);
+}
+body:not(.page-shell) .text-link:hover,
+body:not(.page-shell) .outline-button:hover,
+body:not(.page-shell) .quote-actions .outline-button:hover,
+body:not(.page-shell) .quote-image-actions .outline-button:hover{
+  background:rgba(62,126,125,.25);
+  box-shadow:0 0 0 1px rgba(62,126,125,.22),0 0 18px rgba(62,126,125,.14);
+}
+body:not(.page-shell) .quote-book-filter{border-color:rgba(62,126,125,.25);background:rgba(62,126,125,.055)}
+body:not(.page-shell) .quote-book-filter.is-active{border-color:#65a4a2;background:rgba(62,126,125,.2)}
+body:not(.page-shell) .quote-filter-all{border-color:rgba(62,126,125,.34);background:linear-gradient(145deg,#1c3a3a,#10191a);color:#a5d4d1}
+body:not(.page-shell) .site-footer{border-color:rgba(62,126,125,.2)}
+@media(max-width:680px){body:not(.page-shell) .main-nav{background:#0c1718;border-color:rgba(62,126,125,.25)}}
