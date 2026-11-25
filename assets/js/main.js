@@ -577,40 +577,9 @@ if(quoteRoot){
   {name:"Светлая бирюза",colors:["#e5f5f1","#9bcfc4","#f4fbf8"],light:true}
  ];
  const quoteFormats={square:[1080,1080],landscape:[1920,1080],portrait:[1080,1920]};
- const styleOptions=[["classic","Классика","Рамка и симметрия"],["editorial","Редакционный","Типографская полоса"],["poster","Плакат","Афишная композиция"],["dossier","Досье","Архивная плашка"],["split","Разворот","Две контрастные половины"]];
- const crestLabels=["Картрад","Анспранд","Мармагония","Рупид","Родда-Кира"];
- function makeMenu(id,label,items,value,choose){
-  const root=document.createElement("div");root.className="quote-dropdown";root.dataset.menu=id;
-  const trigger=document.createElement("button");trigger.type="button";trigger.className="quote-dropdown-trigger";trigger.setAttribute("aria-haspopup","true");trigger.setAttribute("aria-expanded","false");trigger.innerHTML='<span class="quote-dropdown-label">'+label+'</span><span class="quote-dropdown-current"></span><span class="quote-dropdown-chevron">▾</span>';
-  const menu=document.createElement("div");menu.className="quote-dropdown-menu";menu.setAttribute("role","listbox");
-  const current=items.find(x=>String(x.value)===String(value))||items[0];trigger.querySelector(".quote-dropdown-current").textContent=current.label;
-  items.forEach(item=>{
-   const button=document.createElement("button");button.type="button";button.className="quote-dropdown-option";button.setAttribute("role","option");
-   const preview=document.createElement("span");preview.className="quote-option-preview "+(item.previewClass||"");if(item.preview)preview.style.background=item.preview;
-   if(item.image){const img=document.createElement("img");img.src=item.image;img.alt="";preview.append(img);}
-   const copy=document.createElement("span");copy.className="quote-option-copy";copy.innerHTML="<strong></strong><small></small>";copy.querySelector("strong").textContent=item.label;copy.querySelector("small").textContent=item.note||"";
-   button.append(preview,copy);
-   button.addEventListener("click",()=>{choose(item.value);trigger.querySelector(".quote-dropdown-current").textContent=item.label;root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
-   menu.append(button);
-  });
-  trigger.addEventListener("click",()=>{quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{if(el!==root){el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");}});root.classList.add("is-open");trigger.setAttribute("aria-expanded","true");});
-  root.addEventListener("mouseenter",()=>{root.classList.add("is-open");trigger.setAttribute("aria-expanded","true");});
-  root.addEventListener("mouseleave",()=>{root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
-  root.append(trigger,menu);quoteControls.append(root);
- }
- function downloadQuoteImage(){if(!activeQuote)return;const a=document.createElement("a");a.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";a.href=imageCanvas.toDataURL("image/png");a.click();}
- async function copyQuoteImage(){if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}}
- document.addEventListener("pointerdown",event=>{if(!event.target.closest(".quote-dropdown")){quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");});}});
- function buildQuoteControls(){
-  quoteControls.innerHTML="";
-  makeMenu("format","Формат",[{value:"square",label:"Квадрат 1:1",note:"1080 × 1080",previewClass:"preview-square"},{value:"landscape",label:"Альбомный 16:9",note:"1920 × 1080",previewClass:"preview-landscape"},{value:"portrait",label:"Вертикальный 9:16",note:"1080 × 1920",previewClass:"preview-portrait"}],quoteFormat,v=>{quoteFormat=v;drawQuoteImage();});
-  makeMenu("style","Стиль",styleOptions.map(x=>({value:x[0],label:x[1],note:x[2],previewClass:"preview-style-"+x[0]})),quoteStyle,v=>{quoteStyle=v;drawQuoteImage();});
-  makeMenu("background","Фон",imageBackgrounds.map((x,i)=>({value:i,label:x.name,note:"Градиент",preview:"linear-gradient(135deg,"+x.colors.join(",")+")"})),backgroundIndex,v=>{backgroundIndex=Number(v);drawQuoteImage();});
-  makeMenu("crest","Герб",crestFiles.map((x,i)=>({value:i,label:crestLabels[i],note:"Герб державы",image:"/assets/images/countries/"+encodeURIComponent(x)})),crestIndex,v=>{crestIndex=Number(v);drawQuoteImage();});
-  makeMenu("actions","Действия",[{value:"download",label:"Скачать PNG",note:"Сохранить изображение"},{value:"copy",label:"Копировать изображение",note:"В буфер обмена"}],"download",v=>{if(v==="download")downloadQuoteImage();else copyQuoteImage();});
- }
  const quoteFormatSelect=document.querySelector("#quote-image-format");
- const quoteControls=document.querySelector("#quote-image-controls");
+ const quoteStyleSelect=document.querySelector("#quote-image-style");
+ const quoteBackgroundSelect=document.querySelector("#quote-image-background-select");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
@@ -665,68 +634,73 @@ if(quoteRoot){
   const [w,h]=quoteFormats[quoteFormat]||quoteFormats.square;
   if(imageCanvas.width!==w||imageCanvas.height!==h){imageCanvas.width=w;imageCanvas.height=h;}
   const ctx=imageContext,palette=imageBackgrounds[backgroundIndex%imageBackgrounds.length],colors=palette.colors;
-  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.76)":"rgba(225,239,231,.76)",accent=light?"#315f65":"#a5d4d1";
-  const cx=w/2,minSide=Math.min(w,h),portrait=quoteFormat==="portrait",landscape=quoteFormat==="landscape";
-  const frameX=w*.075,frameY=portrait?h*.045:h*.075,frameW=w-frameX*2,frameH=h-frameY*2;
-  const innerX=portrait?w*.13:w*.13,innerW=w-innerX*2;
+  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.72)":"rgba(225,239,231,.72)",accent=light?"#315f65":"#a5d4d1";
+  const cx=w/2,margin=w*.075,minSide=Math.min(w,h);
   const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,colors[0]);gradient.addColorStop(.52,colors[1]);gradient.addColorStop(1,colors[2]);
   ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
-  const glow=ctx.createRadialGradient(cx,h*.36,20,cx,h*.43,minSide*.78);glow.addColorStop(0,light?"rgba(255,255,255,.28)":"rgba(255,255,255,.10)");glow.addColorStop(1,"rgba(255,255,255,0)");
+  const glow=ctx.createRadialGradient(cx,h*.34,20,cx,h*.45,minSide*.78);glow.addColorStop(0,light?"rgba(255,255,255,.28)":"rgba(255,255,255,.10)");glow.addColorStop(1,"rgba(255,255,255,0)");
   ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
   const style=quoteStyle;
   if(style==="classic"){
-   ctx.strokeStyle=light?"rgba(30,48,53,.48)":"rgba(220,235,230,.38)";ctx.lineWidth=Math.max(2,minSide*.0025);ctx.strokeRect(frameX,frameY,frameW,frameH);
-   ctx.strokeStyle=accent;ctx.lineWidth=Math.max(3,minSide*.004);ctx.beginPath();ctx.moveTo(cx-minSide*.12,frameY+minSide*.105);ctx.lineTo(cx+minSide*.12,frameY+minSide*.105);ctx.stroke();
+   ctx.strokeStyle=light?"rgba(30,48,53,.35)":"rgba(220,235,230,.30)";ctx.lineWidth=Math.max(2,minSide*.002);ctx.strokeRect(margin,margin,w-2*margin,h-2*margin);
+   ctx.strokeStyle=light?"rgba(30,48,53,.2)":"rgba(220,235,230,.18)";ctx.beginPath();ctx.moveTo(cx-minSide*.14,h*.145);ctx.lineTo(cx+minSide*.14,h*.145);ctx.stroke();
   }else if(style==="editorial"){
-   ctx.fillStyle=accent;ctx.fillRect(frameX,h*.13,Math.max(8,minSide*.012),h*.62);
-   ctx.fillStyle=light?"rgba(23,33,38,.10)":"rgba(240,243,239,.10)";ctx.font="700 "+(minSide*.19)+"px 'PT Sans',Arial,sans-serif";ctx.textAlign="left";ctx.fillText("ЦИТАТА",frameX+minSide*.09,h*.23);
-  }else if(style==="poster"){
-   ctx.fillStyle=accent;ctx.fillRect(0,0,w,h*.105);ctx.fillStyle=light?"#172126":"#f0f3ef";ctx.font="700 "+(minSide*.034)+"px 'PT Sans',Arial,sans-serif";ctx.textAlign="left";ctx.fillText("ГОЛОСА ТРАНКВИЛА",frameX,h*.072);ctx.fillStyle=accent;ctx.fillRect(w*.72,h*.16,w*.18,h*.012);
-  }else if(style==="dossier"){
-   ctx.fillStyle=light?"rgba(255,255,255,.48)":"rgba(0,0,0,.22)";ctx.fillRect(frameX,h*.12,frameW,h*.76);ctx.strokeStyle=accent;ctx.lineWidth=Math.max(3,minSide*.004);ctx.strokeRect(frameX,h*.12,frameW,h*.76);ctx.fillStyle=accent;ctx.fillRect(frameX,h*.12,minSide*.17,h*.76);
-   ctx.save();ctx.translate(frameX+minSide*.105,h*.5);ctx.rotate(-Math.PI/2);ctx.fillStyle=light?"#172126":"#102022";ctx.textAlign="center";ctx.font="700 "+(minSide*.045)+"px 'PT Sans',Arial,sans-serif";ctx.fillText("АРХИВ",0,0);ctx.restore();
-  }else if(style==="split"){
-   ctx.fillStyle=accent;ctx.fillRect(0,0,w*.36,h);ctx.fillStyle=light?"#172126":"#102022";ctx.textAlign="center";ctx.font="700 "+(minSide*.045)+"px 'PT Sans',Arial,sans-serif";ctx.save();ctx.translate(w*.18,h*.5);ctx.rotate(-Math.PI/2);ctx.fillText("ХРОНИКИ ТРАНКВИЛА",0,0);ctx.restore();
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.15,Math.max(7,minSide*.009),h*.54);
+   ctx.globalAlpha=.13;ctx.fillStyle=ink;ctx.font="700 "+(minSide*.34)+"px 'PT Sans', Arial, sans-serif";ctx.textAlign="left";ctx.fillText("“",margin+minSide*.02,h*.38);ctx.globalAlpha=1;
+  }else if(style==="minimal"){
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.16,Math.max(4,minSide*.006),h*.68);
+  }else if(style==="geometry"){
+   ctx.fillStyle=accent;ctx.globalAlpha=.18;ctx.beginPath();ctx.moveTo(w,h*.08);ctx.lineTo(w,h*.43);ctx.lineTo(w*.78,h*.31);ctx.closePath();ctx.fill();
+   ctx.globalAlpha=.14;ctx.beginPath();ctx.arc(margin,h*.18,minSide*.15,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+   ctx.fillStyle=light?"rgba(255,255,255,.55)":"rgba(0,0,0,.20)";ctx.fillRect(margin*.7,h*.12,w-margin*1.4,h*.76);
+   ctx.strokeStyle=accent;ctx.lineWidth=Math.max(5,minSide*.009);ctx.strokeRect(margin*.7,h*.12,w-margin*1.4,h*.76);
+  }else if(style==="ornament"){
+   ctx.strokeStyle=accent;ctx.lineWidth=Math.max(2,minSide*.002);ctx.strokeRect(margin,h*.075,w-2*margin,h*.85);
+   ctx.strokeStyle=light?"rgba(23,33,38,.25)":"rgba(225,239,231,.25)";ctx.lineWidth=Math.max(1,minSide*.001);ctx.strokeRect(margin+minSide*.018,h*.075+minSide*.018,w-2*(margin+minSide*.018),h*.85-2*minSide*.018);
+   const mark=minSide*.035;ctx.fillStyle=accent;
+   [[margin,h*.075],[w-margin,h*.075],[margin,h*.925],[w-margin,h*.925]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,mark,0,Math.PI*2);ctx.fill();});
   }
   const quote='“'+String(activeQuote.quote||"").trim()+'”';
-  const left=style==="editorial"?frameX+minSide*.095:style==="dossier"?frameX+minSide*.22:style==="split"?w*.43:style==="poster"?frameX+minSide*.035:portrait?innerX:frameX+minSide*.075;
-  const right=style==="dossier"?w-frameX-minSide*.075:style==="split"?w-frameX-minSide*.065:portrait?w-innerX:w-frameX-minSide*.075;
-  const maxWidth=right-left;
-  let fontSize=minSide*(portrait?.078:style==="poster"?.075:style==="editorial"?.061:.052);
-  const lineLimit=portrait?h*.39:landscape?h*.43:h*.43;
+  const textLeft=style==="editorial"||style==="minimal"?margin+minSide*.075:style==="geometry"?margin+minSide*.09:margin+minSide*.06;
+  const textRight=w-(style==="editorial"||style==="minimal"?margin+minSide*.045:margin+minSide*.06);
+  const maxWidth=textRight-textLeft;
+  let fontSize=minSide*(style==="editorial"?.062:style==="minimal"?.057:.052);
+  const lineLimit=h*.47;
   let lines=[];
-  const alignLeft=style==="editorial"||style==="poster"||style==="dossier"||style==="split";
-  ctx.textAlign=alignLeft?"left":"center";
-  function measureQuote(){ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";lines=wrapLines(ctx,quote,maxWidth);}
+  ctx.textAlign=style==="editorial"||style==="minimal"?"left":"center";
+  function measureQuote(){
+   ctx.font=(style==="editorial"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";
+   lines=wrapLines(ctx,quote,maxWidth);
+  }
   measureQuote();
-  while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.024){fontSize-=2;measureQuote();}
+  while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.025){fontSize-=2;measureQuote();}
   const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
-  const quoteCenter=portrait?.405:landscape?.445:style==="poster"?.54:style==="editorial"?.52:style==="dossier"?.52:style==="split"?.51:.47;
-  const quoteTop=h*quoteCenter-quoteHeight/2;
-  ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
-  lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
-  const metaY=portrait?h*.785:landscape?h*.735:h*.755;
+  const quoteTop=h*.43-quoteHeight/2;
+  ctx.fillStyle=ink;ctx.font=(style==="editorial"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
+  lines.forEach((line,index)=>ctx.fillText(line,style==="editorial"||style==="minimal"?textLeft:cx,quoteTop+index*lineHeight));
+  if(style==="geometry"){
+   ctx.fillStyle=accent;ctx.fillRect(margin,h*.68,minSide*.11,Math.max(5,minSide*.007));
+  }
+  const metaY=h*.755;
   ctx.textAlign="center";ctx.textBaseline="alphabetic";
-  ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";ctx.fillText("Дмитричев Никита",cx,metaY);
+  ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans', Arial, sans-serif";ctx.fillText("Дмитричев Никита",cx,metaY);
   const source=String(activeQuote.source||"");
   const match=source.match(/^(".*?"): ?(.*)$/);
   const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
-  ctx.fillStyle=muted;ctx.font="400 "+(minSide*.019)+"px 'PT Sans',Arial,sans-serif";
-  ctx.fillText(bookLine,cx,metaY+minSide*.043);
+  ctx.fillStyle=muted;ctx.font="400 "+(minSide*.019)+"px 'PT Sans', Arial, sans-serif";ctx.fillText(bookLine,cx,metaY+minSide*.043);
   if(chapterLine)ctx.fillText(chapterLine,cx,metaY+minSide*.073);
-  const crest=crestImages[crestIndex],logoY=portrait?h*.925:landscape?h*.885:h*.89;
-  const logoTextX=cx-minSide*.065,crestMaxW=minSide*.05,crestMaxH=minSide*.065;
+  const crest=crestImages[crestIndex],logoY=h*.925;
   if(crest?.complete&&crest.naturalWidth){
-   const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight),crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
-   const crestX=cx-minSide*.14-crestW/2,crestY=logoY-crestH*.72;
-   ctx.save();
-   if(light){ctx.fillStyle="rgba(23,33,38,.88)";ctx.beginPath();ctx.arc(crestX+crestW/2,crestY+crestH/2,Math.max(crestW,crestH)*.66,0,Math.PI*2);ctx.fill();}
-   ctx.shadowColor="rgba(0,0,0,.35)";ctx.shadowBlur=8;ctx.shadowOffsetY=2;ctx.drawImage(crest,crestX,crestY,crestW,crestH);ctx.restore();
+   ctx.save();ctx.shadowColor=light?"rgba(0,0,0,.22)":"rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=3;
+   const maxW=minSide*.05,maxH=minSide*.065,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
+   const crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
+   if(light){ctx.fillStyle="rgba(20,30,34,.88)";ctx.fillRect(margin-minSide*.012,logoY-minSide*.057,minSide*.24,minSide*.09);}
+   ctx.drawImage(crest,margin,logoY-crestH/2,crestW,crestH);ctx.restore();
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
-  ctx.shadowColor=light?"rgba(255,255,255,.65)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
-  ctx.fillStyle=light?"#172126":"#e5eeeb";ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002);
-  ctx.fillStyle=light?"#315f65":"#a5d4d1";ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.027);ctx.restore();
+  ctx.shadowColor=light?"rgba(255,255,255,.18)":"rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=2;
+  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",margin+minSide*.065,logoY-minSide*.002);
+  ctx.fillStyle=accent;ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",margin+minSide*.065,logoY+minSide*.027);ctx.restore();
  }
  function copyQuote(){
   if(!activeQuote)return;
@@ -758,7 +732,18 @@ if(quoteRoot){
  document.querySelector("#make-quote-image")?.addEventListener("click",()=>{
   if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
- buildQuoteControls();
+ quoteBackgroundSelect?.addEventListener("change",()=>{backgroundIndex=Number(quoteBackgroundSelect.value)||0;drawQuoteImage();});
+ quoteFormatSelect?.addEventListener("change",()=>{quoteFormat=quoteFormatSelect.value;drawQuoteImage();});
+ quoteStyleSelect?.addEventListener("change",()=>{quoteStyle=quoteStyleSelect.value;drawQuoteImage();});
+ document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
+ document.querySelector("#quote-image-download")?.addEventListener("click",()=>{
+  if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
+ });
+ document.querySelector("#quote-image-copy")?.addEventListener("click",async()=>{
+  if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
+  try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}
+  catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
+ });
  syncBookFilters();
  fetch("/assets/data/quotes.json?v=20261125-test-pool-3").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
   if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
