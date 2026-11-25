@@ -691,7 +691,7 @@ if(quoteRoot){
   const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
   const quoteCenter=style==="poster"?.57:style==="editorial"?.55:style==="dossier"?.56:style==="split"?.55:.50;
   const quoteTop=h*quoteCenter-quoteHeight/2;
-  ctx.fillStyle=ink;ctx.font=(style==="editorial"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
+  ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans', Arial, sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,style==="editorial"||style==="poster"||style==="dossier"||style==="split"?textLeft:cx,quoteTop+index*lineHeight));
   const metaY=h*.755;
   ctx.textAlign="center";ctx.textBaseline="alphabetic";
