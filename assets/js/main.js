@@ -579,7 +579,7 @@ if(quoteRoot){
  const quoteFormats={square:[1080,1080],landscape:[1920,1080],portrait:[1080,1920]};
  const quoteFormatSelect=document.querySelector("#quote-image-format");
  const quoteStyleSelect=document.querySelector("#quote-image-style");
- const paletteName=document.querySelector("#quote-image-palette-name");
+ const quoteBackgroundSelect=document.querySelector("#quote-image-background-select");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
@@ -701,7 +701,6 @@ if(quoteRoot){
   ctx.shadowColor=light?"rgba(255,255,255,.18)":"rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=2;
   ctx.fillStyle=ink;ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",margin+minSide*.065,logoY-minSide*.002);
   ctx.fillStyle=accent;ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",margin+minSide*.065,logoY+minSide*.027);ctx.restore();
-  if(paletteName)paletteName.textContent=palette.name;
  }
  function copyQuote(){
   if(!activeQuote)return;
@@ -733,7 +732,7 @@ if(quoteRoot){
  document.querySelector("#make-quote-image")?.addEventListener("click",()=>{
   if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
- document.querySelector("#quote-image-background")?.addEventListener("click",()=>{backgroundIndex=(backgroundIndex+1)%imageBackgrounds.length;drawQuoteImage();});
+ quoteBackgroundSelect?.addEventListener("change",()=>{backgroundIndex=Number(quoteBackgroundSelect.value)||0;drawQuoteImage();});
  quoteFormatSelect?.addEventListener("change",()=>{quoteFormat=quoteFormatSelect.value;drawQuoteImage();});
  quoteStyleSelect?.addEventListener("change",()=>{quoteStyle=quoteStyleSelect.value;drawQuoteImage();});
  document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
