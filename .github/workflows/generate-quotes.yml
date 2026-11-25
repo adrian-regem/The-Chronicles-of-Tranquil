@@ -28,12 +28,12 @@ jobs:
         run: python assets/data/generate_quotes.py
       - name: Commit generated pool
         run: |
-          if git diff --quiet -- assets/data/quotes.json; then
-            echo "Quote JSON is already up to date."
+          if git diff --quiet -- assets/data/quotes.xlsx assets/data/quotes.json; then
+            echo "Quote workbook and JSON are already up to date."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/data/quotes.json
+          git add assets/data/quotes.xlsx assets/data/quotes.json
           git commit -m "Update generated quote pool"
           git push
