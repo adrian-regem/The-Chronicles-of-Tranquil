@@ -1,0 +1,39 @@
+name: Generate book progress data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assets/data/book-progress.xlsx"
+      - "assets/data/generate_book_progress.py"
+      - ".github/workflows/generate-book-progress.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install spreadsheet reader
+        run: pip install openpyxl
+      - name: Generate progress data
+        run: python assets/data/generate_book_progress.py
+      - name: Commit generated data
+        run: |
+          if git diff --quiet -- assets/data/book-progress.json; then
+            echo "Progress JSON is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/book-progress.json
+          git commit -m "Update generated book progress data"
+          git push
