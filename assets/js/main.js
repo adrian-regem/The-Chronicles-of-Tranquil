@@ -630,8 +630,9 @@ if(quoteRoot){
   quoteStatus.textContent="";imageStatus.textContent="";imagePanel.hidden=true;
  }
  function pickQuote(){
-  if(!selectedThemes.length){showQuoteMessage("Выберите одну или несколько тематик, чтобы получить цитаты");return;}
-  if(!selectedBooks.length){showQuoteMessage("Выберите книгу, чтобы увидеть цитаты.");return;}
+  if(!selectedBooks.length&&!selectedThemes.length){showQuoteMessage("Выберите одну или несколько книг и тематик, чтобы увидеть цитаты");return;}
+  if(!selectedBooks.length){showQuoteMessage("Выберите одну или несколько книг, чтобы увидеть цитаты");return;}
+  if(!selectedThemes.length){showQuoteMessage("Выберите одну или несколько тематик, чтобы увидеть цитаты");return;}
   const pool=availableQuotes();
   if(!pool.length){showQuoteMessage("Для выбранной комбинации не нашлось подходящих цитат. Выберите больше книг или тематик");return;}
   const choices=pool.length>1?pool.filter(item=>String(item.id)!==String(lastQuoteId)):pool;
