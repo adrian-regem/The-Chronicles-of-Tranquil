@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Yanone+Kaffeesatz:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261125-quote-generator-3">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261125-quote-generator-4">
 </head>
 <body>
   <header class="site-header">
@@ -55,6 +55,7 @@
           <button class="quote-theme-filter" type="button" data-quote-theme="Чувства" aria-pressed="false">Чувства</button>
           <button class="quote-theme-filter" type="button" data-quote-theme="Власть и конфликт" aria-pressed="false">Власть и конфликт</button>
         </div>
+        <p class="quote-note" id="quote-status" role="status">Выберите книгу и тему, чтобы увидеть цитаты.</p>
         <div class="quote-display" aria-live="polite">
           <blockquote id="quote-text"></blockquote>
           <p class="quote-source" id="quote-source"></p>
@@ -64,7 +65,6 @@
           <button class="outline-button quote-secondary-button" id="copy-quote" type="button">Копировать</button>
           <button class="outline-button quote-secondary-button" id="make-quote-image" type="button">Картинка</button>
         </div>
-        <p class="quote-note" id="quote-status" role="status">Выберите книгу и тему, чтобы увидеть цитаты.</p>
         <div class="quote-image-panel" id="quote-image-panel" hidden>
           <canvas id="quote-image-canvas" width="1080" height="1080" aria-label="Изображение с цитатой"></canvas>
           <div class="quote-image-actions">
