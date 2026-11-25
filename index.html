@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Yanone+Kaffeesatz:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261124-custom-cursor-4">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261125-quote-generator-1">
 </head>
 <body>
   <header class="site-header">
@@ -38,7 +38,36 @@
       <a class="text-link" href="/lore/">Исследовать Лор <span>→</span></a>
     </section>
     <section class="quote-section" id="quotes">
-      <div class="quote-inner"><p class="eyebrow">Голоса Транквила</p><blockquote id="quote-text">&quot;Здесь появится цитата из одной из книг&quot;</blockquote><p class="quote-source" id="quote-source">Хроники Транквила</p><button class="outline-button" id="new-quote" type="button">Другая цитата <span aria-hidden="true">↻</span></button><p class="quote-note">Генератор будет использовать только подлинные цитаты из произведений.</p></div>
+      <div class="quote-inner quote-generator">
+        <p class="eyebrow">Голоса Транквила</p>
+        <h2 class="quote-generator-title">Слова, которые <em>остаются</em></h2>
+        <div class="quote-book-filters" id="quote-book-filters" aria-label="Фильтр по книге">
+          <button class="quote-book-filter is-active" type="button" data-quote-book="all" aria-pressed="true"><span class="quote-filter-all">Все книги</span></button>
+          <button class="quote-book-filter" type="button" data-quote-book="Порабощение" aria-pressed="false"><img src="/assets/images/books/Обложка%20Порабощение.png" alt=""><span>Порабощение</span></button>
+          <button class="quote-book-filter" type="button" data-quote-book="Артефакт" aria-pressed="false"><img src="/assets/images/books/Обложка%20Артефакт.png" alt=""><span>Артефакт</span></button>
+          <button class="quote-book-filter" type="button" data-quote-book="Золотые крылья" aria-pressed="false"><img src="/assets/images/books/Обложка%20Золотые%20крылья.png" alt=""><span>Золотые крылья</span></button>
+          <button class="quote-book-filter is-disabled" type="button" disabled aria-disabled="true"><span class="quote-filter-unknown">???</span><span>Неизвестно</span></button>
+        </div>
+        <div class="quote-display" aria-live="polite">
+          <blockquote id="quote-text"></blockquote>
+          <p class="quote-id" id="quote-id"></p>
+          <p class="quote-source" id="quote-source"></p>
+        </div>
+        <div class="quote-actions">
+          <button class="outline-button" id="new-quote" type="button">Ещё цитата <span aria-hidden="true">↻</span></button>
+          <button class="outline-button quote-secondary-button" id="copy-quote" type="button">Копировать</button>
+          <button class="outline-button quote-secondary-button" id="make-quote-image" type="button">Картинка</button>
+        </div>
+        <p class="quote-note" id="quote-status" role="status">Загрузка цитат…</p>
+        <div class="quote-image-panel" id="quote-image-panel" hidden>
+          <canvas id="quote-image-canvas" width="1080" height="1080" aria-label="Изображение с цитатой"></canvas>
+          <div class="quote-image-actions">
+            <button class="outline-button" id="quote-image-background" type="button">Сменить фон</button>
+            <button class="outline-button" id="quote-image-copy" type="button">Копировать изображение</button>
+            <button class="outline-button" id="quote-image-download" type="button">Скачать</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
   <footer class="site-footer"><div class="footer-inner"><div class="footer-heading"><img src="/assets/images/countries/%D0%93%D0%B5%D1%80%D0%B1%20%D0%9A%D0%B0%D1%80%D1%82%D1%80%D0%B0%D0%B4%D0%B0%20%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80.png" alt="" class="footer-crest"><h2>Транквильский вестник</h2></div><div class="footer-copy"><p>Дмитричев Никита.</p><p>© 2026. Все материалы вселенной &quot;Хроники Транквила&quot;<br>защищены авторским правом.</p></div></div></footer>
