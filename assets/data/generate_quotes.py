@@ -55,7 +55,7 @@ def main() -> None:
         raise ValueError("Quote IDs must be consecutive from 1 through 134")
 
     TARGET.write_text(
-        json.dumps({"quotes": quotes}, ensure_ascii=False, indent=2) + "\\n",
+        json.dumps({"quotes": quotes}, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"Generated {TARGET} with {len(quotes)} quotes")
