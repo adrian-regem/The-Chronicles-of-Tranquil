@@ -2223,3 +2223,26 @@ body:not(.page-shell) .quote-book-filter.is-active{border-color:#65a4a2;backgrou
 body:not(.page-shell) .quote-filter-all{border-color:rgba(62,126,125,.34);background:linear-gradient(145deg,#1c3a3a,#10191a);color:#a5d4d1}
 body:not(.page-shell) .site-footer{border-color:rgba(62,126,125,.2)}
 @media(max-width:680px){body:not(.page-shell) .main-nav{background:#0c1718;border-color:rgba(62,126,125,.25)}}
+
+/* Quote image controls: one compact row beneath the square image. */
+.quote-image-controls { display:none !important; }
+.quote-image-actions { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px 0 0; }
+.quote-image-actions .outline-button { min-width:150px; }
+.quote-actions #new-quote { display:inline-flex; align-items:center; justify-content:center; gap:7px; }
+.quote-actions #new-quote span { order:-1; margin:0; }
+.quote-image-panel canvas { aspect-ratio:1 / 1; }
+body:not(.page-shell) .quote-actions .outline-button,
+body:not(.page-shell) .quote-image-actions .outline-button {
+ border-color:rgba(62,126,125,.72);
+ color:#b8d8d6;
+ background:rgba(62,126,125,.20);
+}
+body:not(.page-shell) .quote-actions .outline-button:hover,
+body:not(.page-shell) .quote-image-actions .outline-button:hover {
+ border-color:#3e7e7d;
+ background:rgba(62,126,125,.34);
+ box-shadow:0 0 0 1px rgba(62,126,125,.3),0 0 18px rgba(62,126,125,.18);
+}
+@media(max-width:680px) {
+ .quote-image-actions .outline-button { min-width:0; flex:1 1 calc(50% - 10px); }
+}
