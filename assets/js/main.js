@@ -544,6 +544,7 @@ if(quoteRoot){
  const quoteText=document.querySelector("#quote-text");
  const quoteSource=document.querySelector("#quote-source");
  const quoteStatus=document.querySelector("#quote-status");
+ const quoteCounter=document.querySelector("#quote-counter");
  const imageStatus=document.querySelector("#quote-image-status");
  const bookFilters=document.querySelector("#quote-book-filters");
  const themeFilters=document.querySelector("#quote-theme-filters");
@@ -595,6 +596,7 @@ if(quoteRoot){
  }
  function showQuote(record,animate=true){
   activeQuote=record;lastQuoteId=record.id;
+  if(quoteCounter)quoteCounter.textContent=String(record.id)+"/"+quoteRecords.length;
   document.querySelector(".quote-display")?.classList.remove("is-message");
   if(typeTimer)clearInterval(typeTimer);
   const full=String(record.quote||"").trim();
@@ -609,7 +611,7 @@ if(quoteRoot){
  }
  function showQuoteMessage(message){
   if(typeTimer)clearInterval(typeTimer);
-  activeQuote=null;quoteText.textContent=message;quoteSource.textContent="";
+  activeQuote=null;if(quoteCounter)quoteCounter.textContent="";quoteText.textContent=message;quoteSource.textContent="";
   document.querySelector(".quote-display")?.classList.add("is-message");
   quoteStatus.textContent="";imageStatus.textContent="";imagePanel.hidden=true;
  }
@@ -631,7 +633,7 @@ if(quoteRoot){
   const w=1080,h=1080;
   if(imageCanvas.width!==w||imageCanvas.height!==h){imageCanvas.width=w;imageCanvas.height=h;}
   const ctx=imageContext,palette=imageBackgrounds[backgroundIndex%imageBackgrounds.length],colors=palette.colors;
-  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.76)":"rgba(225,239,231,.76)",accent=light?"#315f65":"#3e7e7d";
+  const light=palette.light,ink=light?"#172126":"#f0f3ef",muted=light?"rgba(23,33,38,.76)":"rgba(225,239,231,.76)",accent=light?"#315f65":palette.logoAccent;
   const cx=w/2,minSide=w,portrait=false,landscape=false;
   const frameX=minSide*.075,frameY=portrait?minSide*.045:minSide*.075,frameW=w-frameX*2,frameH=h-frameY*2;
   const innerX=portrait?w*.13:w*.13,innerW=w-innerX*2;
@@ -642,6 +644,7 @@ if(quoteRoot){
   const style="classic";
   if(style==="classic"){
    ctx.strokeStyle=light?"rgba(30,48,53,.48)":"rgba(220,235,230,.38)";ctx.lineWidth=Math.max(2,minSide*.0025);ctx.strokeRect(frameX,frameY,frameW,frameH);
+   ctx.save();ctx.fillStyle=ink;ctx.font="400 18px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="alphabetic";ctx.fillText(String(activeQuote.id)+"/"+quoteRecords.length,w-frameX,frameY-18);ctx.restore();
    ctx.strokeStyle=accent;ctx.lineWidth=Math.max(3,minSide*.004);ctx.beginPath();ctx.moveTo(cx-minSide*.12,frameY+minSide*.105);ctx.lineTo(cx+minSide*.12,frameY+minSide*.105);ctx.stroke();
   }else if(style==="editorial"){
    ctx.fillStyle=accent;ctx.fillRect(frameX,h*.13,Math.max(8,minSide*.012),h*.62);
