@@ -963,7 +963,7 @@ if (bookProgressRoot) {
     });
   }
 
-  fetch("/assets/data/book-progress.json?v=20261125-progress-1")
+  fetch("/assets/data/book-progress.json?v=20261126-task-status-cache-fix")
     .then(response => {
       if (!response.ok) throw new Error("Не удалось загрузить таблицу прогресса.");
       return response.json();
