@@ -2458,3 +2458,173 @@ body.news-page .news-feed { margin-top:62px; }
 @media(prefers-reduced-motion:reduce) {
   .progress-ring-value { transition:none; }
 }
+
+
+/* Revised news progress layout: two independent project columns. */
+body.news-page .news-progress-heading {
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin:0 0 16px;
+  scroll-margin-top:24px;
+}
+body.news-page .news-progress-heading h2 {
+  margin:0;
+  color:#eee5c9;
+  font:500 clamp(30px,3.5vw,42px)/1.05 "Yanone Kaffeesatz",sans-serif;
+}
+body.news-page .news-progress-anchor {
+  color:rgba(198,168,75,.55);
+  font:400 18px/1 "PT Sans",sans-serif;
+  text-decoration:none;
+  transition:color .2s ease;
+}
+body.news-page .news-progress-anchor:hover { color:#d8bd69; }
+body.news-page .news-progress-layout,
+body.news-page .news-progress-overview,
+body.news-page .progress-checklist { display:none; }
+body.news-page .news-progress { padding:0; border:0; background:none; box-shadow:none; }
+body.news-page .news-progress-columns {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  align-items:stretch;
+}
+body.news-page .progress-project-column {
+  min-width:0;
+  padding:clamp(16px,2vw,25px);
+  border:1px solid rgba(169,133,39,.34);
+  border-radius:5px;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(169,133,39,.11),transparent 48%),
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(20,19,13,.96) 68%);
+  box-shadow:0 12px 34px rgba(0,0,0,.13);
+}
+.progress-project-column > h3 {
+  margin:0 0 17px;
+  color:#e8ddbd;
+  font:500 clamp(23px,2.4vw,29px)/1.1 "Yanone Kaffeesatz",sans-serif;
+}
+.progress-overall {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+}
+.progress-overall .progress-ring {
+  flex:0 0 94px;
+  width:94px;
+  margin:0;
+}
+.progress-overall .progress-ring svg { display:block; width:100%; height:100%; }
+.progress-overall .progress-ring circle { fill:none; stroke-width:7; }
+.progress-overall .progress-ring-track { stroke:rgba(196,166,77,.16); }
+.progress-overall .progress-ring-value {
+  stroke:#c2a044;
+  stroke-linecap:round;
+  transform:rotate(-90deg);
+  transform-origin:52px 52px;
+  transition:stroke-dashoffset .65s ease;
+  filter:drop-shadow(0 0 4px rgba(194,160,68,.22));
+}
+.progress-overall .progress-ring-number {
+  color:#f0e6c8;
+  font:600 17px/1 "PT Sans",Arial,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+.progress-overall-label {
+  max-width:90px;
+  color:#b8b19e;
+  font-size:12px;
+  line-height:1.35;
+}
+.progress-segmented-block { margin:0 0 19px; }
+.progress-segmented-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+  color:#cfc5a9;
+  font-size:12px;
+  line-height:1.2;
+}
+.progress-segmented-heading strong {
+  flex:0 0 auto;
+  color:#e8d59d;
+  font-size:12px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.progress-segments {
+  display:flex;
+  align-items:stretch;
+  gap:3px;
+  width:100%;
+  min-height:14px;
+}
+.progress-segment {
+  display:block;
+  flex:1 1 0;
+  min-width:0;
+  border:1px solid rgba(196,166,77,.3);
+  border-radius:2px;
+  background:rgba(196,166,77,.09);
+  transition:background .25s ease,border-color .25s ease,box-shadow .25s ease;
+}
+.progress-segment.is-filled {
+  border-color:#b99b4a;
+  background:linear-gradient(180deg,#d2b45d,#9e7e31);
+  box-shadow:0 0 7px rgba(194,160,68,.2);
+}
+.progress-other-tasks {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  margin:0;
+  padding:13px 0 0;
+  border-top:1px solid rgba(169,133,39,.2);
+  list-style:none;
+}
+.progress-other-task {
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  min-width:0;
+  color:#c9c2b0;
+  font-size:12px;
+  line-height:1.35;
+}
+.progress-other-mark {
+  display:grid;
+  place-items:center;
+  flex:0 0 14px;
+  width:14px;
+  height:14px;
+  margin-top:0;
+  border:1px solid rgba(196,166,77,.45);
+  border-radius:2px;
+  color:#d8e4c9;
+  font:700 10px/1 "PT Sans",sans-serif;
+}
+.progress-other-task.is-done { color:#b8c7b5; }
+.progress-other-task.is-done .progress-other-mark {
+  border-color:#739e77;
+  background:rgba(74,120,80,.24);
+  color:#b9d7b7;
+}
+@media(max-width:760px) {
+  body.news-page .news-progress-columns { grid-template-columns:1fr; gap:13px; }
+  body.news-page .progress-project-column { padding:18px; }
+  .progress-project-column > h3 { font-size:26px; }
+  .progress-overall .progress-ring { flex-basis:88px; width:88px; }
+}
+@media(max-width:680px) {
+  body.news-page .news-progress-heading { margin-bottom:12px; }
+  body.news-page .news-progress-heading h2 { font-size:34px; }
+  body.news-page .progress-project-column { padding:16px 14px; }
+  .progress-other-task { font-size:12px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .progress-segment,.progress-overall .progress-ring-value { transition:none; }
+}
