@@ -577,9 +577,28 @@ if(quoteRoot){
   {name:"Светлая бирюза",colors:["#e5f5f1","#9bcfc4","#f4fbf8"],light:true}
  ];
  const quoteFormats={square:[1080,1080],landscape:[1920,1080],portrait:[1080,1920]};
+ const styleOptions=[["classic","Классика","Рамка и симметрия"],["editorial","Редакционный","Типографская полоса"],["poster","Плакат","Афишная композиция"],["dossier","Досье","Архивная плашка"],["split","Разворот","Две контрастные половины"]];
+ const crestLabels=["Картрад","Анспранд","Мармагония","Рупид","Родда-Кира"];
+ function makeMenu(id,label,items,value,choose){
+  const root=document.createElement("div");root.className="quote-dropdown";
+  const trigger=document.createElement("button");trigger.type="button";trigger.className="quote-dropdown-trigger";trigger.innerHTML='<span class="quote-dropdown-label">'+label+'</span><span class="quote-dropdown-current"></span><span class="quote-dropdown-chevron">▾</span>';
+  const menu=document.createElement("div");menu.className="quote-dropdown-menu";
+  const current=items.find(x=>String(x.value)===String(value))||items[0];trigger.querySelector(".quote-dropdown-current").textContent=current.label;
+  items.forEach(item=>{const button=document.createElement("button");button.type="button";button.className="quote-dropdown-option";const preview=document.createElement("span");preview.className="quote-option-preview "+(item.previewClass||"");if(item.preview)preview.style.background=item.preview;if(item.image){const img=document.createElement("img");img.src=item.image;img.alt="";preview.append(img);}const copy=document.createElement("span");copy.className="quote-option-copy";copy.innerHTML="<strong></strong><small></small>";copy.querySelector("strong").textContent=item.label;copy.querySelector("small").textContent=item.note||"";button.append(preview,copy);button.addEventListener("click",()=>{choose(item.value);trigger.querySelector(".quote-dropdown-current").textContent=item.label;root.classList.remove("is-open");});menu.append(button);});
+  trigger.addEventListener("click",()=>root.classList.toggle("is-open"));root.addEventListener("mouseenter",()=>root.classList.add("is-open"));root.addEventListener("mouseleave",()=>root.classList.remove("is-open"));root.append(trigger,menu);quoteControls.append(root);
+ }
+ function downloadQuoteImage(){if(!activeQuote)return;const a=document.createElement("a");a.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";a.href=imageCanvas.toDataURL("image/png");a.click();}
+ async function copyQuoteImage(){if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}}
+ function buildQuoteControls(){
+  quoteControls.innerHTML="";
+  makeMenu("format","Формат",[{value:"square",label:"Квадрат 1:1",note:"1080 × 1080",previewClass:"preview-square"},{value:"landscape",label:"Альбомный 16:9",note:"1920 × 1080",previewClass:"preview-landscape"},{value:"portrait",label:"Вертикальный 9:16",note:"1080 × 1920",previewClass:"preview-portrait"}],quoteFormat,v=>{quoteFormat=v;drawQuoteImage();});
+  makeMenu("style","Стиль",styleOptions.map(x=>({value:x[0],label:x[1],note:x[2],previewClass:"preview-style-"+x[0]})),quoteStyle,v=>{quoteStyle=v;drawQuoteImage();});
+  makeMenu("background","Фон",imageBackgrounds.map((x,i)=>({value:i,label:x.name,note:"Градиент",preview:"linear-gradient(135deg,"+x.colors.join(",")+")"})),backgroundIndex,v=>{backgroundIndex=Number(v);drawQuoteImage();});
+  makeMenu("crest","Герб",crestFiles.map((x,i)=>({value:i,label:crestLabels[i],note:"Герб державы",image:"/assets/images/countries/"+encodeURIComponent(x)})),crestIndex,v=>{crestIndex=Number(v);drawQuoteImage();});
+  makeMenu("actions","Действия",[{value:"download",label:"Скачать PNG",note:"Сохранить изображение"},{value:"copy",label:"Копировать изображение",note:"В буфер обмена"}],"download",v=>{if(v==="download")downloadQuoteImage();else copyQuoteImage();});
+ }
  const quoteFormatSelect=document.querySelector("#quote-image-format");
- const quoteStyleSelect=document.querySelector("#quote-image-style");
- const quoteBackgroundSelect=document.querySelector("#quote-image-background-select");
+ const quoteControls=document.querySelector("#quote-image-controls");
  function availableQuotes(){
   return quoteRecords.filter(item=>{
    const bookMatch=selectedBooks.includes(bookNames.find(name=>String(item.source||"").startsWith('"'+name+'"')));
@@ -732,18 +751,7 @@ if(quoteRoot){
  document.querySelector("#make-quote-image")?.addEventListener("click",()=>{
   if(!activeQuote)return;imagePanel.hidden=false;drawQuoteImage();imagePanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
- quoteBackgroundSelect?.addEventListener("change",()=>{backgroundIndex=Number(quoteBackgroundSelect.value)||0;drawQuoteImage();});
- quoteFormatSelect?.addEventListener("change",()=>{quoteFormat=quoteFormatSelect.value;drawQuoteImage();});
- quoteStyleSelect?.addEventListener("change",()=>{quoteStyle=quoteStyleSelect.value;drawQuoteImage();});
- document.querySelector("#quote-image-crest")?.addEventListener("click",()=>{crestIndex=(crestIndex+1)%crestImages.length;drawQuoteImage();});
- document.querySelector("#quote-image-download")?.addEventListener("click",()=>{
-  if(!activeQuote)return;const link=document.createElement("a");link.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";link.href=imageCanvas.toDataURL("image/png");link.click();
- });
- document.querySelector("#quote-image-copy")?.addEventListener("click",async()=>{
-  if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}
-  try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}
-  catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}
- });
+ buildQuoteControls();
  syncBookFilters();
  fetch("/assets/data/quotes.json?v=20261125-test-pool-3").then(response=>{if(!response.ok)throw new Error("Не удалось загрузить цитаты.");return response.json();}).then(payload=>{
   if(!Array.isArray(payload.quotes))throw new Error("Файл цитат имеет неверный формат.");
