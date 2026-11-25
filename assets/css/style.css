@@ -2255,3 +2255,9 @@ body:not(.page-shell) .quote-image-actions .outline-button:hover {
 .quote-next-group { display:flex; align-items:center; justify-content:center; gap:8px; }
 .quote-next-group #new-quote { flex:0 0 auto; }
 @media(max-width:680px){ .quote-next-group { flex:1 1 42%; min-width:0; } .quote-next-group #new-quote { flex:1 1 auto; min-width:0; } }
+
+
+/* Quote reveal: words fade in without changing the layout. */
+.quote-word { opacity:0; animation:quote-word-reveal .24s ease forwards; }
+@keyframes quote-word-reveal { from { opacity:0; } to { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .quote-word { opacity:1; animation:none; } }
