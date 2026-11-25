@@ -556,6 +556,7 @@ if(quoteRoot){
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Рупида.png","Герб Родда-Киры вектор.png","Герб Мармагонии вектор.png"];
  const whiteCrests=new Set([0,3,4]);
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file);return img;});
+ crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
  const imageBackgrounds=[
   ["#0b1718","#245052","#101b22"],["#10151e","#263d5b","#111a2b"],
   ["#102019","#315c45","#101a17"],["#211617","#633b3d","#171113"],
