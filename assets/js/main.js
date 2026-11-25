@@ -553,8 +553,8 @@ if(quoteRoot){
  const authorName="Дмитричев Никита";
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
  let quoteRecords=[],activeQuote=null,selectedBooks=[],activeTheme="all",lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
- const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Рупида.png","Герб Родда-Киры вектор.png","Герб Мармагонии вектор.png"];
- const whiteCrests=new Set([0,3,4]);
+ const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
+ const whiteCrests=new Set([0,2,4]);
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file);return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
  const imageBackgrounds=[
