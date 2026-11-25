@@ -654,6 +654,12 @@ if(quoteRoot){
   }else if(style==="split"){
    ctx.fillStyle=accent;ctx.fillRect(0,0,w*.36,h);ctx.fillStyle=light?"#172126":"#102022";ctx.textAlign="center";ctx.font="700 "+(minSide*.045)+"px 'PT Sans',Arial,sans-serif";ctx.save();ctx.translate(w*.18,h*.5);ctx.rotate(-Math.PI/2);ctx.fillText("ХРОНИКИ ТРАНКВИЛА",0,0);ctx.restore();
   }
+  ctx.save();
+  ctx.textAlign="left";ctx.textBaseline="top";
+  ctx.fillStyle=light?"rgba(49,95,101,.20)":"rgba(240,243,239,.20)";
+  ctx.font="700 "+(minSide*.22)+"px 'PT Sans',Arial,sans-serif";
+  ctx.fillText("“",frameX+minSide*.045,frameY+minSide*.055);
+  ctx.restore();
   const quote='“'+String(activeQuote.quote||"").trim()+'”';
   const left=style==="editorial"?frameX+minSide*.095:style==="dossier"?frameX+minSide*.22:style==="split"?w*.43:style==="poster"?frameX+minSide*.035:portrait?innerX:frameX+minSide*.075;
   const right=style==="dossier"?w-frameX-minSide*.075:style==="split"?w-frameX-minSide*.065:portrait?w-innerX:w-frameX-minSide*.075;
@@ -668,23 +674,23 @@ if(quoteRoot){
   while(lines.length*fontSize*1.38>lineLimit&&fontSize>minSide*.024){fontSize-=2;measureQuote();}
   const lineHeight=fontSize*1.38,quoteHeight=lines.length*lineHeight;
   const quoteCenter=portrait?.405:landscape?.445:style==="poster"?.54:style==="editorial"?.52:style==="dossier"?.52:style==="split"?.51:.47;
-  const quoteTop=h*quoteCenter-quoteHeight/2;
+  const quoteTop=h*quoteCenter-quoteHeight/2-140;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
   const logoY=h-frameY-minSide*.066;
   const crest=crestImages[crestIndex];
   const crestMaxW=minSide*.078,crestMaxH=minSide*.078;
-  const crestX=frameX+minSide*.035;
-  let logoTextX=crestX+minSide*.098;
+  const crestX=frameX+minSide*.035-17;
+  let logoTextX=crestX+minSide*.098-10;
   let crestW=crestMaxW,crestH=crestMaxH;
   if(crest?.complete&&crest.naturalWidth){
    const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight);
    crestW=crest.naturalWidth*scale;crestH=crest.naturalHeight*scale;
-   const crestY=logoY+minSide*.014-crestH/2;
+   const crestY=logoY+minSide*.014-crestH/2-7;
    ctx.save();
    ctx.shadowColor=light?"rgba(23,33,38,.18)":"rgba(0,0,0,.35)";
    ctx.shadowBlur=8;ctx.shadowOffsetY=2;
-   if(light){
+   if(light&&crestIndex!==1&&crestIndex!==3){
     const darkCrest=document.createElement("canvas");
     darkCrest.width=crest.naturalWidth;darkCrest.height=crest.naturalHeight;
     const darkCtx=darkCrest.getContext("2d");
@@ -699,15 +705,15 @@ if(quoteRoot){
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor=light?"rgba(255,255,255,.45)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
-  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.038)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002);
-  ctx.fillStyle=light?"#315f65":"#f0f3ef";ctx.font="600 "+(minSide*.034)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032);
+  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.0361)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002+11);
+  ctx.fillStyle=light?"#315f65":"#f0f3ef";ctx.font="600 "+(minSide*.0323)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032+11);
   ctx.restore();
 
   const source=String(activeQuote.source||"");
   const match=source.match(/^(".*?"): ?(.*)$/);
   const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
   const metaX=w-frameX-minSide*.035;
-  const metaY=logoY-minSide*.002;
+  const metaY=logoY-minSide*.002-163;
   ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";
   ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";
   ctx.fillText("Дмитричев Никита",metaX,metaY);
