@@ -2202,9 +2202,9 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
 .quote-dropdown.is-open .quote-dropdown-menu{display:block}
 .quote-dropdown:focus-within .quote-dropdown-menu{display:none}
 .quote-dropdown.is-open:focus-within .quote-dropdown-menu{display:block}
-.quote-dropdown-option{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer}
-.quote-dropdown-trigger{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer}
-.quote-image-controls,.quote-image-controls *{cursor:url("/assets/images/cursors/pointer.png") 4 2,pointer!important}
+.quote-dropdown-option{cursor:url("/assets/images/cursor/pointer.png") 4 2,pointer}
+.quote-dropdown-trigger{cursor:url("/assets/images/cursor/pointer.png") 4 2,pointer}
+.quote-image-controls,.quote-image-controls *{cursor:url("/assets/images/cursor/pointer.png") 4 2,pointer!important}
 .quote-dropdown-menu{z-index:500;overscroll-behavior:contain}
 .quote-dropdown-option:focus-visible,.quote-dropdown-trigger:focus-visible{outline:1px solid #8fc4bf;outline-offset:-2px}
 
