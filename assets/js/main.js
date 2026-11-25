@@ -322,6 +322,7 @@ if(guideRoot){
  const guidePoints=document.querySelector("#guide-progress-points");
  const guideTagOptions=document.querySelector("#guide-tag-options");
  const guideResults=document.querySelector("#guide-results");
+ const guideResultsCount=document.querySelector("#guide-results-count");
  const guideStages=[
   {book:"Порабощение",phase:"Повествование",cover:"Обложка Порабощение.png"},
   {book:"Порабощение",phase:"Финал",cover:"Обложка Порабощение.png"},
@@ -452,6 +453,7 @@ if(guideRoot){
   let empty=guideResults.querySelector(".guide-no-matches");
   if(!visible&&cards.length){if(!empty){empty=document.createElement("p");empty.className="guide-no-matches";empty.textContent="По заданным условиям ничего не найдено.";guideResults.append(empty);}empty.hidden=false;}
   else if(empty)empty.hidden=true;
+  if(guideResultsCount)guideResultsCount.textContent=visible+" из "+guideGroups.length+" сущностей";
  }
  function renderCards(){
   updateProgressDisplay();
