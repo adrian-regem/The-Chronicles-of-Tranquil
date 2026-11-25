@@ -2081,7 +2081,7 @@ body.author-page .page-heading {
 body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
 .quote-generator { max-width:980px; }
 .quote-generator-title { margin:14px 0 34px; color:var(--text); font-size:clamp(38px,5vw,58px); }
-.quote-book-filters { display:flex; justify-content:center; align-items:stretch; flex-wrap:wrap; gap:12px; margin:0 auto 42px; }
+.quote-book-filters { display:flex; justify-content:center; align-items:flex-start; flex-wrap:wrap; gap:12px; margin:0 auto 42px; }
 .quote-book-filter { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:9px; width:126px; min-height:150px; padding:10px 9px 12px; border:1px solid rgba(101,164,162,.2); border-radius:5px; background:rgba(255,255,255,.025); color:#aebcbd; cursor:pointer; transition:border-color .2s,background .2s,transform .2s; }
 .quote-book-filter img { display:block; width:72px; height:98px; object-fit:cover; box-shadow:0 5px 16px rgba(0,0,0,.32); }
 .quote-book-filter span { font-size:11px; line-height:1.25; }
@@ -2135,18 +2135,18 @@ body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
 
 
 /* Quote generator: filter cards, feedback placement and empty states. */
-.quote-book-filter { width:108px; min-height:124px; padding:8px 7px 9px; gap:7px; }
+.quote-book-filter { width:108px; height:auto; min-height:0; padding:8px 7px 9px; gap:7px; align-self:flex-start; }
 .quote-book-filter img { width:50px; height:69px; }
 .quote-book-filter span { font-size:13px; }
-.quote-filter-all { width:50px; height:69px; }
+
 .quote-note { margin:8px 0 18px; min-height:18px; text-align:center; }
 .quote-display.is-message { min-height:130px; }
 .quote-display.is-message blockquote { max-width:650px; margin:0 auto; font:400 18px/1.55 'PT Sans',sans-serif; color:#aebfbc; letter-spacing:0; }
 .quote-display.is-message .quote-source { display:none; }
 .quote-display blockquote:not(:empty) { text-shadow:0 3px 9px rgba(0,0,0,.48); }
 @media(max-width:680px) {
- .quote-book-filter { width:calc(33.333% - 8px); min-width:88px; min-height:112px; padding:7px 5px; gap:6px; }
- .quote-book-filter img,.quote-filter-all { width:41px; height:57px; }
+ .quote-book-filter { width:calc(33.333% - 8px); min-width:88px; height:auto; min-height:0; padding:7px 5px; gap:6px; align-self:flex-start; }
+ .quote-book-filter img { width:41px; height:57px; }
  .quote-book-filter span { font-size:12px; }
  .quote-display.is-message { min-height:120px; }
  .quote-display.is-message blockquote { font-size:15px; }
