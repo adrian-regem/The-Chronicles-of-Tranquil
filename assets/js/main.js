@@ -642,7 +642,9 @@ if(quoteRoot){
   if(crest?.complete&&crest.naturalWidth){
    ctx.save();ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=12;ctx.shadowOffsetY=4;
    if(whiteCrests.has(crestIndex))ctx.filter="brightness(0) invert(1)";
-   ctx.drawImage(crest,82,916,48,64);ctx.restore();
+   const maxW=53,maxH=70,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
+   const crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
+   ctx.drawImage(crest,82,951-crestH,crestW,crestH);ctx.restore();
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor="rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
