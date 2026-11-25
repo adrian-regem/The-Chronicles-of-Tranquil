@@ -1,352 +1,352 @@
 {
   "items": [
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Пролог",
-      "status": "in_progress",
+      "status": "done",
       "weight": 0.66
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 1",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 2",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 3",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 4",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 5",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 6",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 7",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 8",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 9",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 10",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 11",
-      "status": "in_progress",
+      "status": "done",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 12",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 13",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 14",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 15",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 16",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 17",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Глава 18",
       "status": "in_progress",
       "weight": 3.26
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Эпилог",
       "status": "in_progress",
       "weight": 0.66
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Придумать название книги",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Нарисовать обложку книги",
       "status": "in_progress",
-      "weight": 5
+      "weight": 5.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Провести редактуру и корректуру текста",
       "status": "in_progress",
-      "weight": 10
+      "weight": 10.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Провести финальную вычитку",
       "status": "in_progress",
-      "weight": 6
+      "weight": 6.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Подготовить аннотацию",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Проверить вёрстку и отображение книги",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Отправить книгу в издательство",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Дождаться модерации книги",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Хроники Транквила: ???",
+      "book": "Книга",
       "stage": "Опубликовать книгу",
       "status": "in_progress",
-      "weight": 4
+      "weight": 4.0
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 1",
+      "book": "Путеводитель",
+      "stage": "Портрет Адриан Рэгем",
       "status": "in_progress",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 2",
+      "book": "Путеводитель",
+      "stage": "Портрет Вель",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Гость",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Кассандра Рэгем (Кирслав)",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Келп-Роса Венс",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Киприла Лунстад",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Ларн Фери",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Мексция Век",
       "status": "in_progress",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 3",
+      "book": "Путеводитель",
+      "stage": "Портрет Миктл Сома",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Мо'Рак",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Поркий Дивус",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Прискас",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Проспер Дивус",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Рубина Санг",
       "status": "in_progress",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 4",
+      "book": "Путеводитель",
+      "stage": "Портрет Сорция Век",
+      "status": "done",
+      "weight": 2.78
+    },
+    {
+      "book": "Путеводитель",
+      "stage": "Портрет Фредер Кирслав",
       "status": "in_progress",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 5",
-      "status": "in_progress",
+      "book": "Путеводитель",
+      "stage": "Портрет Хорт-Мал Теомал",
+      "status": "done",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 6",
-      "status": "in_progress",
+      "book": "Путеводитель",
+      "stage": "Портрет Эмилиус",
+      "status": "done",
       "weight": 2.78
     },
     {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 7",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 8",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 9",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 10",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 11",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 12",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 13",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 14",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 15",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 16",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 17",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
-      "stage": "Портрет персонажа 18",
-      "status": "in_progress",
-      "weight": 2.78
-    },
-    {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Написать статьи",
       "status": "in_progress",
       "weight": 28.96
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Составить список персонажей и терминов",
       "status": "in_progress",
-      "weight": 2
+      "weight": 2.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Обновить карту мира",
       "status": "in_progress",
-      "weight": 2
+      "weight": 2.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Нарисовать обложку путеводителя",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Провести редактуру и корректуру текста",
       "status": "in_progress",
-      "weight": 3
+      "weight": 3.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Провести финальную вычитку",
       "status": "in_progress",
-      "weight": 1
+      "weight": 1.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Подготовить аннотацию",
       "status": "in_progress",
-      "weight": 1
+      "weight": 1.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Проверить вёрстку и отображение книги",
       "status": "in_progress",
-      "weight": 2
+      "weight": 2.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Отправить путеводитель в издательство",
       "status": "in_progress",
-      "weight": 2
+      "weight": 2.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Дождаться модерации путеводителя",
       "status": "in_progress",
-      "weight": 1
+      "weight": 1.0
     },
     {
-      "book": "Путеводитель по \"???\"",
+      "book": "Путеводитель",
       "stage": "Опубликовать путеводитель",
       "status": "in_progress",
-      "weight": 4
+      "weight": 4.0
     }
   ]
 }
