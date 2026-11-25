@@ -2261,3 +2261,200 @@ body:not(.page-shell) .quote-image-actions .outline-button:hover {
 .quote-word { opacity:0; animation:quote-word-reveal .24s ease forwards; }
 @keyframes quote-word-reveal { from { opacity:0; } to { opacity:1; } }
 @media (prefers-reduced-motion:reduce) { .quote-word { opacity:1; animation:none; } }
+
+
+/* News page: independent progress rings and the full project checklist. */
+body.news-page .news-progress-layout {
+  display:grid;
+  grid-template-columns:minmax(265px,.82fr) minmax(0,1.45fr);
+  gap:clamp(22px,3vw,38px);
+  align-items:start;
+  padding:clamp(20px,3vw,34px);
+  border:1px solid rgba(169,133,39,.34);
+  border-radius:5px;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(169,133,39,.13),transparent 48%),
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(20,19,13,.96) 68%);
+  box-shadow:0 16px 45px rgba(0,0,0,.16);
+}
+body.news-page .news-progress-overview { min-width:0; }
+body.news-page .news-progress-overview .eyebrow { color:#c6a84b; }
+body.news-page .news-progress-overview h2 {
+  margin:10px 0 12px;
+  color:#eee5c9;
+  font-size:clamp(34px,4vw,48px);
+  line-height:1.02;
+}
+body.news-page .news-progress-lead {
+  max-width:420px;
+  margin:0;
+  color:#b8b19e;
+  font-size:14px;
+  line-height:1.75;
+}
+.progress-rings {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:28px;
+}
+.progress-ring-card {
+  min-width:0;
+  padding:16px 9px 13px;
+  border:1px solid rgba(169,133,39,.25);
+  border-radius:4px;
+  background:rgba(169,133,39,.055);
+  text-align:center;
+}
+.progress-ring {
+  position:relative;
+  width:min(100%,132px);
+  aspect-ratio:1;
+  margin:0 auto 10px;
+}
+.progress-ring svg { display:block; width:100%; height:100%; overflow:visible; }
+.progress-ring circle {
+  fill:none;
+  stroke-width:7;
+}
+.progress-ring-track { stroke:rgba(196,166,77,.16); }
+.progress-ring-value {
+  stroke:#c2a044;
+  stroke-linecap:round;
+  transform:rotate(-90deg);
+  transform-origin:56px 56px;
+  transition:stroke-dashoffset .65s ease;
+  filter:drop-shadow(0 0 4px rgba(194,160,68,.22));
+}
+.progress-ring-number {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#f0e6c8;
+  font:600 clamp(17px,2vw,22px)/1 "PT Sans",Arial,sans-serif;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.progress-ring-caption { display:flex; flex-direction:column; gap:3px; }
+.progress-ring-caption strong { color:#e8ddbd; font-size:13px; font-weight:700; }
+.progress-ring-caption span { color:#a69d85; font-size:11px; }
+.progress-checklist {
+  min-width:0;
+  padding-left:clamp(0px,1.5vw,20px);
+  border-left:1px solid rgba(169,133,39,.22);
+}
+.progress-project + .progress-project {
+  margin-top:26px;
+  padding-top:23px;
+  border-top:1px solid rgba(169,133,39,.22);
+}
+.progress-project h3 {
+  margin:0 0 17px;
+  color:#e8ddbd;
+  font:600 22px/1.2 "PT Sans",Arial,sans-serif;
+  letter-spacing:0;
+}
+.progress-task-group + .progress-task-group { margin-top:19px; }
+.progress-task-group h4 {
+  margin:0 0 9px;
+  color:#c4a64d;
+  font:700 12px/1.4 "PT Sans",Arial,sans-serif;
+  letter-spacing:.045em;
+}
+.progress-task-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px 12px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.progress-task-group-individual .progress-task-list {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+}
+.progress-task {
+  display:grid;
+  grid-template-columns:17px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  align-items:start;
+  column-gap:7px;
+  min-width:0;
+  padding:7px 8px;
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:3px;
+  background:rgba(255,255,255,.022);
+}
+.progress-task-mark {
+  grid-row:1 / span 2;
+  display:grid;
+  place-items:center;
+  width:16px;
+  height:16px;
+  margin-top:1px;
+  border:1px solid rgba(196,166,77,.48);
+  border-radius:3px;
+  color:#f3e6bb;
+  font:700 11px/1 "PT Sans",Arial,sans-serif;
+}
+.progress-task.is-done {
+  border-color:rgba(115,158,119,.23);
+  background:rgba(74,120,80,.09);
+}
+.progress-task.is-done .progress-task-mark {
+  border-color:#739e77;
+  background:rgba(74,120,80,.24);
+  color:#b9d7b7;
+}
+.progress-task-name {
+  min-width:0;
+  color:#d5d0c1;
+  font-size:12px;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.progress-task.is-done .progress-task-name { color:#b8c7b5; }
+.progress-task-status {
+  grid-column:2;
+  margin-top:2px;
+  color:#968e7b;
+  font-size:10px;
+  line-height:1.2;
+}
+.progress-task.is-done .progress-task-status { color:#86aa87; }
+.progress-loading,.progress-error {
+  grid-column:1 / -1;
+  margin:0;
+  color:#b8b19e;
+  font-size:13px;
+  line-height:1.6;
+}
+.progress-error { color:#e0a18e; }
+body.news-page .news-feed { margin-top:62px; }
+@media(max-width:1000px) {
+  body.news-page .news-progress-layout { grid-template-columns:1fr; }
+  .progress-checklist { padding:22px 0 0; border-left:0; border-top:1px solid rgba(169,133,39,.22); }
+  .progress-rings { max-width:460px; margin-inline:auto; }
+}
+@media(max-width:680px) {
+  body.news-page .news-progress-layout { gap:22px; padding:19px 14px; }
+  body.news-page .news-progress-overview h2 { font-size:36px; }
+  body.news-page .news-progress-lead { font-size:13px; }
+  .progress-rings { gap:8px; margin-top:21px; }
+  .progress-ring-card { padding:12px 6px 10px; }
+  .progress-ring { width:min(100%,112px); }
+  .progress-ring-number { font-size:17px; }
+  .progress-ring-caption strong { font-size:12px; }
+  .progress-ring-caption span { font-size:10px; }
+  .progress-project h3 { font-size:19px; }
+  .progress-task-list { grid-template-columns:1fr; }
+  .progress-task-group-individual .progress-task-list { grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+  .progress-task { padding:7px 6px; column-gap:5px; }
+  .progress-task-name { font-size:11px; }
+  .progress-task-status { font-size:9px; }
+  body.news-page .news-feed { margin-top:42px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .progress-ring-value { transition:none; }
+}
