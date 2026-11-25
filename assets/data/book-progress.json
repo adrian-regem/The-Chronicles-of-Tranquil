@@ -135,7 +135,7 @@
     {
       "book": "Книга",
       "stage": "Провести редактуру и корректуру текста",
-      "status": "in_progress",
+      "status": "done",
       "weight": 10.0
     },
     {
@@ -285,7 +285,7 @@
     {
       "book": "Путеводитель",
       "stage": "Написать статьи",
-      "status": "in_progress",
+      "status": "done",
       "weight": 28.96
     },
     {
