@@ -580,12 +580,23 @@ if(quoteRoot){
  const styleOptions=[["classic","Классика","Рамка и симметрия"],["editorial","Редакционный","Типографская полоса"],["poster","Плакат","Афишная композиция"],["dossier","Досье","Архивная плашка"],["split","Разворот","Две контрастные половины"]];
  const crestLabels=["Картрад","Анспранд","Мармагония","Рупид","Родда-Кира"];
  function makeMenu(id,label,items,value,choose){
-  const root=document.createElement("div");root.className="quote-dropdown";
-  const trigger=document.createElement("button");trigger.type="button";trigger.className="quote-dropdown-trigger";trigger.innerHTML='<span class="quote-dropdown-label">'+label+'</span><span class="quote-dropdown-current"></span><span class="quote-dropdown-chevron">▾</span>';
-  const menu=document.createElement("div");menu.className="quote-dropdown-menu";
+  const root=document.createElement("div");root.className="quote-dropdown";root.dataset.menu=id;
+  const trigger=document.createElement("button");trigger.type="button";trigger.className="quote-dropdown-trigger";trigger.setAttribute("aria-haspopup","true");trigger.setAttribute("aria-expanded","false");trigger.innerHTML='<span class="quote-dropdown-label">'+label+'</span><span class="quote-dropdown-current"></span><span class="quote-dropdown-chevron">▾</span>';
+  const menu=document.createElement("div");menu.className="quote-dropdown-menu";menu.setAttribute("role","listbox");
   const current=items.find(x=>String(x.value)===String(value))||items[0];trigger.querySelector(".quote-dropdown-current").textContent=current.label;
-  items.forEach(item=>{const button=document.createElement("button");button.type="button";button.className="quote-dropdown-option";const preview=document.createElement("span");preview.className="quote-option-preview "+(item.previewClass||"");if(item.preview)preview.style.background=item.preview;if(item.image){const img=document.createElement("img");img.src=item.image;img.alt="";preview.append(img);}const copy=document.createElement("span");copy.className="quote-option-copy";copy.innerHTML="<strong></strong><small></small>";copy.querySelector("strong").textContent=item.label;copy.querySelector("small").textContent=item.note||"";button.append(preview,copy);button.addEventListener("click",()=>{choose(item.value);trigger.querySelector(".quote-dropdown-current").textContent=item.label;root.classList.remove("is-open");});menu.append(button);});
-  trigger.addEventListener("click",()=>root.classList.toggle("is-open"));root.addEventListener("mouseenter",()=>root.classList.add("is-open"));root.addEventListener("mouseleave",()=>root.classList.remove("is-open"));root.append(trigger,menu);quoteControls.append(root);
+  items.forEach(item=>{
+   const button=document.createElement("button");button.type="button";button.className="quote-dropdown-option";button.setAttribute("role","option");
+   const preview=document.createElement("span");preview.className="quote-option-preview "+(item.previewClass||"");if(item.preview)preview.style.background=item.preview;
+   if(item.image){const img=document.createElement("img");img.src=item.image;img.alt="";preview.append(img);}
+   const copy=document.createElement("span");copy.className="quote-option-copy";copy.innerHTML="<strong></strong><small></small>";copy.querySelector("strong").textContent=item.label;copy.querySelector("small").textContent=item.note||"";
+   button.append(preview,copy);
+   button.addEventListener("click",()=>{choose(item.value);trigger.querySelector(".quote-dropdown-current").textContent=item.label;root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
+   menu.append(button);
+  });
+  trigger.addEventListener("click",()=>{const open=!root.classList.contains("is-open");quoteControls.querySelectorAll(".quote-dropdown.is-open").forEach(el=>{el.classList.remove("is-open");el.querySelector(".quote-dropdown-trigger").setAttribute("aria-expanded","false");});root.classList.toggle("is-open",open);trigger.setAttribute("aria-expanded",String(open));});
+  root.addEventListener("mouseenter",()=>{root.classList.add("is-open");trigger.setAttribute("aria-expanded","true");});
+  root.addEventListener("mouseleave",()=>{root.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");});
+  root.append(trigger,menu);quoteControls.append(root);
  }
  function downloadQuoteImage(){if(!activeQuote)return;const a=document.createElement("a");a.download="tsitata-"+activeQuote.id+"-"+quoteFormat+".png";a.href=imageCanvas.toDataURL("image/png");a.click();}
  async function copyQuoteImage(){if(!activeQuote||!navigator.clipboard||!window.ClipboardItem){imageStatus.textContent="Копирование изображения не поддерживается этим браузером.";return;}try{const blob=await new Promise(resolve=>imageCanvas.toBlob(resolve,"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);imageStatus.textContent="Изображение скопировано.";}catch(error){imageStatus.textContent="Не удалось скопировать изображение.";}}
