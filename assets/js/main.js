@@ -938,8 +938,10 @@ if (bookProgressRoot) {
     }
 
     requestAnimationFrame(() => {
-      ring.style.strokeDashoffset = String(targetOffset);
-      animateCounter(number, targetPercent);
+      requestAnimationFrame(() => {
+        ring.style.strokeDashoffset = String(targetOffset);
+        animateCounter(number, targetPercent);
+      });
     });
 
     const segmentDelay = 55;
