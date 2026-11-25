@@ -848,7 +848,7 @@ if (bookProgressRoot) {
   function renderSegmentedProgress(items, label, key) {
     const completed = items.filter(item => item.status === "done").length;
     const segments = items.map((item, index) => {
-      const flex = label === "Рукопись" && (item.stage === "Пролог" || item.stage === "Эпилог") ? 0.2 : 1;
+      const flex = label === "Главы" && (item.stage === "Пролог" || item.stage === "Эпилог") ? 0.2 : 1;
       return `<span class="progress-segment" data-segment-index="${index}" style="flex-grow:${flex}" aria-hidden="true"></span>`;
     }).join("");
 
@@ -890,7 +890,7 @@ if (bookProgressRoot) {
       <article class="progress-project-column" data-progress-project="${key}">
         <h3>${escapeBookProgress(displayProjectName(project))}</h3>
         ${renderOverallRing(project, key)}
-        ${renderSegmentedProgress(individual, guide ? "Портреты персонажей" : "Рукопись", key)}
+        ${renderSegmentedProgress(individual, guide ? "Портреты персонажей" : "Главы", key)}
         ${renderOtherTasks(other, key)}
       </article>`;
   }
@@ -900,7 +900,7 @@ if (bookProgressRoot) {
       element.textContent = progressNumber.format(target) + "%";
       return;
     }
-    const duration = 850;
+    const duration = 1105;
     const startTime = performance.now();
     const tick = (now) => {
       const progress = Math.min(1, (now - startTime) / duration);
@@ -942,12 +942,12 @@ if (bookProgressRoot) {
       animateCounter(number, targetPercent);
     });
 
-    const segmentDelay = 42;
+    const segmentDelay = 55;
     segments.slice(0, completed).forEach((segment, index) => {
       window.setTimeout(() => {
         segment.classList.add("is-filled");
         counter.textContent = (index + 1) + "/" + segments.length;
-      }, 100 + index * segmentDelay);
+      }, 130 + index * segmentDelay);
     });
     counter.textContent = "0/" + segments.length;
 
@@ -955,7 +955,7 @@ if (bookProgressRoot) {
       window.setTimeout(() => {
         task.classList.add("is-done");
         task.querySelector(".progress-other-mark").textContent = "✓";
-      }, 130 + index * 85);
+      }, 169 + index * 111);
     });
   }
 
