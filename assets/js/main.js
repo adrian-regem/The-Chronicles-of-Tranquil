@@ -709,8 +709,8 @@ if(quoteRoot){
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor=light?"rgba(255,255,255,.18)":"rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=2;
-  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",margin+minSide*.065,logoY-minSide*.002);
-  ctx.fillStyle=accent;ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",margin+minSide*.065,logoY+minSide*.027);ctx.restore();
+  ctx.fillStyle="#e5eeeb";ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("Транквильский",margin+minSide*.065,logoY-minSide*.002);
+  ctx.fillStyle="#a5d4d1";ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz', Arial, sans-serif";ctx.fillText("вестник",margin+minSide*.065,logoY+minSide*.027);ctx.restore();
  }
  function copyQuote(){
   if(!activeQuote)return;
