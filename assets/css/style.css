@@ -2075,3 +2075,40 @@ body.author-page .page-header { background:#1a1112; }
 body.author-page .page-heading {
   background:radial-gradient(ellipse at 50% 0%,rgba(168,61,67,.2),transparent 68%),linear-gradient(135deg,#211416,#171011 72%);
 }
+
+
+/* Homepage quote generator */
+body:not(.page-shell) .quote-section { padding:110px 6vw 120px; }
+.quote-generator { max-width:980px; }
+.quote-generator-title { margin:14px 0 34px; color:var(--text); font-size:clamp(38px,5vw,58px); }
+.quote-book-filters { display:flex; justify-content:center; align-items:stretch; flex-wrap:wrap; gap:12px; margin:0 auto 42px; }
+.quote-book-filter { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:9px; width:126px; min-height:150px; padding:10px 9px 12px; border:1px solid rgba(101,164,162,.2); border-radius:5px; background:rgba(255,255,255,.025); color:#aebcbd; cursor:pointer; transition:border-color .2s,background .2s,transform .2s; }
+.quote-book-filter img { display:block; width:72px; height:98px; object-fit:cover; box-shadow:0 5px 16px rgba(0,0,0,.32); }
+.quote-book-filter span { font-size:11px; line-height:1.25; }
+.quote-book-filter:hover:not(:disabled) { transform:translateY(-3px); border-color:rgba(101,164,162,.6); }
+.quote-book-filter.is-active { border-color:#65a4a2; background:rgba(62,126,126,.16); color:#e1eeee; box-shadow:0 0 0 1px rgba(101,164,162,.16); }
+.quote-filter-all,.quote-filter-unknown { display:grid; place-items:center; width:72px; height:98px; border:1px solid rgba(101,164,162,.22); background:linear-gradient(145deg,#1d3435,#10191c); color:#a5d4d1; font:500 20px/1 'Yanone Kaffeesatz',sans-serif !important; }
+.quote-filter-unknown { color:#7b8585; border-style:dashed; background:rgba(255,255,255,.025); }
+.quote-book-filter.is-disabled { opacity:.38; cursor:not-allowed; }
+.quote-display { min-height:210px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 10px 12px; }
+.quote-display blockquote { max-width:880px; min-height:1.2em; margin:0 auto 22px; color:#e4efec; font:500 clamp(28px,4.2vw,48px)/1.28 'Yanone Kaffeesatz','PT Sans',sans-serif; letter-spacing:.015em; }
+.quote-id { margin:0 0 7px; color:#7f9997; font-size:10px; letter-spacing:.14em; }
+.quote-source { margin:0; color:#8fc4bf; font-size:12px; letter-spacing:.04em; }
+.quote-actions,.quote-image-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:28px; }
+.quote-actions .outline-button,.quote-image-actions .outline-button { margin:0; min-width:142px; padding:12px 17px; border-color:rgba(101,164,162,.42); background:rgba(62,126,126,.13); color:#b6d9d5; font-size:11px; letter-spacing:.06em; text-transform:none; }
+.quote-actions .outline-button:hover,.quote-image-actions .outline-button:hover { background:rgba(62,126,126,.27); border-color:#65a4a2; }
+.quote-note { min-height:18px; margin:16px 0 0; color:#80918f; font-size:11px; }
+.quote-image-panel { width:min(100%,720px); margin:42px auto 0; }
+.quote-image-panel[hidden] { display:none; }
+.quote-image-panel canvas { display:block; width:100%; height:auto; border:1px solid rgba(101,164,162,.28); box-shadow:0 18px 55px rgba(0,0,0,.3); }
+.quote-image-actions { margin-top:18px; }
+@media(max-width:680px){
+ body:not(.page-shell) .quote-section { padding:78px 6vw 88px; }
+ .quote-book-filters { gap:8px; margin-bottom:26px; }
+ .quote-book-filter { width:calc(33.333% - 8px); min-width:94px; min-height:128px; padding:8px 5px; gap:7px; }
+ .quote-book-filter img,.quote-filter-all,.quote-filter-unknown { width:58px; height:80px; }
+ .quote-book-filter span { font-size:10px; }
+ .quote-display { min-height:180px; padding-inline:0; }
+ .quote-display blockquote { font-size:clamp(27px,8vw,38px); }
+ .quote-actions .outline-button,.quote-image-actions .outline-button { min-width:0; flex:1 1 42%; }
+}
