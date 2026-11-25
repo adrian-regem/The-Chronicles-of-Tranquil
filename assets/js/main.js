@@ -671,30 +671,50 @@ if(quoteRoot){
   const quoteTop=h*quoteCenter-quoteHeight/2;
   ctx.fillStyle=ink;ctx.font=(style==="editorial"||style==="poster"?"700 ":"500 ")+fontSize+"px 'PT Sans',Arial,sans-serif";ctx.textBaseline="top";
   lines.forEach((line,index)=>ctx.fillText(line,alignLeft?left:cx,quoteTop+index*lineHeight));
-  const metaY=portrait?h*.785:landscape?h*.735:h*.755;
-  ctx.textAlign="center";ctx.textBaseline="alphabetic";
-  ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";ctx.fillText("Дмитричев Никита",cx,metaY);
+  const logoY=h-frameY-minSide*.066;
+  const crest=crestImages[crestIndex];
+  const crestMaxW=minSide*.078,crestMaxH=minSide*.078;
+  const crestX=frameX+minSide*.035;
+  let logoTextX=crestX+minSide*.098;
+  let crestW=crestMaxW,crestH=crestMaxH;
+  if(crest?.complete&&crest.naturalWidth){
+   const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight);
+   crestW=crest.naturalWidth*scale;crestH=crest.naturalHeight*scale;
+   const crestY=logoY-minSide*.014-crestH/2;
+   ctx.save();
+   ctx.shadowColor=light?"rgba(23,33,38,.18)":"rgba(0,0,0,.35)";
+   ctx.shadowBlur=8;ctx.shadowOffsetY=2;
+   if(light){
+    const darkCrest=document.createElement("canvas");
+    darkCrest.width=crest.naturalWidth;darkCrest.height=crest.naturalHeight;
+    const darkCtx=darkCrest.getContext("2d");
+    darkCtx.drawImage(crest,0,0);
+    darkCtx.globalCompositeOperation="source-in";
+    darkCtx.fillStyle="#172126";darkCtx.fillRect(0,0,darkCrest.width,darkCrest.height);
+    ctx.drawImage(darkCrest,crestX,crestY,crestW,crestH);
+   }else{
+    ctx.drawImage(crest,crestX,crestY,crestW,crestH);
+   }
+   ctx.restore();
+  }
+  ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
+  ctx.shadowColor=light?"rgba(255,255,255,.45)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
+  ctx.fillStyle=ink;ctx.font="600 "+(minSide*.038)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002);
+  ctx.fillStyle=light?"#315f65":"#f0f3ef";ctx.font="600 "+(minSide*.034)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.032);
+  ctx.restore();
+
   const source=String(activeQuote.source||"");
   const match=source.match(/^(".*?"): ?(.*)$/);
   const bookLine=match?match[1]:source,chapterLine=match?match[2]:"";
+  const metaX=w-frameX-minSide*.035;
+  const metaY=logoY-minSide*.002;
+  ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";
+  ctx.fillStyle=ink;ctx.font="700 "+(minSide*.024)+"px 'PT Sans',Arial,sans-serif";
+  ctx.fillText("Дмитричев Никита",metaX,metaY);
   ctx.fillStyle=muted;ctx.font="400 "+(minSide*.019)+"px 'PT Sans',Arial,sans-serif";
-  ctx.fillText(bookLine,cx,metaY+minSide*.043);
-  if(chapterLine)ctx.fillText(chapterLine,cx,metaY+minSide*.073);
-  const crest=crestImages[crestIndex],logoY=h-frameY-minSide*.058;
-  const crestMaxW=minSide*.052,crestMaxH=minSide*.068;
-  const crestX=frameX+minSide*.035;
-  let logoTextX=crestX+minSide*.075;
-  if(crest?.complete&&crest.naturalWidth){
-   const scale=Math.min(crestMaxW/crest.naturalWidth,crestMaxH/crest.naturalHeight),crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
-   const crestY=logoY-crestH*.72;
-   ctx.save();
-   if(light){ctx.fillStyle="rgba(23,33,38,.88)";ctx.beginPath();ctx.arc(crestX+crestW/2,crestY+crestH/2,Math.max(crestW,crestH)*.66,0,Math.PI*2);ctx.fill();}
-   ctx.shadowColor="rgba(0,0,0,.35)";ctx.shadowBlur=8;ctx.shadowOffsetY=2;ctx.drawImage(crest,crestX,crestY,crestW,crestH);ctx.restore();
-  }
-  ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
-  ctx.shadowColor=light?"rgba(255,255,255,.65)":"rgba(0,0,0,.58)";ctx.shadowBlur=8;ctx.shadowOffsetY=1;
-  ctx.fillStyle=light?"#172126":"#f0f3ef";ctx.font="600 "+(minSide*.032)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("Транквильский",logoTextX,logoY-minSide*.002);
-  ctx.fillStyle="#3e7e7d";ctx.font="600 "+(minSide*.027)+"px 'Yanone Kaffeesatz',Arial,sans-serif";ctx.fillText("вестник",logoTextX,logoY+minSide*.027);ctx.restore();
+  ctx.fillText(bookLine,metaX,metaY+minSide*.032);
+  if(chapterLine)ctx.fillText(chapterLine,metaX,metaY+minSide*.061);
+  ctx.restore();
  }
   function copyQuote(){
   if(!activeQuote)return;
