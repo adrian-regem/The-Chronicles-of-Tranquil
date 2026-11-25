@@ -555,7 +555,7 @@ if(quoteRoot){
  const bookNames=["Порабощение","Артефакт","Золотые крылья"];
   const bookSourceTitles={"Порабощение":'"Хроники Транквила. Порабощение"',"Артефакт":'"Хроники Транквила. Артефакт"',"Золотые крылья":'"Золотые крылья"'};
  const themeNames=["Размышления","Чувства","Мрак","Остроумие"];
-  let quoteRecords=[],activeQuote=null,selectedBooks=[],selectedThemes=[...themeNames],lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
+  let quoteRecords=[],activeQuote=null,selectedBooks=["Порабощение"],selectedThemes=[...themeNames],lastQuoteId=null,backgroundIndex=0,crestIndex=0,typeTimer=null;
  const crestFiles=["Герб Картрада вектор.png","Герб Анспранда.png","Герб Мармагонии вектор.png","Герб Рупида.png","Герб Родда-Киры вектор.png"];
  const crestImages=crestFiles.map(file=>{const img=new Image();img.src="/assets/images/countries/"+encodeURIComponent(file)+"?v=20261125-white-crests";return img;});
  crestImages.forEach(img=>img.addEventListener("load",()=>{if(!imagePanel.hidden&&activeQuote)drawQuoteImage();}));
