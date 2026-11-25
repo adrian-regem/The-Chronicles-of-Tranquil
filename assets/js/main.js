@@ -644,7 +644,7 @@ if(quoteRoot){
    if(whiteCrests.has(crestIndex))ctx.filter="brightness(0) invert(1)";
    const maxW=53,maxH=70,scale=Math.min(maxW/crest.naturalWidth,maxH/crest.naturalHeight);
    const crestW=crest.naturalWidth*scale,crestH=crest.naturalHeight*scale;
-   ctx.drawImage(crest,82,951-crestH,crestW,crestH);ctx.restore();
+   ctx.drawImage(crest,82,949-crestH/2,crestW,crestH);ctx.restore();
   }
   ctx.save();ctx.textAlign="left";ctx.textBaseline="alphabetic";
   ctx.shadowColor="rgba(0,0,0,.58)";ctx.shadowBlur=9;ctx.shadowOffsetY=3;
