@@ -2246,3 +2246,8 @@ body:not(.page-shell) .quote-image-actions .outline-button:hover {
 @media(max-width:680px) {
  .quote-image-actions .outline-button { min-width:0; flex:1 1 calc(50% - 10px); }
 }
+
+
+/* Quote counters */
+.quote-counter { display:inline-flex; align-items:center; justify-content:center; align-self:center; flex:0 0 auto; min-width:42px; color:#8fc4bf; font:400 11px/1 'PT Sans',sans-serif; letter-spacing:.04em; font-variant-numeric:tabular-nums; white-space:nowrap; }
+@media(max-width:680px){ .quote-counter { min-width:36px; font-size:10px; } }
